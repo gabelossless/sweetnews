@@ -1,0 +1,122 @@
+import { useState } from 'react';
+import { motion } from 'motion/react';
+import { LogIn, UserPlus, ArrowRight, Mail, Lock } from 'lucide-react';
+import { 
+  signInWithEmailAndPassword, 
+  createUserWithEmailAndPassword,
+  updateProfile
+} from 'firebase/auth';
+import { auth } from '../../lib/firebase';
+import { Button } from '../../components/atoms/Button';
+import { Input } from '../../components/atoms/Input';
+import { sanitizeObject } from '../../lib/utils';
+
+export default function FleetLoginView() {
+  const [isLogin, setIsLogin] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    name: '',
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const sanitizedData = sanitizeObject(formData);
+      
+      if (isLogin) {
+        await signInWithEmailAndPassword(auth, sanitizedData.email, sanitizedData.password);
+      } else {
+        const { user } = await createUserWithEmailAndPassword(auth, sanitizedData.email, sanitizedData.password);
+        await updateProfile(user, { displayName: sanitizedData.name });
+      }
+    } catch (error: any) {
+      console.error('Auth error:', error);
+      alert(error.message || 'Authentication failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-black text-white p-6 flex flex-col justify-center">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="max-w-md mx-auto w-full space-y-8"
+      >
+        <div className="text-center space-y-2">
+          <h1 className="text-4xl font-black tracking-tighter">
+            FLEET<span className="text-primary">LOGIN</span>
+          </h1>
+          <p className="text-on-surface-variant text-xs uppercase tracking-[0.2em]">
+            Sweet News Delivery Partners
+          </p>
+        </div>
+
+        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {!isLogin && (
+              <Input
+                label="Full Name"
+                placeholder="John Doe"
+                required
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              />
+            )}
+            
+            <Input
+              label="Email Address"
+              placeholder="name@example.com"
+              type="email"
+              required
+              icon={<Mail size={16} />}
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            />
+            
+            <Input
+              label="Password"
+              placeholder="••••••••"
+              type="password"
+              required
+              icon={<Lock size={16} />}
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+            />
+
+            <Button
+              type="submit"
+              fullWidth
+              loading={loading}
+              className="h-14 mt-4"
+            >
+              {isLogin ? 'Sign In to Fleet' : 'Create Partner Account'} <ArrowRight className="ml-2" size={18} />
+            </Button>
+          </form>
+
+          <div className="text-center">
+            <button
+              onClick={() => setIsLogin(!isLogin)}
+              className="text-xs text-on-surface-variant hover:text-primary transition-colors flex items-center gap-2 mx-auto"
+            >
+              {isLogin ? (
+                <> <UserPlus size={14} /> New here? Apply to deliver</>
+              ) : (
+                <> <LogIn size={14} /> Already a partner? Sign in</>
+              )}
+            </button>
+          </div>
+        </div>
+
+        <p className="text-[10px] text-center text-white/20 px-8">
+          By signing in, you agree to the Sweet News Delivery Partner Terms of Service and Privacy Policy.
+        </p>
+      </motion.div>
+    </div>
+  );
+}

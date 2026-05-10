@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-background: #000000;
+  --color-surface: #0a0a0a;
+  --color-surface-bright: #1a1a1a;
+  --color-surface-dim: #050505;
+  --color-surface-container-lowest: #000000;
+  --color-surface-container-low: #0f0f0f;
+  --color-surface-container: #141414;
+  --color-surface-container-high: #1c1c1e;
+  --color-surface-container-highest: #2c2c2e;
+
+  --color-on-background: #ffffff;
+  --color-on-surface: #ffffff;
+  --color-surface-variant: #1a1a1a;
+  --color-on-surface-variant: #a1a1a6;
+
+  --color-primary: #e60023;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #5c000e;
+  --color-on-primary-container: #ffdad6;
+
+  --color-secondary: #ffffff;
+  --color-on-secondary: #000000;
+  --color-secondary-container: #262626;
+  --color-on-secondary-container: #ffffff;
+
+  --color-tertiary: #a1a1a6;
+  --color-on-tertiary: #000000;
+
+  --color-outline: #38383a;
+  --color-outline-variant: #2c2c2e;
+
+  --color-inverse-surface: #ffffff;
+  --color-inverse-on-surface: #000000;
+  --color-inverse-primary: #ffb4a9;
+
+  --color-error: #ff453a;
+  --color-on-error: #ffffff;
+  --color-error-container: #5c0006;
+  --color-on-error-container: #ffdad6;
+
+  --color-primary-fixed: #ffb4a9;
+  --color-primary-fixed-dim: #ff897d;
+  --color-on-primary-fixed: #3b0003;
+  --color-on-primary-fixed-variant: #68000b;
+
+  --color-secondary-fixed: #1c1c1e;
+  --color-secondary-fixed-dim: #2c2c2e;
+  --color-on-secondary-fixed: #ffffff;
+  --color-on-secondary-fixed-variant: #a1a1a6;
+
+  --color-tertiary-fixed: #2c2c2e;
+  --color-tertiary-fixed-dim: #38383a;
+  --color-on-tertiary-fixed: #ffffff;
+  --color-on-tertiary-fixed-variant: #a1a1a6;
+
+  --spacing-base: 8px;
+  --spacing-xs: 4px;
+  --spacing-sm: 12px;
+  --spacing-md: 24px;
+  --spacing-margin-mobile: 20px;
+  --spacing-gutter: 16px;
+  --spacing-lg: 40px;
+
+  --font-headline-md: "Space Grotesk", sans-serif;
+  --font-headline-lg: "Space Grotesk", sans-serif;
+  --font-body-lg: "Inter", sans-serif;
+  --font-body-md: "Inter", sans-serif;
+  --font-display-xl: "Space Grotesk", sans-serif;
+  --font-label-bold: "Inter", sans-serif;
+}
+
+/* Global Safe Area & Layout Adaptations */
+html, body {
+  background-color: var(--color-background);
+  color: var(--color-on-background);
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body-md);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+  overflow-x: hidden;
+  overscroll-behavior-y: contain; /* Prevents viewport rubber-banding elastic scroll in safari standalones */
+}
+
+@layer utilities {
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* iOS Standalone Navigation safe-area-inset adjusters */
+.standalone-layout {
+  padding-top: calc(env(safe-area-inset-top, 54px) + 60px) !important;
+  padding-bottom: calc(env(safe-area-inset-bottom, 34px) + 90px) !important;
+}

@@ -1,0 +1,314 @@
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Search, Store, ReceiptText, User, ShoppingBag, CheckCircle2 } from 'lucide-react';
+
+import { useCartStore } from './store/cart';
+import { useProfileStore } from './store/profile';
+import { useOrdersStore } from './store/orders';
+import { useToastStore } from './store/toast';
+import { useIsStandalone } from './hooks/useIsStandalone';
+import { useGeolocation } from './hooks/useGeolocation';
+import { Product, ActiveOrder } from './types';
+
+// Components
+import { NavButton } from './components/molecules/NavButton';
+import { CartSheet } from './components/organisms/CartSheet';
+import { CheckoutForm } from './components/organisms/CheckoutForm';
+import { InstallPrompt } from './components/pwa/InstallPrompt';
+
+// Views
+import { ShopView } from './views/ShopView';
+import { SearchView } from './views/SearchView';
+import { OrdersView } from './views/OrdersView';
+import { ProfileView } from './views/ProfileView';
+
+export default function CustomerApp() {
+  useGeolocation();
+
+  const [activeTab, setActiveTab] = useState<'shop' | 'search' | 'orders' | 'profile'>('shop');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [isOrderPlaced, setIsOrderPlaced] = useState(false);
+
+  // Standalone mode layout adjustment helper
+  const isStandalone = useIsStandalone();
+
+  // Profile fields & Offline state syncing
+  const [isOnline, setIsOnline] = useState(typeof navigator !== 'undefined' ? navigator.onLine : true);
+
+  // Cart Store variables
+  const cartItemsCount = useCartStore((state) => state.getTotalItems());
+  const cartItems = useCartStore((state) => state.items);
+  const addItem = useCartStore((state) => state.addItem);
+  const clearCart = useCartStore((state) => state.clearCart);
+
+  // Orders Store variables
+  const orders = useOrdersStore((state) => state.orders);
+  const addOrder = useOrdersStore((state) => state.addOrder);
+  const updateOrdersProgress = useOrdersStore((state) => state.updateOrdersProgress);
+
+  // Toast Store variables
+  const toastMessage = useToastStore((state) => state.toastMessage);
+  const showToast = useToastStore((state) => state.showToast);
+
+  // Sync Online/Offline State
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  // Simulated Order Tracker Live Progress Timer
+  useEffect(() => {
+    const timer = setInterval(() => {
+      updateOrdersProgress();
+    }, 15000);
+    return () => clearInterval(timer);
+  }, [updateOrdersProgress]);
+
+  const handlePlaceOrder = (details: { name: string; address: string }) => {
+    setIsProcessing(true);
+    
+    // Auto sync back to profile store
+    useProfileStore.getState().setDeliveryName(details.name);
+    useProfileStore.getState().setDeliveryAddress(details.address);
+
+    setTimeout(() => {
+      setIsProcessing(false);
+      const newOrder: ActiveOrder = {
+        id: Math.floor(1000 + Math.random() * 9000).toString(),
+        items: [...cartItems],
+        total: cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0) + 3.99,
+        date: 'Just Now',
+        status: 'confirmed',
+        progress: 0,
+        address: details.address
+      };
+      setIsOrderPlaced(true);
+      addOrder(newOrder);
+      clearCart();
+      
+      setTimeout(() => {
+        setIsCheckoutOpen(false);
+        setIsOrderPlaced(false);
+        setActiveTab('orders');
+      }, 1500);
+    }, 2000);
+  };
+
+  const handleCheckoutTrigger = () => {
+    setIsCartOpen(false);
+    setIsCheckoutOpen(true);
+  };
+
+  const closeCheckout = () => {
+    setIsCheckoutOpen(false);
+    setTimeout(() => {
+      setIsOrderPlaced(false);
+    }, 300);
+  };
+
+  const handleAddToCart = (product: Product) => {
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image
+    });
+    
+    showToast(`Added ${product.name} to cart`);
+  };
+
+  const handleRedeemReward = (rewardName: string) => {
+    showToast(`Claimed: ${rewardName}!`);
+  };
+
+  return (
+    <div className={`bg-background text-on-background min-h-screen pb-[120px] pt-[110px] sm:pt-[130px] font-body-md selection:bg-primary selection:text-on-primary overflow-x-hidden ${isStandalone ? 'standalone-layout' : ''}`}>
+      
+      {/* TopAppBar */}
+      <header className="fixed top-0 w-full flex justify-between items-center px-6 pt-[max(env(safe-area-inset-top,54px),16px)] pb-4 backdrop-blur-xl border-b border-white/[0.04] shadow-[0_4px_30px_rgba(0,0,0,0.8)] z-50 bg-background/80 md:max-w-md md:mx-auto md:left-1/2 md:-translate-x-1/2 md:rounded-b-[24px]">
+        <div className="flex items-center gap-3">
+          <motion.button 
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setActiveTab('profile')}
+            aria-label="View member profile"
+            className="w-12 h-12 rounded-full bg-surface-container-highest overflow-hidden border-2 border-primary/40 shadow-sm cursor-pointer relative group bg-transparent border-none outline-none"
+          >
+            <img 
+              alt="User Profile" 
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200" 
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfxltCzz-Dp-BbsUzLwyIL1SepoqSXB7_wBz0bPyHxabW6LqfEPYtIoPU0birhCkc_sOVPEzq5kKEJ1lwGtv3t642G7FhiNydEzNbSDW0AVhsoTGaX-PCZvdrSl6fB8CqCbrWanVu1uUAr0ZtKP-JuyyklApiM4NMMik5DIp-ocmvqg5NFwIXirDvkT7J3o_Ne49uajFDSoNJTE3KAwmXhlmX6H8SZUIiOXFAnHqtMGJ-u7rzQFrWH0sSjZ2eoMp9qn2evqqCSAiQ" 
+            />
+            {/* Online Badge status */}
+            <div className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border border-black ${isOnline ? 'bg-emerald-500' : 'bg-amber-500'}`} />
+          </motion.button>
+        </div>
+        <div 
+          onClick={() => setActiveTab('shop')}
+          className="text-[26px] font-headline-lg font-black italic tracking-tighter text-primary drop-shadow-sm cursor-pointer select-none"
+        >
+          SweetNews
+        </div>
+        <div className="flex items-center gap-3">
+          <motion.button 
+            whileTap={{ scale: 0.9 }}
+            whileHover={{ scale: 1.05 }}
+            onClick={() => setActiveTab('search')}
+            aria-label="Search delicacies"
+            className={`w-12 h-12 flex items-center justify-center rounded-full transition-colors duration-200 shadow-sm border border-white/[0.06] ${activeTab === 'search' ? 'bg-primary text-white border-transparent' : 'bg-surface-container-lowest text-on-surface hover:bg-surface-container-high'}`}
+          >
+            <Search className="w-[22px] h-[22px]" strokeWidth={2.5} />
+          </motion.button>
+          
+          <motion.button 
+            whileTap={{ scale: 0.9 }}
+            whileHover={{ scale: 1.05 }}
+            onClick={() => setIsCartOpen(true)}
+            aria-label="Open shopping cart"
+            className="w-12 h-12 relative flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container-high transition-colors duration-200 shadow-sm border border-white/[0.06] bg-surface-container-lowest"
+          >
+            <motion.div
+              key={cartItemsCount}
+              initial={{ scale: 1.2, rotate: -10 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            >
+              <ShoppingBag className="w-[22px] h-[22px]" strokeWidth={2.5} />
+            </motion.div>
+            <AnimatePresence>
+              {cartItemsCount > 0 && (
+                <motion.div 
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  exit={{ scale: 0 }}
+                  className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-on-primary rounded-full flex items-center justify-center font-label-bold text-[11px] shadow-[0_2px_8px_rgba(230,0,35,0.6)]"
+                >
+                  <motion.span
+                    key={cartItemsCount}
+                    initial={{ scale: 1.5 }}
+                    animate={{ scale: 1 }}
+                  >
+                    {cartItemsCount}
+                  </motion.span>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.button>
+        </div>
+      </header>
+
+      {/* Main Pages Container */}
+      <main className="px-6 md:max-w-4xl md:mx-auto">
+        <AnimatePresence mode="wait">
+          
+          {/* 1. SHOP VIEW */}
+          {activeTab === 'shop' && (
+            <ShopView
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
+              onAddToCart={handleAddToCart}
+              onNavigateToSearch={() => setActiveTab('search')}
+            />
+          )}
+
+          {/* 2. SEARCH VIEW */}
+          {activeTab === 'search' && (
+            <SearchView
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              onAddToCart={handleAddToCart}
+            />
+          )}
+
+          {/* 3. DEDICATED REAL-TIME ORDERS VIEW */}
+          {activeTab === 'orders' && (
+            <OrdersView
+              orders={orders}
+              onStartShopping={() => setActiveTab('shop')}
+            />
+          )}
+
+          {/* 4. DEDICATED PROFILE VIEW */}
+          {activeTab === 'profile' && (
+            <ProfileView
+              isOnline={isOnline}
+              onRedeemReward={handleRedeemReward}
+            />
+          )}
+
+        </AnimatePresence>
+      </main>
+
+      {/* BottomNavBar */}
+      <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-[calc(env(safe-area-inset-bottom,34px)+12px)] pt-4 bg-background/80 backdrop-blur-2xl rounded-t-[40px] border-t border-white/[0.04] shadow-[0_-15px_40px_rgba(0,0,0,0.8)] md:max-w-md md:mx-auto md:left-1/2 md:-translate-x-1/2 md:bottom-6 md:rounded-[40px] md:border">
+        <NavButton 
+          icon={<Store />} 
+          label="Shop" 
+          isActive={activeTab === 'shop'} 
+          onClick={() => setActiveTab('shop')} 
+        />
+        <NavButton 
+          icon={<Search />} 
+          label="Search" 
+          isActive={activeTab === 'search'} 
+          onClick={() => setActiveTab('search')} 
+        />
+        <NavButton 
+          icon={<ReceiptText />} 
+          label="Orders" 
+          isActive={activeTab === 'orders'} 
+          onClick={() => setActiveTab('orders')} 
+        />
+        <NavButton 
+          icon={<User />} 
+          label="Profile" 
+          isActive={activeTab === 'profile'} 
+          onClick={() => setActiveTab('profile')} 
+        />
+      </nav>
+
+      {/* Cart Bottom Sheet Overlay */}
+      <CartSheet
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        onCheckout={handleCheckoutTrigger}
+      />
+
+      {/* Checkout Modal Overlay */}
+      <CheckoutForm
+        isOpen={isCheckoutOpen}
+        onClose={closeCheckout}
+        onPlaceOrder={handlePlaceOrder}
+        isProcessing={isProcessing}
+        isOrderPlaced={isOrderPlaced}
+      />
+
+      {/* Toast Notification */}
+      <AnimatePresence>
+        {toastMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.9 }}
+            className="fixed bottom-[100px] left-1/2 -translate-x-1/2 z-[100] flex items-center gap-3 bg-white text-black px-5 py-3.5 rounded-full shadow-2xl md:bottom-28 border border-white/10"
+          >
+            <CheckCircle2 className="w-5 h-5 text-emerald-500 fill-emerald-500/10" />
+            <span className="font-label-bold text-[13px] font-bold">{toastMessage}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Install Prompt Banner */}
+      <InstallPrompt />
+    </div>
+  );
+}
