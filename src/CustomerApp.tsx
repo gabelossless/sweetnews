@@ -7,8 +7,9 @@ import { useProfileStore } from './store/profile';
 import { useOrdersStore } from './store/orders';
 import { useToastStore } from './store/toast';
 import { useIsStandalone } from './hooks/useIsStandalone';
-import { useGeolocation } from './hooks/useGeolocation';
+import { useAuth } from './context/AuthContext';
 import { Product, ActiveOrder } from './types';
+import { createOrder, subscribeToCustomerOrders } from './lib/orders';
 
 // Components
 import { NavButton } from './components/molecules/NavButton';
@@ -24,6 +25,7 @@ import { ProfileView } from './views/ProfileView';
 
 export default function CustomerApp() {
   useGeolocation();
+  const { user } = useAuth();
 
   const [activeTab, setActiveTab] = useState<'shop' | 'search' | 'orders' | 'profile'>('shop');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -47,8 +49,16 @@ export default function CustomerApp() {
 
   // Orders Store variables
   const orders = useOrdersStore((state) => state.orders);
-  const addOrder = useOrdersStore((state) => state.addOrder);
-  const updateOrdersProgress = useOrdersStore((state) => state.updateOrdersProgress);
+  // Sync Orders from Firestore
+  useEffect(() => {
+    if (!user) return;
+    
+    const unsubscribe = subscribeToCustomerOrders(user.uid, (freshOrders) => {
+      useOrdersStore.setState({ orders: freshOrders });
+    });
+
+    return () => unsubscribe();
+  }, [user]);
 
   // Toast Store variables
   const toastMessage = useToastStore((state) => state.toastMessage);
@@ -66,34 +76,30 @@ export default function CustomerApp() {
     };
   }, []);
 
-  // Simulated Order Tracker Live Progress Timer
-  useEffect(() => {
-    const timer = setInterval(() => {
-      updateOrdersProgress();
-    }, 15000);
-    return () => clearInterval(timer);
-  }, [updateOrdersProgress]);
+  const handlePlaceOrder = async (details: { name: string; address: string }) => {
+    if (!user) {
+      showToast('Please sign in to place an order');
+      return;
+    }
 
-  const handlePlaceOrder = (details: { name: string; address: string }) => {
     setIsProcessing(true);
     
     // Auto sync back to profile store
     useProfileStore.getState().setDeliveryName(details.name);
     useProfileStore.getState().setDeliveryAddress(details.address);
 
-    setTimeout(() => {
-      setIsProcessing(false);
-      const newOrder: ActiveOrder = {
-        id: Math.floor(1000 + Math.random() * 9000).toString(),
+    try {
+      await createOrder({
+        customerId: user.uid,
+        customerName: details.name,
         items: [...cartItems],
         total: cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0) + 3.99,
-        date: 'Just Now',
-        status: 'confirmed',
-        progress: 0,
-        address: details.address
-      };
+        date: new Date().toLocaleDateString(),
+        address: details.address,
+      });
+
+      setIsProcessing(false);
       setIsOrderPlaced(true);
-      addOrder(newOrder);
       clearCart();
       
       setTimeout(() => {
@@ -101,7 +107,11 @@ export default function CustomerApp() {
         setIsOrderPlaced(false);
         setActiveTab('orders');
       }, 1500);
-    }, 2000);
+    } catch (error) {
+      console.error('Order placement failed:', error);
+      showToast('Order failed. Please try again.');
+      setIsProcessing(false);
+    }
   };
 
   const handleCheckoutTrigger = () => {

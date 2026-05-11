@@ -8,8 +8,13 @@ export interface Product {
   categoryId: string;
 }
 
+export type OrderStatus = 'pending' | 'confirmed' | 'cooking' | 'delivering' | 'delivered' | 'cancelled';
+
 export interface ActiveOrder {
   id: string;
+  customerId: string;
+  customerName: string;
+  driverId: string | null;
   items: {
     id: string;
     name: string;
@@ -19,9 +24,16 @@ export interface ActiveOrder {
   }[];
   total: number;
   date: string;
-  status: 'confirmed' | 'cooking' | 'delivering' | 'delivered';
+  status: OrderStatus;
   progress: number; // 0 to 100
   address: string;
+  createdAt: string;
+  etaMins?: number;
+  rating?: number;
+  driverSnapshot?: {
+    name: string;
+    photo: string | null;
+  };
 }
 
 export interface CartItem {
@@ -41,4 +53,17 @@ export interface UserProfile {
   photoURL: string | null;
   role: UserRole;
   createdAt: string;
+  averageRating?: number;
+  totalDeliveries?: number;
+}
+
+export interface DriverApplication {
+  id: string;
+  uid: string;
+  email: string;
+  vehicleType: string;
+  licensePlate: string;
+  phone: string;
+  status: 'pending' | 'approved' | 'rejected';
+  submittedAt: string;
 }

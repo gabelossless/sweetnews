@@ -1,0 +1,48 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper to check if user is admin
+    function isAdmin() {
+      return request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // User profiles
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && (request.auth.uid == userId || isAdmin());
+    }
+
+    // Products (Public read, Admin write)
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Orders
+    match /orders/{orderId} {
+      allow create: if request.auth != null;
+      allow read: if request.auth != null && (
+        resource.data.customerId == request.auth.uid || 
+        resource.data.driverId == request.auth.uid || 
+        isAdmin()
+      );
+      allow update: if request.auth != null && (
+        resource.data.driverId == request.auth.uid || 
+        isAdmin()
+      );
+    }
+
+    // Waitlist (Public write, Admin read)
+    match /waitlist/{entryId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+    
+    // Drivers metadata
+    match /drivers/{driverId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && (request.auth.uid == driverId || isAdmin());
+    }
+  }
+}

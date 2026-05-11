@@ -161,6 +161,15 @@ export function CheckoutForm({
                   </Button>
                 </div>
               </form>
+              
+              <div className="mt-8 mb-4 px-6 text-center">
+                <p className="text-[11px] text-on-surface-variant leading-relaxed font-medium">
+                  Love the speed? <button onClick={() => window.location.href='/fleet'} className="text-primary font-bold hover:underline bg-transparent border-none p-0 cursor-pointer">Apply to be a driver</button> and earn on your schedule.
+                </p>
+                <div className="flex items-center justify-center gap-2 text-[10px] uppercase font-black tracking-widest text-on-surface-variant mt-4 opacity-40">
+                  <ShieldCheck size={12} className="text-emerald-500" /> Secure Encryption Active
+                </div>
+              </div>
             )}
           </motion.div>
         </div>
