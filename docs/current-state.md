@@ -7,28 +7,26 @@ This document is the **single source of truth (SSOT)** for the current state of 
 ## 🚀 Active Project Status
 
 ```
-Phase 1: Audit Remediation ─────────► [100% COMPLETED]
-Phase 2: Atomic Restructuring ─────► [100% COMPLETED]
-Phase 3: PWA Hardening ─────────────► [100% COMPLETED]
-Phase 4: UX Enhancements ──────────► [100% COMPLETED]
-Phase 5: Quality Gate & Verification ► [100% COMPLETED]
-Phase 6: Fleet & Admin Expansion ───► [100% COMPLETED]
-Phase 7: Order-Fleet Integration ───► [20% COMPLETED]
+Phase 1: Audit Remediation ─────────────────► [100% COMPLETED]
+Phase 2: Atomic Restructuring ──────────────► [100% COMPLETED]
+Phase 3: PWA Hardening ──────────────────────► [100% COMPLETED]
+Phase 4: UX Enhancements ───────────────────► [100% COMPLETED]
+Phase 5: Quality Gate & Verification ────────► [100% COMPLETED]
+Phase 6: Fleet & Admin Expansion ────────────► [100% COMPLETED]
+Phase 7: Order-Fleet Integration ────────────► [100% COMPLETED]
+Phase 8: Logistics Recruitment Pipeline ─────► [100% COMPLETED]
+Phase 9: Feedback Loop & Logistics Hardening ► [100% COMPLETED]
 ```
 
-| Phase | Description | Lead Agent / Guild | Status | Notes |
-|---|---|---|---|---|
-| **Phase 1** | Security & Audit Remediation | `SN-SEC-006` | **Completed** | TS strict compiler enabled, type errors fixed, profile storage persisted. |
-| **Phase 2** | Atomic Design Restructuring | `SN-UI-001` | **Completed** | Monolithic `App.tsx` completely split into atoms, molecules, organisms, and views. |
-| **Phase 3** | PWA Hardening | `SN-PWA-002` | **Completed** | Implemented iOS instructions guides and native Android installer triggers. |
-| **Phase 4** | UX Enhancements | `SN-PERF-004` | **Completed** | Persistent orders store & centralized toast alert system fully active. |
-| **Phase 5** | Verification & Quality Gate | `SN-OPS-007` | **Completed** | Clean compilation checked with absolutely zero compilation warnings. |
-| **Phase 6** | Fleet & Admin Expansion | `SN-ARCH-009` | **Completed** | Firebase Auth, Driver Lifecycle, and Admin Approval HQ fully operational. |
-| **Phase 7** | Order-Fleet Integration | `SN-LOG-010` | **Completed** | Real-time order assignment and driver dispatching. |
+| Phase | Description | Status | Notes |
+|---|---|---|---|
+| **Phase 1–7** | Foundation → Fleet Integration | **Completed** | See historical logs. |
+| **Phase 8** | Waitlist pipeline, Firestore rules, Admin Waitlist Manager | **Completed** | `src/lib/waitlist.ts`, `WaitlistModal.tsx`, `firestore.rules` |
+| **Phase 9** | Driver ratings, ETA tracking, order cancellation/unassign | **Completed** | `TrackerCard.tsx` rebuilt, `orders.ts` hardened, Admin HQ exception controls |
 
-- [x] **Phase 6: Admin & Fleet Recruitment** (Driver lifecycle, Admin approval queue)
-- [x] **Phase 7: Order-Fleet Integration** (Firestore orders, Admin dispatcher, Driver delivery management)
-- [ ] **Phase 8: Polish & Production Prep** (Testing, Analytics, Performance optimization)
+- [x] **Phase 8: Logistics Recruitment** (Driver waitlist, Firestore rules, admin invite flow)
+- [x] **Phase 9: Feedback & Exception Handling** (Ratings, ETA, cancel/unassign)
+- [ ] **Phase 10: Production Polish** (Auto-timeout alerts, invite emails, analytics, performance)
 
 ---
 
@@ -134,3 +132,18 @@ graph TD
 - Implemented `onSnapshot` listeners on the `driver_applications` collection for a zero-latency application queue.
 - Orchestrated atomic "Approval" triggers using Firestore `writeBatch`, ensuring the application status and user `role` (`driver_active`) stay perfectly synchronized.
 - Applied "Apple Standard" design aesthetics with glassmorphism, Framer Motion transitions, and high-contrast dark mode indicators.
+
+### 12. Driver Waitlist & Firestore Security Rules (Phase 8)
+- Built `src/lib/waitlist.ts` for capturing high-intent driver leads without requiring account creation.
+- Created `WaitlistModal.tsx` as a premium glassmorphism lead capture interface.
+- Deployed production-grade `firestore.rules`: public writes to `waitlist`, private reads for admin only.
+- Added **Waitlist Manager** tab to `AdminApp.tsx` with real-time listener and one-click "Send Invite" action.
+- Implemented `ProfileView` recruitment card with multi-tier CTA (Customer / Pending / Active states).
+
+### 13. Feedback Loop & Exception Handling (Phase 9)
+- **`TrackerCard.tsx`** fully rebuilt: ETA pulse indicator, driver identity card, animated 1-5 star ratings, cancelled state, support mailto button.
+- **`orders.ts`** hardened with: `submitOrderRating` (moving average aggregation), `updateOrderETA`, `unassignDriver` (resets to pending), `cancelOrder` (logs reason, sets terminal state).
+- **`ActiveOrder` schema** extended: `etaMins`, `rating`, `driverSnapshot`, `cancellationReason`.
+- **`UserProfile` schema** extended: `averageRating`, `totalDeliveries`.
+- **`OrderStatus`** union now includes `'cancelled'`.
+- **Admin HQ** upgraded: ETA input per order, "Unassign Driver" and "Cancel Order" controls at every stage.
