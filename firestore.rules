@@ -39,6 +39,16 @@ service cloud.firestore {
       allow read, update, delete: if isAdmin();
     }
     
+    // Driver applications
+    match /driver_applications/{appId} {
+      allow create: if request.auth != null;
+      allow read: if request.auth != null && (
+        resource.data.uid == request.auth.uid ||
+        isAdmin()
+      );
+      allow update: if isAdmin();
+    }
+
     // Drivers metadata
     match /drivers/{driverId} {
       allow read: if request.auth != null;

@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { 
-  Box, 
-  Car, 
-  ChevronRight, 
-  Clock, 
-  LogOut, 
-  MapPin, 
-  Package, 
-  Settings, 
-  Navigation,
-  CheckCircle2
+  Box,
+  Car,
+  ChevronRight,
+  Clock,
+  LogOut,
+  MapPin,
+  Package,
+  Settings,
+  Navigation
 } from 'lucide-react';
 import { useAuth } from './context/AuthContext';
 import { Button } from './components/atoms/Button';
@@ -58,7 +57,7 @@ export default function FleetApp() {
   };
 
   if (!user) return <FleetLoginView />;
-  if (role === 'unassigned') return <FleetApplyView />;
+  if (role === 'customer') return <FleetApplyView />;
   if (role === 'driver_pending') return <FleetPendingView />;
 
   if (role === 'driver_active') {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, CheckCircle2, Lock } from 'lucide-react';
+import { X, CheckCircle2, Lock, ShieldCheck } from 'lucide-react';
 import { useCartStore } from '../../store/cart';
 import { useProfileStore } from '../../store/profile';
 import { Button } from '../atoms/Button';
@@ -85,6 +85,7 @@ export function CheckoutForm({
                 <p className="font-body-md text-on-surface-variant mb-8 px-4 text-sm leading-relaxed">Your premium snacks are locked in. Redirecting you to the live tracking console...</p>
               </div>
             ) : (
+              <>
               <form onSubmit={handleSubmit} className="flex-1 flex flex-col overflow-y-auto hide-scrollbar">
                 <div className="space-y-6 flex-1 pb-4">
                   {/* Delivery Details */}
@@ -170,6 +171,7 @@ export function CheckoutForm({
                   <ShieldCheck size={12} className="text-emerald-500" /> Secure Encryption Active
                 </div>
               </div>
+              </>
             )}
           </motion.div>
         </div>

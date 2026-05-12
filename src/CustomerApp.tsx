@@ -7,8 +7,9 @@ import { useProfileStore } from './store/profile';
 import { useOrdersStore } from './store/orders';
 import { useToastStore } from './store/toast';
 import { useIsStandalone } from './hooks/useIsStandalone';
+import { useGeolocation } from './hooks/useGeolocation';
 import { useAuth } from './context/AuthContext';
-import { Product, ActiveOrder } from './types';
+import { Product } from './types';
 import { createOrder, subscribeToCustomerOrders } from './lib/orders';
 
 // Components
