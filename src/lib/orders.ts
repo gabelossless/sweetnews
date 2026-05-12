@@ -16,7 +16,9 @@ import { ActiveOrder, OrderStatus } from '../types';
 /**
  * Creates a new order in Firestore.
  */
-export const createOrder = async (orderData: Omit<ActiveOrder, 'id' | 'createdAt' | 'status' | 'progress' | 'driverId'>) => {
+export const createOrder = async (
+  orderData: Omit<ActiveOrder, 'id' | 'createdAt' | 'status' | 'progress' | 'driverId'> & { paymentMethodId?: string }
+) => {
   const orderCollection = collection(db, 'orders');
   const docRef = await addDoc(orderCollection, {
     ...orderData,

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, Store, ReceiptText, User, ShoppingBag, CheckCircle2 } from 'lucide-react';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
 
 import { useCartStore } from './store/cart';
 import { useProfileStore } from './store/profile';
@@ -11,6 +13,8 @@ import { useGeolocation } from './hooks/useGeolocation';
 import { useAuth } from './context/AuthContext';
 import { Product } from './types';
 import { createOrder, subscribeToCustomerOrders } from './lib/orders';
+
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY ?? '');
 
 // Components
 import { NavButton } from './components/molecules/NavButton';
@@ -77,7 +81,7 @@ export default function CustomerApp() {
     };
   }, []);
 
-  const handlePlaceOrder = async (details: { name: string; address: string }) => {
+  const handlePlaceOrder = async (details: { name: string; address: string; paymentMethodId?: string }) => {
     if (!user) {
       showToast('Please sign in to place an order');
       return;
@@ -97,6 +101,7 @@ export default function CustomerApp() {
         total: cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0) + 3.99,
         date: new Date().toLocaleDateString(),
         address: details.address,
+        paymentMethodId: details.paymentMethodId,
       });
 
       setIsProcessing(false);
@@ -154,11 +159,17 @@ export default function CustomerApp() {
             aria-label="View member profile"
             className="w-12 h-12 rounded-full bg-surface-container-highest overflow-hidden border-2 border-primary/40 shadow-sm cursor-pointer relative group bg-transparent border-none outline-none"
           >
-            <img 
-              alt="User Profile" 
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200" 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfxltCzz-Dp-BbsUzLwyIL1SepoqSXB7_wBz0bPyHxabW6LqfEPYtIoPU0birhCkc_sOVPEzq5kKEJ1lwGtv3t642G7FhiNydEzNbSDW0AVhsoTGaX-PCZvdrSl6fB8CqCbrWanVu1uUAr0ZtKP-JuyyklApiM4NMMik5DIp-ocmvqg5NFwIXirDvkT7J3o_Ne49uajFDSoNJTE3KAwmXhlmX6H8SZUIiOXFAnHqtMGJ-u7rzQFrWH0sSjZ2eoMp9qn2evqqCSAiQ" 
-            />
+            {user?.photoURL ? (
+              <img
+                alt="User Profile"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                src={user.photoURL}
+              />
+            ) : (
+              <div className="w-full h-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant text-lg font-bold">
+                {user?.displayName?.[0]?.toUpperCase() ?? '?'}
+              </div>
+            )}
             {/* Online Badge status */}
             <div className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border border-black ${isOnline ? 'bg-emerald-500' : 'bg-amber-500'}`} />
           </motion.button>
@@ -295,13 +306,15 @@ export default function CustomerApp() {
       />
 
       {/* Checkout Modal Overlay */}
-      <CheckoutForm
-        isOpen={isCheckoutOpen}
-        onClose={closeCheckout}
-        onPlaceOrder={handlePlaceOrder}
-        isProcessing={isProcessing}
-        isOrderPlaced={isOrderPlaced}
-      />
+      <Elements stripe={stripePromise}>
+        <CheckoutForm
+          isOpen={isCheckoutOpen}
+          onClose={closeCheckout}
+          onPlaceOrder={handlePlaceOrder}
+          isProcessing={isProcessing}
+          isOrderPlaced={isOrderPlaced}
+        />
+      </Elements>
 
       {/* Toast Notification */}
       <AnimatePresence>
