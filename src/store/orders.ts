@@ -8,25 +8,10 @@ export interface OrdersState {
   updateOrdersProgress: () => void;
 }
 
-const DEFAULT_ORDERS: ActiveOrder[] = [
-  {
-    id: '8392',
-    items: [
-      { id: '1', name: 'Wagyu Katsu Sando', price: 24.50, quantity: 1, image: 'https://images.unsplash.com/photo-1627907228175-2bf8ec2c8dd6?q=80&w=600&auto=format&fit=crop' },
-      { id: '3', name: 'Cold-Pressed Green Detox', price: 8.50, quantity: 1, image: 'https://images.unsplash.com/photo-1600271886742-f049cd451bba?q=80&w=600&auto=format&fit=crop' }
-    ],
-    total: 36.99,
-    date: 'Yesterday, 11:42 PM',
-    status: 'delivered',
-    progress: 100,
-    address: 'Downloads/sweet-news HQ, Suite 300'
-  }
-];
-
 export const useOrdersStore = create<OrdersState>()(
   persist(
     (set) => ({
-      orders: DEFAULT_ORDERS,
+      orders: [],
       addOrder: (order) => set((state) => ({ orders: [order, ...state.orders] })),
       updateOrdersProgress: () => set((state) => ({
         orders: state.orders.map((order) => {

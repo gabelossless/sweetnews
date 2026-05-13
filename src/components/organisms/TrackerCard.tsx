@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import { Clock, MapPin, Star, Mail, User, Info } from 'lucide-react';
 import { ActiveOrder } from '../../types';
 import { submitOrderRating } from '../../lib/orders';

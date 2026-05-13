@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   collection, 
   query, 
@@ -15,7 +15,7 @@ import { DriverApplication, ActiveOrder, UserProfile } from './types';
 import { Button } from './components/atoms/Button';
 import { assignDriver, updateOrderStatus, updateOrderETA, unassignDriver, cancelOrder } from './lib/orders';
 import { motion, AnimatePresence } from 'motion/react';
-import { UserCheck, UserX, Clock, Car, Hash, Phone, ShieldCheck, Box, MapPin, Navigation, CheckCircle2 } from 'lucide-react';
+import { Car, Hash, Phone, ShieldCheck, Box, MapPin, Navigation, CheckCircle2 } from 'lucide-react';
 
 export default function AdminApp() {
   const { role, user } = useAuth();
@@ -24,7 +24,6 @@ export default function AdminApp() {
   const [orders, setOrders] = useState<ActiveOrder[]>([]);
   const [activeDrivers, setActiveDrivers] = useState<UserProfile[]>([]);
   const [waitlist, setWaitlist] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (role !== 'admin') return;
@@ -60,7 +59,6 @@ export default function AdminApp() {
       setWaitlist(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
     });
 
-    setLoading(false);
     return () => {
       unsubApps();
       unsubOrders();

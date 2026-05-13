@@ -16,8 +16,8 @@ export interface ProfileState {
 export const useProfileStore = create<ProfileState>()(
   persist(
     (set) => ({
-      deliveryName: 'Walt & Carter',
-      deliveryAddress: 'Downloads/sweet-news HQ, Suite 300',
+      deliveryName: '',
+      deliveryAddress: '',
       pushNotificationsEnabled: true,
       detectedCity: null,
       detectedRegion: null,
