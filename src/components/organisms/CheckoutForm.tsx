@@ -95,11 +95,15 @@ export function CheckoutForm({
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
-            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="w-full h-[90vh] md:h-[85vh] bg-[#050505] md:rounded-[32px] rounded-t-[32px] md:max-w-md md:border border-white/[0.06] flex flex-col pt-6 pb-6 px-6 overflow-hidden z-[85] relative shadow-[0_-20px_60px_rgba(0,0,0,0.8)]"
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="fixed bottom-0 left-0 w-full h-[95vh] bg-[#000]/90 backdrop-blur-[50px] rounded-t-[48px] z-[70] flex flex-col shadow-[0_-20px_60px_rgba(0,0,0,0.9),_inset_0_1px_0_rgba(255,255,255,0.1)] border-t border-white/[0.08] md:max-w-md md:mx-auto md:left-1/2 md:-translate-x-1/2"
           >
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="font-headline-lg text-[24px] font-bold tracking-tight">Checkout</h2>
+            <div className="flex justify-center pt-3 pb-2">
+              <div className="w-12 h-1.5 bg-white/10 rounded-full" />
+            </div>
+            
+            <div className="flex justify-between items-center px-6 py-4 border-b border-white/[0.04]">
+              <h2 className="font-display-xl text-[24px] uppercase tracking-tighter font-black">Checkout</h2>
               <button
                 onClick={onClose}
                 aria-label="Close checkout"
@@ -116,20 +120,20 @@ export function CheckoutForm({
                   animate={{ scale: 1 }}
                   transition={{ type: 'spring', bounce: 0.5 }}
                 >
-                  <CheckCircle2 className="w-24 h-24 text-primary mb-6 animate-pulse" />
+                  <CheckCircle2 className="w-24 h-24 text-white mb-6 animate-pulse" />
                 </motion.div>
-                <h3 className="font-headline-lg text-[28px] font-bold mb-3 tracking-tight">Cooking Order!</h3>
+                <h3 className="font-display-xl text-[36px] uppercase font-black mb-3 tracking-tighter">Order Sent</h3>
                 <p className="font-body-md text-on-surface-variant mb-8 px-4 text-sm leading-relaxed">
                   Your premium snacks are locked in. Redirecting you to the live tracking console...
                 </p>
               </div>
             ) : (
               <>
-                <form onSubmit={handleSubmit} className="flex-1 flex flex-col overflow-y-auto hide-scrollbar">
+                <form onSubmit={handleSubmit} className="flex-1 flex flex-col overflow-y-auto hide-scrollbar px-6 pt-6">
                   <div className="space-y-6 flex-1 pb-4">
                     {/* Delivery Details */}
                     <section>
-                      <h3 className="font-label-bold text-[11px] text-on-surface-variant mb-3 uppercase tracking-widest pl-1 font-bold">
+                      <h3 className="font-headline-md text-[12px] text-white/50 mb-3 uppercase tracking-[0.2em] pl-1 font-black">
                         Delivery Details
                       </h3>
                       <div className="space-y-3">
@@ -158,7 +162,7 @@ export function CheckoutForm({
 
                     {/* Payment — Stripe Elements */}
                     <section>
-                      <h3 className="font-label-bold text-[11px] text-on-surface-variant mb-3 uppercase tracking-widest pl-1 font-bold">
+                      <h3 className="font-headline-md text-[12px] text-white/50 mb-3 uppercase tracking-[0.2em] pl-1 font-black">
                         Payment Method
                       </h3>
                       <div className="bg-[#0a0a0a] border border-white/[0.08] rounded-2xl px-4 py-4 focus-within:border-primary transition-colors">
@@ -180,30 +184,24 @@ export function CheckoutForm({
                         <span>$3.99</span>
                       </div>
                       <div className="w-full h-px bg-white/[0.06] my-3"></div>
-                      <div className="flex justify-between items-center font-label-bold text-[18px] text-white">
-                        <span>Total</span>
-                        <span>${total.toFixed(2)}</span>
+                      <div className="flex justify-between items-center mb-6 px-1">
+                        <span className="font-headline-md tracking-[0.2em] uppercase text-[14px] text-white/60 font-black">Total</span>
+                        <span className="font-headline-md text-[24px] font-black tracking-widest text-white">
+                          ${cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)}
+                        </span>
                       </div>
+                      
+                      <Button 
+                        type="submit"
+                        disabled={isProcessing || !stripe || !elements || cartItems.length === 0}
+                        whileTapScale={0.95}
+                        className="w-full py-5 bg-white text-black font-headline-md uppercase tracking-[0.2em] text-[14px] rounded-full shadow-[0_10px_30px_rgba(255,255,255,0.2)] hover:shadow-[0_15px_40px_rgba(255,255,255,0.3)] transition-all disabled:opacity-30 disabled:shadow-none disabled:cursor-not-allowed font-black"
+                      >
+                        {isProcessing ? 'Processing...' : 'Place Order'}
+                      </Button>
                     </div>
                   </div>
 
-                  <div className="pt-4 border-t border-white/[0.04] mt-auto shrink-0 bg-[#050505]">
-                    <Button
-                      type="submit"
-                      disabled={isProcessing || !stripe}
-                      whileTapScale={0.95}
-                      className="w-full py-4 bg-primary text-on-primary font-label-bold text-[16px] rounded-full shadow-[0_4px_15px_rgba(230,0,35,0.3)] disabled:opacity-70 flex justify-center items-center gap-2 relative overflow-hidden transition-all font-bold"
-                    >
-                      {isProcessing ? (
-                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      ) : (
-                        <>
-                          <Lock className="w-4 h-4 opacity-70" strokeWidth={2.5} />
-                          <span>Pay ${total.toFixed(2)}</span>
-                        </>
-                      )}
-                    </Button>
-                  </div>
                 </form>
 
                 <div className="mt-4 mb-2 px-6 text-center">

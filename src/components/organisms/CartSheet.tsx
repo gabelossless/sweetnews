@@ -30,7 +30,7 @@ export function CartSheet({ isOpen, onClose, onCheckout }: CartSheetProps) {
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed bottom-0 left-0 w-full h-[85vh] bg-[#050505] rounded-t-[32px] z-[70] flex flex-col shadow-[0_-20px_60px_rgba(0,0,0,0.8)] border-t border-white/[0.06] md:max-w-md md:mx-auto md:left-1/2 md:-translate-x-1/2"
+            className="fixed bottom-0 left-0 w-full h-[85vh] bg-[#000]/80 backdrop-blur-[50px] rounded-t-[48px] z-[70] flex flex-col shadow-[0_-20px_60px_rgba(0,0,0,0.9),_inset_0_1px_0_rgba(255,255,255,0.1)] border-t border-white/[0.08] md:max-w-md md:mx-auto md:left-1/2 md:-translate-x-1/2"
           >
             <div className="flex justify-center pt-3 pb-2">
               <div className="w-12 h-1.5 bg-white/10 rounded-full" />
@@ -58,14 +58,14 @@ export function CartSheet({ isOpen, onClose, onCheckout }: CartSheetProps) {
                   >
                     <ShoppingBag className="w-12 h-12 text-on-surface-variant opacity-60" strokeWidth={1.5} />
                   </motion.div>
-                  <h3 className="font-headline-lg text-[24px] font-bold mb-2">Your cart is feeling light</h3>
-                  <p className="font-body-md text-on-surface-variant mb-8 px-4 leading-relaxed text-sm">Let's treat those late-night cravings. Add some delicious snacks to get started!</p>
+                  <h3 className="font-display-xl text-[28px] uppercase tracking-tighter font-black mb-2">Your cart is empty</h3>
+                  <p className="font-body-md text-white/50 mb-8 px-4 leading-relaxed text-sm">Let's treat those late-night cravings. Add some premium snacks to get started.</p>
                   <Button 
                     whileTapScale={0.95}
                     onClick={onClose}
-                    className="px-8 py-3.5 bg-primary text-on-primary font-label-bold text-[16px] rounded-full shadow-[0_4px_15px_rgba(230,0,35,0.4)] hover:shadow-[0_6px_20px_rgba(230,0,35,0.5)] transition-all font-bold"
+                    className="px-8 py-3.5 bg-white text-black font-headline-md uppercase tracking-widest text-[13px] rounded-full shadow-[0_5px_20px_rgba(255,255,255,0.15)] hover:shadow-[0_8px_30px_rgba(255,255,255,0.2)] transition-all font-black"
                   >
-                    Explore Snacks
+                    Discover
                   </Button>
                 </div>
               ) : (
@@ -103,8 +103,8 @@ export function CartSheet({ isOpen, onClose, onCheckout }: CartSheetProps) {
                   
                   <div className="mt-8 border-t border-white/[0.04] pt-4">
                     <div className="flex justify-between items-center mb-6">
-                      <span className="font-body-lg text-[18px]">Total</span>
-                      <span className="font-headline-md text-[20px] font-bold text-primary">
+                      <span className="font-headline-md tracking-widest uppercase text-[14px] text-white/60 font-bold">Total</span>
+                      <span className="font-headline-md text-[24px] font-black tracking-widest text-white">
                         ${cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)}
                       </span>
                     </div>
@@ -112,7 +112,7 @@ export function CartSheet({ isOpen, onClose, onCheckout }: CartSheetProps) {
                       onClick={onCheckout}
                       disabled={cartItems.length === 0}
                       whileTapScale={0.95}
-                      className="w-full py-4 bg-primary text-on-primary font-label-bold text-[16px] rounded-full shadow-[0_4px_15px_rgba(230,0,35,0.4)] hover:shadow-[0_6px_20px_rgba(230,0,35,0.5)] transition-all disabled:opacity-50 disabled:shadow-none disabled:cursor-not-allowed font-bold"
+                      className="w-full py-5 bg-white text-black font-headline-md uppercase tracking-[0.2em] text-[14px] rounded-full shadow-[0_10px_30px_rgba(255,255,255,0.2)] hover:shadow-[0_15px_40px_rgba(255,255,255,0.3)] transition-all disabled:opacity-30 disabled:shadow-none disabled:cursor-not-allowed font-black"
                     >
                       Checkout
                     </Button>

@@ -60,31 +60,35 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setUser(user);
-      
-      if (user) {
-        const userDocRef = doc(db, 'users', user.uid);
-        const userDoc = await getDoc(userDocRef);
+      try {
+        setUser(user);
         
-        if (userDoc.exists()) {
-          setProfile(userDoc.data() as UserProfile);
+        if (user) {
+          const userDocRef = doc(db, 'users', user.uid);
+          const userDoc = await getDoc(userDocRef);
+          
+          if (userDoc.exists()) {
+            setProfile(userDoc.data() as UserProfile);
+          } else {
+            const newProfile: UserProfile = {
+              uid: user.uid,
+              email: user.email || '',
+              displayName: user.displayName,
+              photoURL: user.photoURL,
+              role: 'customer',
+              createdAt: new Date().toISOString(),
+            };
+            await setDoc(userDocRef, newProfile);
+            setProfile(newProfile);
+          }
         } else {
-          const newProfile: UserProfile = {
-            uid: user.uid,
-            email: user.email || '',
-            displayName: user.displayName,
-            photoURL: user.photoURL,
-            role: 'customer',
-            createdAt: new Date().toISOString(),
-          };
-          await setDoc(userDocRef, newProfile);
-          setProfile(newProfile);
+          setProfile(null);
         }
-      } else {
-        setProfile(null);
+      } catch (error) {
+        console.error('Error in auth state listener:', error);
+      } finally {
+        setLoading(false);
       }
-      
-      setLoading(false);
     });
 
     return unsubscribe;

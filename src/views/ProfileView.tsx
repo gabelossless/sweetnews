@@ -218,44 +218,11 @@ export function ProfileView({ isOnline, onRedeemReward }: ProfileViewProps) {
           </div>
         </div>
 
-        {/* Driver Partner Promotion - Premium Glass Card */}
-        <motion.div 
-          whileHover={{ scale: 1.01 }}
-          className="relative overflow-hidden bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-transparent border border-white/10 rounded-[32px] p-8 shadow-2xl group"
-        >
-          <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
-            <Car size={80} className="text-white" />
-          </div>
-          
-          <div className="relative z-10">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center border border-indigo-500/30">
-                <ShieldCheck size={16} className="text-indigo-400" />
-              </div>
-              <span className="text-[10px] uppercase font-black tracking-widest text-indigo-300">Fleet Opportunity</span>
-            </div>
-            
-            <h3 className="text-2xl font-black text-white mb-2 italic">Earn with Sweet News</h3>
-            <p className="text-sm text-on-surface-variant max-w-[240px] leading-relaxed mb-6">
-              Join our elite delivery fleet and turn your late nights into high-yield earnings.
-            </p>
-            
-            <button 
-              onClick={() => window.location.href = '/fleet'}
-              className="px-6 py-3 bg-white text-black text-xs font-black rounded-full hover:bg-indigo-400 hover:text-white transition-all transform active:scale-95 shadow-xl"
-            >
-              Get Started
-            </button>
-          </div>
-          
-          {/* Subtle animated light sweep */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-        </motion.div>
-
         {/* Payment protection */}
         <div className="flex items-center justify-center gap-2 text-[10px] uppercase font-bold tracking-widest text-on-surface-variant py-4">
           <ShieldCheck size={14} className="text-emerald-500" /> Secure 256-Bit SSL Checkout Guard
         </div>
+
       </section>
     </motion.div>
   );

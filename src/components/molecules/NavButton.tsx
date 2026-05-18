@@ -13,24 +13,24 @@ export function NavButton({ icon, label, isActive, onClick }: NavButtonProps) {
     <motion.button 
       whileTap={{ scale: 0.85 }}
       onClick={onClick}
-      className={`flex flex-col items-center justify-center p-2 rounded-2xl transition-all duration-300 ${
+      className={`flex flex-col items-center justify-center w-16 h-16 rounded-[20px] transition-all duration-300 relative ${
         isActive 
-          ? 'text-primary scale-110' 
-          : 'text-on-surface-variant hover:text-primary'
+          ? 'text-white scale-105 bg-white/5' 
+          : 'text-white/40 hover:text-white/80 hover:bg-white/5'
       }`}
     >
-      <div className={`mb-1 relative ${isActive ? 'fill-current' : ''}`}>
-        {isActive && (
-          <motion.div 
-            layoutId="nav-indicator"
-            className="absolute inset-0 bg-primary/10 rounded-full scale-150 blur-sm"
-          />
-        )}
+      <div className={`mb-1 relative z-10 ${isActive ? 'drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]' : ''}`}>
         {icon}
       </div>
-      <span className={`font-headline-md text-[11px] font-extrabold tracking-wide uppercase ${isActive ? '' : 'opacity-80'}`}>
+      <span className={`font-headline-md text-[9px] font-black tracking-widest uppercase mt-0.5 z-10 ${isActive ? 'opacity-100' : 'opacity-0 scale-75 hidden'}`}>
         {label}
       </span>
+      {isActive && (
+        <motion.div 
+          layoutId="nav-indicator"
+          className="absolute inset-0 border border-white/10 rounded-[20px] shadow-[inset_0_0_20px_rgba(255,255,255,0.05)]"
+        />
+      )}
     </motion.button>
   );
 }

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -65,11 +65,11 @@
   --spacing-gutter: 16px;
   --spacing-lg: 40px;
 
-  --font-headline-md: "Space Grotesk", sans-serif;
-  --font-headline-lg: "Space Grotesk", sans-serif;
+  --font-headline-md: "Outfit", sans-serif;
+  --font-headline-lg: "Outfit", sans-serif;
   --font-body-lg: "Inter", sans-serif;
   --font-body-md: "Inter", sans-serif;
-  --font-display-xl: "Space Grotesk", sans-serif;
+  --font-display-xl: "Outfit", sans-serif;
   --font-label-bold: "Inter", sans-serif;
 }
 
