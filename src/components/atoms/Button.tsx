@@ -24,8 +24,8 @@ export function Button({
 }: ButtonProps) {
   
   const variants = {
-    primary: 'bg-primary text-white hover:bg-primary-dark shadow-[0_10px_30px_rgba(255,107,0,0.2)]',
-    secondary: 'bg-white text-black hover:bg-white/90',
+    primary: 'bg-white text-black hover:bg-white/90 shadow-[0_10px_30px_rgba(255,255,255,0.15)]',
+    secondary: 'bg-white/5 border border-white/10 text-white hover:bg-white/10',
     outline: 'bg-transparent border border-white/10 text-white hover:bg-white/5',
     ghost: 'bg-transparent text-white/60 hover:text-white hover:bg-white/5'
   };

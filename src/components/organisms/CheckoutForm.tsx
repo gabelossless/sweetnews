@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, CheckCircle2, Lock, ShieldCheck } from 'lucide-react';
+import { X, CheckCircle2, ShieldCheck } from 'lucide-react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useCartStore } from '../../store/cart';
 import { useProfileStore } from '../../store/profile';
@@ -109,7 +109,7 @@ export function CheckoutForm({
                 aria-label="Close checkout"
                 className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 transition-colors"
               >
-                <X className="w-5 h-5 text-on-surface-variant" />
+                <X className="w-5 h-5 text-white/60 hover:text-white" />
               </button>
             </div>
 
@@ -123,7 +123,7 @@ export function CheckoutForm({
                   <CheckCircle2 className="w-24 h-24 text-white mb-6 animate-pulse" />
                 </motion.div>
                 <h3 className="font-display-xl text-[36px] uppercase font-black mb-3 tracking-tighter">Order Sent</h3>
-                <p className="font-body-md text-on-surface-variant mb-8 px-4 text-sm leading-relaxed">
+                <p className="font-body-md text-white/40 mb-8 px-4 text-xs font-medium leading-relaxed">
                   Your premium snacks are locked in. Redirecting you to the live tracking console...
                 </p>
               </div>
@@ -133,7 +133,7 @@ export function CheckoutForm({
                   <div className="space-y-6 flex-1 pb-4">
                     {/* Delivery Details */}
                     <section>
-                      <h3 className="font-headline-md text-[12px] text-white/50 mb-3 uppercase tracking-[0.2em] pl-1 font-black">
+                      <h3 className="font-headline-md text-[10px] text-white/40 mb-3 uppercase tracking-[0.25em] pl-1 font-black">
                         Delivery Details
                       </h3>
                       <div className="space-y-3">
@@ -159,35 +159,35 @@ export function CheckoutForm({
                         </div>
                       </div>
                     </section>
-
+ 
                     {/* Payment — Stripe Elements */}
                     <section>
-                      <h3 className="font-headline-md text-[12px] text-white/50 mb-3 uppercase tracking-[0.2em] pl-1 font-black">
+                      <h3 className="font-headline-md text-[10px] text-white/40 mb-3 uppercase tracking-[0.25em] pl-1 font-black">
                         Payment Method
                       </h3>
-                      <div className="bg-[#0a0a0a] border border-white/[0.08] rounded-2xl px-4 py-4 focus-within:border-primary transition-colors">
+                      <div className="bg-[#0a0a0a] border border-white/[0.08] rounded-2xl px-4 py-4 focus-within:border-white/20 transition-colors">
                         <CardElement options={CARD_ELEMENT_OPTIONS} />
                       </div>
                       {cardError && (
                         <p className="text-[12px] text-red-400 mt-2 pl-1">{cardError}</p>
                       )}
                     </section>
-
+ 
                     {/* Order Summary */}
                     <div className="bg-[#0a0a0a] border border-white/[0.06] rounded-[24px] p-5 mt-2">
-                      <div className="flex justify-between items-center mb-3 font-body-md text-xs text-on-surface-variant font-medium">
+                      <div className="flex justify-between items-center mb-3 font-body-md text-xs text-white/40 font-medium">
                         <span>Subtotal</span>
                         <span>${subtotal.toFixed(2)}</span>
                       </div>
-                      <div className="flex justify-between items-center mb-3 font-body-md text-xs text-on-surface-variant font-medium">
+                      <div className="flex justify-between items-center mb-3 font-body-md text-xs text-white/40 font-medium">
                         <span>Delivery Fee</span>
                         <span>$3.99</span>
                       </div>
                       <div className="w-full h-px bg-white/[0.06] my-3"></div>
                       <div className="flex justify-between items-center mb-6 px-1">
-                        <span className="font-headline-md tracking-[0.2em] uppercase text-[14px] text-white/60 font-black">Total</span>
-                        <span className="font-headline-md text-[24px] font-black tracking-widest text-white">
-                          ${cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)}
+                        <span className="text-[11px] tracking-[0.2em] uppercase text-white/40 font-black">Total</span>
+                        <span className="text-[24px] font-black tracking-widest text-white">
+                          ${total.toFixed(2)}
                         </span>
                       </div>
                       
@@ -195,28 +195,28 @@ export function CheckoutForm({
                         type="submit"
                         disabled={isProcessing || !stripe || !elements || cartItems.length === 0}
                         whileTapScale={0.95}
-                        className="w-full py-5 bg-white text-black font-headline-md uppercase tracking-[0.2em] text-[14px] rounded-full shadow-[0_10px_30px_rgba(255,255,255,0.2)] hover:shadow-[0_15px_40px_rgba(255,255,255,0.3)] transition-all disabled:opacity-30 disabled:shadow-none disabled:cursor-not-allowed font-black"
+                        className="w-full py-5 bg-white text-black font-headline-md uppercase tracking-[0.2em] text-[12px] rounded-full shadow-[0_10px_30px_rgba(255,255,255,0.15)] hover:bg-white/90 hover:shadow-[0_15px_40px_rgba(255,255,255,0.25)] transition-all disabled:opacity-30 disabled:shadow-none disabled:cursor-not-allowed font-black"
                       >
                         {isProcessing ? 'Processing...' : 'Place Order'}
                       </Button>
                     </div>
                   </div>
-
+ 
                 </form>
-
+ 
                 <div className="mt-4 mb-2 px-6 text-center">
-                  <p className="text-[11px] text-on-surface-variant leading-relaxed font-medium">
+                  <p className="text-[10px] text-white/40 leading-relaxed font-medium">
                     Love the speed?{' '}
                     <button
                       onClick={() => (window.location.href = '/fleet')}
-                      className="text-primary font-bold hover:underline bg-transparent border-none p-0 cursor-pointer"
+                      className="text-white font-black hover:underline bg-transparent border-none p-0 cursor-pointer uppercase tracking-wider text-[9px]"
                     >
                       Apply to be a driver
                     </button>{' '}
                     and earn on your schedule.
                   </p>
-                  <div className="flex items-center justify-center gap-2 text-[10px] uppercase font-black tracking-widest text-on-surface-variant mt-3 opacity-40">
-                    <ShieldCheck size={12} className="text-emerald-500" /> Secure Encryption Active
+                  <div className="flex items-center justify-center gap-2 text-[9px] uppercase font-black tracking-[0.25em] text-white/40 mt-3">
+                    <ShieldCheck size={12} className="text-white/60" /> Secure Encryption Active
                   </div>
                 </div>
               </>

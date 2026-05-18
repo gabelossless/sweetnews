@@ -25,10 +25,10 @@ export function ProductCard({
       className={`relative rounded-[32px] p-4 flex flex-col group ${className}`}
     >
       {/* Deep Shadow Backdrop */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent border border-white/[0.05] rounded-[32px] z-0 pointer-events-none" />
+      <div className={`absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent border ${isFeatured ? 'border-white/20 shadow-[0_0_20px_rgba(255,255,255,0.05)]' : 'border-white/[0.05]'} rounded-[32px] z-0 pointer-events-none`} />
       
       {/* Stage platform glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[60%] bg-white/5 blur-[40px] rounded-full z-0 group-hover:bg-white/10 transition-colors duration-500" />
+      <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[60%] ${isFeatured ? 'bg-white/10 blur-[50px]' : 'bg-white/5 blur-[40px]'} rounded-full z-0 group-hover:bg-white/10 transition-colors duration-500`} />
       
       <div className="aspect-square relative z-10 flex items-center justify-center mb-6">
         <motion.img 
