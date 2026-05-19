@@ -16,7 +16,7 @@ export function Input({ label, icon, className = '', id, ...props }: InputProps)
           {label}
         </label>
       )}
-      <div className="relative group">
+      <div className="relative group w-full">
         {icon && (
           <div className="absolute left-5 top-1/2 -translate-y-1/2 text-white/30 group-focus-within:text-primary transition-colors">
             {icon}
