@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
 import { LogIn, UserPlus, ArrowRight, Mail, Lock } from 'lucide-react';
-import { 
-  signInWithEmailAndPassword, 
+import {
+  signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   updateProfile
 } from 'firebase/auth';
@@ -26,7 +26,7 @@ export default function FleetLoginView() {
 
     try {
       const sanitizedData = sanitizeObject(formData);
-      
+
       if (isLogin) {
         await signInWithEmailAndPassword(auth, sanitizedData.email, sanitizedData.password);
       } else {
@@ -42,11 +42,12 @@ export default function FleetLoginView() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-6 flex flex-col justify-center">
+    <div className="min-h-screen w-full bg-black text-white flex flex-col items-center justify-center px-6 py-12">
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="max-w-md mx-auto w-full space-y-8"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35, ease: 'easeOut' }}
+        className="w-full max-w-sm space-y-8"
       >
         <div className="text-center space-y-2">
           <h1 className="text-4xl font-black tracking-tighter">
@@ -57,7 +58,7 @@ export default function FleetLoginView() {
           </p>
         </div>
 
-        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 space-y-6">
+        <div className="w-full bg-white/5 border border-white/10 rounded-3xl p-6 space-y-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             {!isLogin && (
               <Input
@@ -68,7 +69,7 @@ export default function FleetLoginView() {
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               />
             )}
-            
+
             <Input
               label="Email Address"
               placeholder="name@example.com"
@@ -78,7 +79,7 @@ export default function FleetLoginView() {
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             />
-            
+
             <Input
               label="Password"
               placeholder="••••••••"
@@ -91,9 +92,10 @@ export default function FleetLoginView() {
 
             <Button
               type="submit"
+              variant="brand"
               fullWidth
               loading={loading}
-              className="h-14 mt-4 btn-brand rounded-2xl"
+              className="h-14 mt-4 rounded-2xl text-base"
             >
               {isLogin ? 'Sign In to Fleet' : 'Create Partner Account'} <ArrowRight className="ml-2" size={18} />
             </Button>
@@ -105,9 +107,9 @@ export default function FleetLoginView() {
               className="text-xs text-white/40 hover:text-[#ff2060] transition-colors flex items-center gap-2 mx-auto"
             >
               {isLogin ? (
-                <> <UserPlus size={14} /> New here? Apply to deliver</>
+                <><UserPlus size={14} /> New here? Apply to deliver</>
               ) : (
-                <> <LogIn size={14} /> Already a partner? Sign in</>
+                <><LogIn size={14} /> Already a partner? Sign in</>
               )}
             </button>
           </div>
