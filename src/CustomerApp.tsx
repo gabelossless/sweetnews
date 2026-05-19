@@ -143,21 +143,17 @@ export default function CustomerApp() {
     showToast(`Added ${product.name} to cart`);
   };
 
-  const handleRedeemReward = (rewardName: string) => {
-    showToast(`Claimed: ${rewardName}!`);
-  };
-
   return (
-    <div className={`bg-background text-on-background min-h-screen pb-[120px] pt-[110px] sm:pt-[130px] font-body-md selection:bg-primary selection:text-on-primary overflow-x-hidden ${isStandalone ? 'standalone-layout' : ''}`}>
+    <div className={`bg-background text-on-background min-h-screen pb-[120px] pt-[110px] sm:pt-[130px] font-body-md selection:bg-white selection:text-black overflow-x-hidden ${isStandalone ? 'standalone-layout' : ''}`}>
       
       {/* TopAppBar */}
-      <header className="fixed top-0 w-full flex justify-between items-center px-6 pt-[max(env(safe-area-inset-top,54px),16px)] pb-4 backdrop-blur-xl border-b border-white/[0.04] shadow-[0_4px_30px_rgba(0,0,0,0.8)] z-50 bg-background/80 md:max-w-md md:mx-auto md:left-1/2 md:-translate-x-1/2 md:rounded-b-[24px]">
+      <header className="fixed top-0 w-full flex justify-between items-center px-6 pt-[max(env(safe-area-inset-top,54px),24px)] pb-6 bg-gradient-to-b from-[#000000] via-[#000000]/80 to-transparent z-50 md:max-w-md md:mx-auto md:left-1/2 md:-translate-x-1/2">
         <div className="flex items-center gap-3">
           <motion.button 
             whileTap={{ scale: 0.95 }}
             onClick={() => setActiveTab('profile')}
             aria-label="View member profile"
-            className="w-12 h-12 rounded-full bg-surface-container-highest overflow-hidden border-2 border-primary/40 shadow-sm cursor-pointer relative group bg-transparent border-none outline-none"
+            className="w-12 h-12 rounded-full bg-white/5 overflow-hidden border-2 border-white/20 shadow-sm cursor-pointer relative group bg-transparent border-none outline-none"
           >
             {user?.photoURL ? (
               <img
@@ -166,19 +162,19 @@ export default function CustomerApp() {
                 src={user.photoURL}
               />
             ) : (
-              <div className="w-full h-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant text-lg font-bold">
+              <div className="w-full h-full bg-white/5 flex items-center justify-center text-white text-lg font-bold">
                 {user?.displayName?.[0]?.toUpperCase() ?? '?'}
               </div>
             )}
             {/* Online Badge status */}
-            <div className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border border-black ${isOnline ? 'bg-emerald-500' : 'bg-amber-500'}`} />
+            <div className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border border-black ${isOnline ? 'bg-white shadow-[0_0_10px_rgba(255,255,255,1)]' : 'bg-white/20'}`} />
           </motion.button>
         </div>
         <div 
           onClick={() => setActiveTab('shop')}
-          className="text-[26px] font-headline-lg font-black italic tracking-tighter text-primary drop-shadow-sm cursor-pointer select-none"
+          className="text-[20px] font-headline-lg font-black tracking-[0.25em] text-white uppercase drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] cursor-pointer select-none"
         >
-          SweetNews
+          SWEETNEWS
         </div>
         <div className="flex items-center gap-3">
           <motion.button 
@@ -186,7 +182,7 @@ export default function CustomerApp() {
             whileHover={{ scale: 1.05 }}
             onClick={() => setActiveTab('search')}
             aria-label="Search delicacies"
-            className={`w-12 h-12 flex items-center justify-center rounded-full transition-colors duration-200 shadow-sm border border-white/[0.06] ${activeTab === 'search' ? 'bg-primary text-white border-transparent' : 'bg-surface-container-lowest text-on-surface hover:bg-surface-container-high'}`}
+            className={`w-12 h-12 flex items-center justify-center rounded-full transition-all duration-200 shadow-sm border ${activeTab === 'search' ? 'btn-brand border-transparent shadow-[0_4px_20px_rgba(230,0,35,0.4)]' : 'bg-white/5 text-white hover:bg-white/10 border-white/[0.06]'}`}
           >
             <Search className="w-[22px] h-[22px]" strokeWidth={2.5} />
           </motion.button>
@@ -196,7 +192,7 @@ export default function CustomerApp() {
             whileHover={{ scale: 1.05 }}
             onClick={() => setIsCartOpen(true)}
             aria-label="Open shopping cart"
-            className="w-12 h-12 relative flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container-high transition-colors duration-200 shadow-sm border border-white/[0.06] bg-surface-container-lowest"
+            className="w-12 h-12 relative flex items-center justify-center rounded-full text-white hover:bg-white/10 transition-colors duration-200 shadow-sm border border-white/[0.06] bg-white/5"
           >
             <motion.div
               key={cartItemsCount}
@@ -212,7 +208,7 @@ export default function CustomerApp() {
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   exit={{ scale: 0 }}
-                  className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-on-primary rounded-full flex items-center justify-center font-label-bold text-[11px] shadow-[0_2px_8px_rgba(230,0,35,0.6)]"
+                  className="absolute -top-1 -right-1 w-5 h-5 bg-white text-black rounded-full flex items-center justify-center font-label-bold text-[11px] shadow-[0_2px_8px_rgba(255,255,255,0.4)]"
                 >
                   <motion.span
                     key={cartItemsCount}
@@ -263,15 +259,14 @@ export default function CustomerApp() {
           {activeTab === 'profile' && (
             <ProfileView
               isOnline={isOnline}
-              onRedeemReward={handleRedeemReward}
             />
           )}
 
         </AnimatePresence>
       </main>
 
-      {/* BottomNavBar */}
-      <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-[calc(env(safe-area-inset-bottom,34px)+12px)] pt-4 bg-background/80 backdrop-blur-2xl rounded-t-[40px] border-t border-white/[0.04] shadow-[0_-15px_40px_rgba(0,0,0,0.8)] md:max-w-md md:mx-auto md:left-1/2 md:-translate-x-1/2 md:bottom-6 md:rounded-[40px] md:border">
+      {/* BottomNavBar Pill */}
+      <nav className="fixed bottom-[calc(env(safe-area-inset-bottom,34px)+16px)] left-1/2 -translate-x-1/2 w-[90%] md:max-w-sm z-50 flex justify-around items-center px-4 py-3.5 bg-[#050505]/70 backdrop-blur-3xl rounded-[32px] border border-white/[0.08] shadow-[0_20px_40px_rgba(0,0,0,0.8),_inset_0_1px_0_rgba(255,255,255,0.1)] transition-all duration-300">
         <NavButton 
           icon={<Store />} 
           label="Shop" 

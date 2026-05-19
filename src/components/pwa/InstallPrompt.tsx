@@ -75,12 +75,12 @@ export function InstallPrompt() {
           className="fixed bottom-[110px] left-4 right-4 z-[90] bg-[#0a0a0a]/90 backdrop-blur-md rounded-2xl border border-white/[0.08] p-4 shadow-[0_12px_40px_rgba(0,0,0,0.8)] flex gap-4 items-center justify-between md:max-w-md md:mx-auto md:left-1/2 md:-translate-x-1/2 md:bottom-28"
         >
           <div className="flex-1 flex gap-3 items-center min-w-0">
-            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center font-bold text-white text-lg flex-shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center font-bold text-white text-lg flex-shrink-0">
               🍩
             </div>
             <div className="min-w-0">
-              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Install Sweet News</h4>
-              <p className="text-[10px] text-on-surface-variant truncate mt-0.5">
+              <h4 className="text-xs font-black text-white uppercase tracking-wider">Install Sweet News</h4>
+              <p className="text-[10px] text-white/40 truncate mt-0.5 font-medium">
                 {isIOS ? 'Add to Home Screen for order tracking' : 'Get instant delivery notifications'}
               </p>
             </div>
@@ -90,18 +90,17 @@ export function InstallPrompt() {
             {isIOS ? (
               <button 
                 onClick={() => {
-                  // Show steps modal or alert for iOS
                   alert("To install, tap the Share icon at the bottom of your Safari browser, then choose 'Add to Home Screen'!");
                   setShowPrompt(false);
                 }}
-                className="h-8 px-4 rounded-full bg-white text-black font-semibold text-xs transition-colors flex items-center gap-1.5 hover:bg-gray-100"
+                className="h-8 px-4 rounded-full bg-white text-black font-black uppercase tracking-wider text-[10px] transition-colors flex items-center gap-1.5 hover:bg-white/90 cursor-pointer"
               >
                 <Share size={12} /> Steps
               </button>
             ) : (
               <button 
                 onClick={handleInstallClick}
-                className="h-8 px-4 rounded-full bg-primary text-white font-semibold text-xs transition-colors flex items-center gap-1 hover:bg-primary-container"
+                className="h-8 px-4 rounded-full bg-white text-black font-black uppercase tracking-wider text-[10px] transition-colors flex items-center gap-1 hover:bg-white/90 cursor-pointer"
               >
                 <ArrowDown size={12} /> Install
               </button>
@@ -110,7 +109,7 @@ export function InstallPrompt() {
             <button 
               onClick={handleDismiss}
               aria-label="Dismiss prompt"
-              className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 text-on-surface-variant transition-colors"
+              className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 text-white/60 hover:text-white transition-colors cursor-pointer"
             >
               <X size={14} />
             </button>

@@ -95,15 +95,15 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     />
                     <div className="space-y-1.5">
-                      <label className="text-[10px] uppercase tracking-widest font-black text-on-surface-variant ml-1">Vehicle</label>
+                      <label className="text-[10px] uppercase tracking-widest font-black text-white/40 ml-1">Vehicle</label>
                       <select 
                         value={formData.vehicleType}
                         onChange={(e) => setFormData({ ...formData, vehicleType: e.target.value })}
-                        className="w-full h-12 bg-white/5 border border-white/10 rounded-2xl px-4 text-sm text-white focus:outline-none focus:ring-1 focus:ring-primary/50 appearance-none font-bold"
+                        className="w-full h-12 bg-white/5 border border-white/10 rounded-2xl px-4 text-sm text-white focus:outline-none focus:ring-1 focus:ring-white/25 appearance-none font-bold"
                       >
-                        <option value="Car">Car</option>
-                        <option value="Scooter">Scooter</option>
-                        <option value="Bicycle">Bicycle</option>
+                        <option value="Car" className="bg-black text-white">Car</option>
+                        <option value="Scooter" className="bg-black text-white">Scooter</option>
+                        <option value="Bicycle" className="bg-black text-white">Bicycle</option>
                       </select>
                     </div>
                   </div>
@@ -119,7 +119,7 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                     type="submit"
                     fullWidth
                     loading={loading}
-                    className="h-14 mt-4 bg-white text-black hover:bg-primary hover:text-white"
+                    className="h-14 mt-4 bg-white text-black hover:bg-white/90"
                   >
                     Submit Application <Send className="ml-2" size={16} />
                   </Button>
@@ -130,11 +130,11 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                   animate={{ scale: 1, opacity: 1 }}
                   className="py-12 text-center space-y-4"
                 >
-                  <div className="w-20 h-20 bg-emerald-500/10 border border-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <CheckCircle2 size={40} className="text-emerald-400" />
+                  <div className="w-20 h-20 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_20px_rgba(255,255,255,0.05)]">
+                    <CheckCircle2 size={40} className="text-white" />
                   </div>
-                  <h3 className="text-2xl font-black text-white">Application Received</h3>
-                  <p className="text-sm text-on-surface-variant leading-relaxed">
+                  <h3 className="text-2xl font-black text-white uppercase tracking-tight">Application Received</h3>
+                  <p className="text-xs text-white/40 leading-relaxed font-medium">
                     You've been added to the Sweet News waitlist. We'll reach out via email once a slot opens in your zone.
                   </p>
                 </motion.div>

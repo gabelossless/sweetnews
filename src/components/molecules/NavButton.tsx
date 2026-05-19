@@ -13,24 +13,24 @@ export function NavButton({ icon, label, isActive, onClick }: NavButtonProps) {
     <motion.button 
       whileTap={{ scale: 0.85 }}
       onClick={onClick}
-      className={`flex flex-col items-center justify-center p-2 rounded-2xl transition-all duration-300 ${
-        isActive 
-          ? 'text-primary scale-110' 
-          : 'text-on-surface-variant hover:text-primary'
+      className={`flex flex-col items-center justify-center w-16 h-16 rounded-[20px] transition-all duration-300 relative ${
+        isActive
+          ? 'scale-105'
+          : 'text-white/40 hover:text-white/80 hover:bg-white/5'
       }`}
     >
-      <div className={`mb-1 relative ${isActive ? 'fill-current' : ''}`}>
-        {isActive && (
-          <motion.div 
-            layoutId="nav-indicator"
-            className="absolute inset-0 bg-primary/10 rounded-full scale-150 blur-sm"
-          />
-        )}
+      <div className={`mb-1 relative z-10 ${isActive ? 'text-[#ff2060] drop-shadow-[0_0_10px_rgba(255,32,96,0.8)]' : ''}`}>
         {icon}
       </div>
-      <span className={`font-headline-md text-[11px] font-extrabold tracking-wide uppercase ${isActive ? '' : 'opacity-80'}`}>
+      <span className={`font-headline-md text-[9px] font-black tracking-widest uppercase mt-0.5 z-10 ${isActive ? 'opacity-100 text-[#ff2060]' : 'opacity-0 scale-75 hidden'}`}>
         {label}
       </span>
+      {isActive && (
+        <motion.div
+          layoutId="nav-indicator"
+          className="absolute inset-0 rounded-[20px] border border-[#e60023]/20 bg-gradient-to-b from-[#e60023]/10 to-[#ff2060]/5 shadow-[inset_0_0_20px_rgba(230,0,35,0.08)]"
+        />
+      )}
     </motion.button>
   );
 }

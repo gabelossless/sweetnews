@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -18,6 +18,7 @@
   --color-on-surface-variant: #a1a1a6;
 
   --color-primary: #e60023;
+  --color-pink: #ff2060;
   --color-on-primary: #ffffff;
   --color-primary-container: #5c000e;
   --color-on-primary-container: #ffdad6;
@@ -65,11 +66,11 @@
   --spacing-gutter: 16px;
   --spacing-lg: 40px;
 
-  --font-headline-md: "Space Grotesk", sans-serif;
-  --font-headline-lg: "Space Grotesk", sans-serif;
+  --font-headline-md: "Outfit", sans-serif;
+  --font-headline-lg: "Outfit", sans-serif;
   --font-body-lg: "Inter", sans-serif;
   --font-body-md: "Inter", sans-serif;
-  --font-display-xl: "Space Grotesk", sans-serif;
+  --font-display-xl: "Outfit", sans-serif;
   --font-label-bold: "Inter", sans-serif;
 }
 
@@ -97,6 +98,19 @@ html, body {
   .hide-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+
+  /* Brand gradient — red to pink */
+  .btn-brand {
+    background: linear-gradient(135deg, #e60023 0%, #ff2060 100%);
+    box-shadow: 0 8px 32px rgba(230, 0, 35, 0.45), 0 2px 8px rgba(255, 32, 96, 0.3);
+    color: #fff;
+  }
+  .btn-brand:hover {
+    box-shadow: 0 12px 40px rgba(230, 0, 35, 0.55), 0 4px 12px rgba(255, 32, 96, 0.4);
+  }
+  .glow-brand {
+    box-shadow: 0 0 24px rgba(230, 0, 35, 0.5), 0 0 48px rgba(255, 32, 96, 0.2);
   }
 }
 

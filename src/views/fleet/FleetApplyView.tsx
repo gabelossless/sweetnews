@@ -57,7 +57,7 @@ export default function FleetApplyView() {
         className="max-w-md mx-auto w-full space-y-8"
       >
         <header className="space-y-2">
-          <div className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center mb-4">
+          <div className="w-12 h-12 rounded-2xl btn-brand flex items-center justify-center mb-4">
             <Truck className="text-white w-6 h-6" />
           </div>
           <h1 className="text-3xl font-black tracking-tight">Become a Partner</h1>
@@ -111,7 +111,7 @@ export default function FleetApplyView() {
             type="submit"
             fullWidth
             loading={loading}
-            className="h-14 text-base font-bold"
+            className="h-14 text-base font-bold btn-brand rounded-2xl"
           >
             Submit Application <ArrowRight className="ml-2" size={18} />
           </Button>
