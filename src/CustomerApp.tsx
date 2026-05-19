@@ -143,10 +143,6 @@ export default function CustomerApp() {
     showToast(`Added ${product.name} to cart`);
   };
 
-  const handleRedeemReward = (rewardName: string) => {
-    showToast(`Claimed: ${rewardName}!`);
-  };
-
   return (
     <div className={`bg-background text-on-background min-h-screen pb-[120px] pt-[110px] sm:pt-[130px] font-body-md selection:bg-white selection:text-black overflow-x-hidden ${isStandalone ? 'standalone-layout' : ''}`}>
       
@@ -263,7 +259,6 @@ export default function CustomerApp() {
           {activeTab === 'profile' && (
             <ProfileView
               isOnline={isOnline}
-              onRedeemReward={handleRedeemReward}
             />
           )}
 

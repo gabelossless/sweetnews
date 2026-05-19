@@ -7,10 +7,9 @@ import { useState } from 'react';
 
 interface ProfileViewProps {
   isOnline: boolean;
-  onRedeemReward: (rewardName: string) => void;
 }
 
-export function ProfileView({ isOnline, onRedeemReward }: ProfileViewProps) {
+export function ProfileView({ isOnline }: ProfileViewProps) {
   const { role } = useAuth();
   const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
   const deliveryName = useProfileStore((state) => state.deliveryName);
@@ -50,8 +49,7 @@ export function ProfileView({ isOnline, onRedeemReward }: ProfileViewProps) {
           <div className="relative z-10 flex flex-col justify-between h-48">
             <div className="flex justify-between items-start">
               <div>
-                <span className="text-[9px] uppercase font-black tracking-[0.2em] text-white/60 bg-white/5 px-3 py-1 rounded-full border border-white/[0.08]">VIP NIGHT OWL MEMBER</span>
-                <h3 className="text-xl font-black mt-3 uppercase tracking-wide text-white">{deliveryName || 'Walt & Carter'}</h3>
+                <h3 className="text-xl font-black uppercase tracking-wide text-white">{deliveryName || 'Member'}</h3>
               </div>
               <div className="w-10 h-10 rounded-full bg-white/5 border border-white/[0.08] flex items-center justify-center text-white text-sm font-bold">
                 👑
@@ -60,17 +58,10 @@ export function ProfileView({ isOnline, onRedeemReward }: ProfileViewProps) {
             
             <div className="flex justify-between items-end">
               <div>
-                <span className="text-[8px] uppercase font-black tracking-[0.2em] text-white/40 block">Loyalty Balance</span>
-                <p className="text-3xl font-black text-white mt-1">1,450 <span className="text-[10px] text-white/50 font-medium tracking-widest uppercase ml-1">pts</span></p>
+                <span className="text-[8px] uppercase font-black tracking-[0.2em] text-white/40 block">Loyalty Rewards</span>
+                <p className="text-sm font-black text-white/30 mt-1 tracking-widest uppercase">Coming Soon</p>
               </div>
-              <div>
-                <button
-                  onClick={() => onRedeemReward('Redeem Wagyu Sando')}
-                  className="px-4 py-2 btn-brand text-[9px] font-black uppercase tracking-[0.2em] rounded-full transition-all flex items-center gap-1 cursor-pointer"
-                >
-                  Redeem Reward <ChevronRight size={12} />
-                </button>
-              </div>
+              <ChevronRight size={16} className="text-white/20" />
             </div>
           </div>
           <div className="absolute right-0 top-0 w-48 h-48 rounded-full blur-[120px] opacity-20 group-hover:scale-110 group-hover:opacity-30 transition-all duration-700" style={{ background: 'radial-gradient(circle, #ff2060, #e60023)' }} />
