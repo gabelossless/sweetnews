@@ -30,7 +30,7 @@ export function ShopView({
       {/* Brutalist Header */}
       <section className="mt-8 mb-10 px-2">
         <h1 className="font-display-xl text-[54px] uppercase font-black leading-[0.85] tracking-tighter mb-6 text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.15)]">
-          CRAVE<br/>
+          <span style={{ background: 'linear-gradient(135deg,#e60023,#ff2060)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>CRAVE</span><br/>
           <span className="text-white/30">THE NIGHT.</span>
         </h1>
         <div 
@@ -89,22 +89,23 @@ export function ShopView({
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => { setSelectedCategory('exotic'); }}
-          className="cursor-pointer bg-gradient-to-br from-[#111] to-[#000] rounded-[40px] p-8 text-on-surface shadow-[0_20px_50px_rgba(0,0,0,0.9)] border border-white/[0.05] relative overflow-hidden group"
+          className="cursor-pointer rounded-[40px] p-8 text-on-surface shadow-[0_20px_60px_rgba(230,0,35,0.25)] border border-[#e60023]/20 relative overflow-hidden group"
+          style={{ background: 'linear-gradient(135deg, #1a0008 0%, #0d0003 60%, #000 100%)' }}
         >
           <div className="relative z-10 w-3/4">
-            <h3 className="font-headline-lg text-[13px] tracking-[0.3em] text-white/50 uppercase font-black mb-3">Midnight Series</h3>
-            <h4 className="font-display-xl text-[36px] uppercase font-black leading-[0.9] tracking-tighter mb-8 drop-shadow-lg">
+            <h3 className="font-headline-lg text-[13px] tracking-[0.3em] text-[#ff2060]/70 uppercase font-black mb-3">Midnight Series</h3>
+            <h4 className="font-display-xl text-[36px] uppercase font-black leading-[0.9] tracking-tighter mb-8 drop-shadow-lg text-white">
               DARK<br/>MATTER
             </h4>
-            <Button 
+            <Button
               whileTapScale={0.92}
-              className="px-6 py-3.5 bg-white text-black font-headline-md text-[12px] tracking-[0.2em] uppercase rounded-full shadow-[0_10px_30px_rgba(255,255,255,0.15)] transition-all hover:bg-white/90 font-black"
+              className="px-6 py-3.5 btn-brand font-headline-md text-[12px] tracking-[0.2em] uppercase rounded-full font-black"
             >
               Unlock
             </Button>
           </div>
-          <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-white rounded-full blur-[100px] opacity-[0.03] z-0 group-hover:opacity-[0.08] transition-all duration-700"></div>
-          <Moon className="absolute right-6 bottom-10 w-32 h-32 text-white opacity-[0.02] transform rotate-[-15deg] group-hover:rotate-[0deg] group-hover:scale-110 group-hover:opacity-[0.05] transition-all duration-700 ease-out z-0 fill-current" />
+          <div className="absolute -right-20 -bottom-20 w-80 h-80 rounded-full blur-[100px] opacity-20 z-0 group-hover:opacity-30 transition-all duration-700" style={{ background: 'radial-gradient(circle, #e60023, #ff2060)' }} />
+          <Moon className="absolute right-6 bottom-10 w-32 h-32 text-[#ff2060] opacity-[0.06] transform rotate-[-15deg] group-hover:rotate-[0deg] group-hover:scale-110 group-hover:opacity-[0.12] transition-all duration-700 ease-out z-0 fill-current" />
         </motion.div>
       </section>
 

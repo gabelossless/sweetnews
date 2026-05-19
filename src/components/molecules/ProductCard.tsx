@@ -53,11 +53,11 @@ export function ProductCard({
           <span className="font-headline-md text-[16px] text-white tracking-[0.1em] font-black">
             ${product.price.toFixed(2)}
           </span>
-          <Button 
+          <Button
             whileTapScale={0.85}
             onClick={onAdd}
             aria-label={`Add ${product.name}`}
-            className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center shadow-[0_5px_20px_rgba(255,255,255,0.2)] hover:shadow-[0_5px_25px_rgba(255,255,255,0.3)] transition-all"
+            className="w-10 h-10 rounded-full btn-brand flex items-center justify-center transition-all"
           >
             <Plus className="w-5 h-5" strokeWidth={3} />
           </Button>

@@ -8,30 +8,34 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
   loading?: boolean;
   fullWidth?: boolean;
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'brand';
 }
 
-export function Button({ 
-  children, 
-  whileTapScale = 0.95, 
-  whileHoverScale = 1.02, 
-  className = '', 
+export function Button({
+  children,
+  whileTapScale = 0.95,
+  whileHoverScale = 1.02,
+  className = '',
   loading = false,
   fullWidth = false,
   variant = 'primary',
   disabled,
-  ...props 
+  ...props
 }: ButtonProps) {
-  
+
   const variants = {
-    primary: 'bg-white text-black hover:bg-white/90 shadow-[0_10px_30px_rgba(255,255,255,0.15)]',
-    secondary: 'bg-white/5 border border-white/10 text-white hover:bg-white/10',
-    outline: 'bg-transparent border border-white/10 text-white hover:bg-white/5',
-    ghost: 'bg-transparent text-white/60 hover:text-white hover:bg-white/5'
+    // Red → pink gradient — main CTA
+    brand: 'btn-brand font-black',
+    // Clean white — secondary CTA
+    primary: 'bg-white text-black hover:bg-white/90 shadow-[0_10px_30px_rgba(255,255,255,0.12)] font-black',
+    secondary: 'bg-white/5 border border-white/10 text-white hover:bg-white/10 font-black',
+    outline: 'bg-transparent border border-white/10 text-white hover:bg-white/5 font-black',
+    ghost: 'bg-transparent text-white/60 hover:text-white hover:bg-white/5',
   };
 
-  const baseStyles = "relative flex items-center justify-center gap-2 rounded-2xl px-6 py-4 font-black transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden";
-  
+  const baseStyles =
+    'relative flex items-center justify-center gap-2 rounded-2xl px-6 py-4 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden';
+
   return (
     <motion.button
       whileTap={!disabled && !loading ? { scale: whileTapScale } : {}}

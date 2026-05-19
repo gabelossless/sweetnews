@@ -186,7 +186,7 @@ export default function CustomerApp() {
             whileHover={{ scale: 1.05 }}
             onClick={() => setActiveTab('search')}
             aria-label="Search delicacies"
-            className={`w-12 h-12 flex items-center justify-center rounded-full transition-colors duration-200 shadow-sm border border-white/[0.06] ${activeTab === 'search' ? 'bg-white text-black border-transparent' : 'bg-white/5 text-white hover:bg-white/10'}`}
+            className={`w-12 h-12 flex items-center justify-center rounded-full transition-all duration-200 shadow-sm border ${activeTab === 'search' ? 'btn-brand border-transparent shadow-[0_4px_20px_rgba(230,0,35,0.4)]' : 'bg-white/5 text-white hover:bg-white/10 border-white/[0.06]'}`}
           >
             <Search className="w-[22px] h-[22px]" strokeWidth={2.5} />
           </motion.button>

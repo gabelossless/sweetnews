@@ -18,6 +18,7 @@
   --color-on-surface-variant: #a1a1a6;
 
   --color-primary: #e60023;
+  --color-pink: #ff2060;
   --color-on-primary: #ffffff;
   --color-primary-container: #5c000e;
   --color-on-primary-container: #ffdad6;
@@ -97,6 +98,19 @@ html, body {
   .hide-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+
+  /* Brand gradient — red to pink */
+  .btn-brand {
+    background: linear-gradient(135deg, #e60023 0%, #ff2060 100%);
+    box-shadow: 0 8px 32px rgba(230, 0, 35, 0.45), 0 2px 8px rgba(255, 32, 96, 0.3);
+    color: #fff;
+  }
+  .btn-brand:hover {
+    box-shadow: 0 12px 40px rgba(230, 0, 35, 0.55), 0 4px 12px rgba(255, 32, 96, 0.4);
+  }
+  .glow-brand {
+    box-shadow: 0 0 24px rgba(230, 0, 35, 0.5), 0 0 48px rgba(255, 32, 96, 0.2);
   }
 }
 

@@ -32,7 +32,7 @@ export function ProfileView({ isOnline, onRedeemReward }: ProfileViewProps) {
     >
       <section className="mb-10">
         <h1 className="font-display-xl text-[54px] uppercase font-black leading-[0.85] tracking-tighter mb-6 text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.15)]">
-          MEMBER<br/>
+          <span style={{ background: 'linear-gradient(135deg,#e60023,#ff2060)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>MEMBER</span><br/>
           <span className="text-white/30">CARD.</span>
         </h1>
         <p className="text-[12px] uppercase tracking-[0.25em] text-white/40 font-black">Active Tiers, Identity, & Sync Telemetry</p>
@@ -44,7 +44,8 @@ export function ProfileView({ isOnline, onRedeemReward }: ProfileViewProps) {
         <motion.div 
           whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.99 }}
-          className="bg-white/[0.02] backdrop-blur-3xl border border-white/[0.08] rounded-[32px] p-6 text-white shadow-2xl relative overflow-hidden group select-none"
+          className="backdrop-blur-3xl border border-[#e60023]/20 rounded-[32px] p-6 text-white relative overflow-hidden group select-none shadow-[0_20px_60px_rgba(230,0,35,0.15)]"
+          style={{ background: 'linear-gradient(135deg, #150004 0%, #0a0002 60%, #000 100%)' }}
         >
           <div className="relative z-10 flex flex-col justify-between h-48">
             <div className="flex justify-between items-start">
@@ -63,16 +64,16 @@ export function ProfileView({ isOnline, onRedeemReward }: ProfileViewProps) {
                 <p className="text-3xl font-black text-white mt-1">1,450 <span className="text-[10px] text-white/50 font-medium tracking-widest uppercase ml-1">pts</span></p>
               </div>
               <div>
-                <button 
+                <button
                   onClick={() => onRedeemReward('Redeem Wagyu Sando')}
-                  className="px-4 py-2 bg-white text-black text-[9px] font-black uppercase tracking-[0.2em] rounded-full hover:bg-white/90 transition-all flex items-center gap-1 cursor-pointer"
+                  className="px-4 py-2 btn-brand text-[9px] font-black uppercase tracking-[0.2em] rounded-full transition-all flex items-center gap-1 cursor-pointer"
                 >
                   Redeem Reward <ChevronRight size={12} />
                 </button>
               </div>
             </div>
           </div>
-          <div className="absolute right-0 top-0 w-48 h-48 bg-white rounded-full blur-[120px] opacity-[0.03] group-hover:scale-110 transition-transform duration-700" />
+          <div className="absolute right-0 top-0 w-48 h-48 rounded-full blur-[120px] opacity-20 group-hover:scale-110 group-hover:opacity-30 transition-all duration-700" style={{ background: 'radial-gradient(circle, #ff2060, #e60023)' }} />
         </motion.div>
 
         {/* Profile settings & Address detail list */}
@@ -140,7 +141,7 @@ export function ProfileView({ isOnline, onRedeemReward }: ProfileViewProps) {
             </p>
             
             {role !== 'driver_pending' && (
-              <button 
+              <button
                 onClick={() => {
                   if (role === 'driver_active') {
                     window.location.href = '/fleet';
@@ -148,7 +149,7 @@ export function ProfileView({ isOnline, onRedeemReward }: ProfileViewProps) {
                     setIsWaitlistOpen(true);
                   }
                 }}
-                className="px-6 py-3 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-white/90 transition-all transform active:scale-95 shadow-xl"
+                className="px-6 py-3 btn-brand text-[10px] font-black uppercase tracking-widest rounded-full transition-all transform active:scale-95"
               >
                 {role === 'driver_active' ? 'Fleet Terminal' : 'Join Fleet Waitlist'}
               </button>

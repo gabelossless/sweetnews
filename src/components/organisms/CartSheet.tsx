@@ -108,11 +108,11 @@ export function CartSheet({ isOpen, onClose, onCheckout }: CartSheetProps) {
                         ${cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)}
                       </span>
                     </div>
-                    <Button 
+                    <Button
                       onClick={onCheckout}
                       disabled={cartItems.length === 0}
                       whileTapScale={0.95}
-                      className="w-full py-5 bg-white text-black font-headline-md uppercase tracking-[0.2em] text-[12px] rounded-full shadow-[0_10px_30px_rgba(255,255,255,0.15)] hover:bg-white/90 hover:shadow-[0_15px_40px_rgba(255,255,255,0.25)] transition-all disabled:opacity-30 disabled:shadow-none disabled:cursor-not-allowed font-black"
+                      className="w-full py-5 btn-brand font-headline-md uppercase tracking-[0.2em] text-[12px] rounded-full disabled:opacity-30 disabled:shadow-none disabled:cursor-not-allowed font-black"
                     >
                       Checkout
                     </Button>
