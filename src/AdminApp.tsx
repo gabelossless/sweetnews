@@ -136,24 +136,24 @@ export default function AdminApp() {
         <header className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-6">
           <div>
             <h1 className="text-4xl font-black tracking-tight mb-2">
-              Admin <span className="text-primary">HQ</span>
+              Admin <span style={{ background: 'linear-gradient(135deg,#e60023,#ff2060)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>HQ</span>
             </h1>
             <div className="flex gap-4 mt-6">
               <button 
                 onClick={() => setActiveTab('dispatcher')}
-                className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${activeTab === 'dispatcher' ? 'bg-primary text-white' : 'bg-white/5 text-on-surface-variant hover:bg-white/10'}`}
+                className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${activeTab === 'dispatcher' ? 'btn-brand' : 'bg-white/5 text-on-surface-variant hover:bg-white/10'}`}
               >
                 Dispatcher Terminal
               </button>
               <button 
                 onClick={() => setActiveTab('drivers')}
-                className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${activeTab === 'drivers' ? 'bg-primary text-white' : 'bg-white/5 text-on-surface-variant hover:bg-white/10'}`}
+                className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${activeTab === 'drivers' ? 'btn-brand' : 'bg-white/5 text-on-surface-variant hover:bg-white/10'}`}
               >
                 Fleet Recruitment
               </button>
               <button 
                 onClick={() => setActiveTab('waitlist')}
-                className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${activeTab === 'waitlist' ? 'bg-primary text-white' : 'bg-white/5 text-on-surface-variant hover:bg-white/10'}`}
+                className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${activeTab === 'waitlist' ? 'btn-brand' : 'bg-white/5 text-on-surface-variant hover:bg-white/10'}`}
               >
                 Waitlist Manager
               </button>
@@ -292,7 +292,7 @@ export default function AdminApp() {
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-4">
                       <div className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
-                        order.status === 'pending' ? 'bg-amber-500 text-black' : 'bg-primary text-white'
+                        order.status === 'pending' ? 'bg-amber-500 text-black' : 'btn-brand'
                       }`}>
                         {order.status}
                       </div>
@@ -359,7 +359,7 @@ export default function AdminApp() {
                             <button
                               key={driver.uid}
                               onClick={() => handleAssign(order.id, driver.uid)}
-                              className="w-full bg-white/5 hover:bg-primary hover:text-white border border-white/10 rounded-2xl p-4 text-left transition-all group"
+                              className="w-full bg-white/5 hover:btn-brand border border-white/10 rounded-2xl p-4 text-left transition-all group"
                             >
                               <p className="text-sm font-bold group-hover:text-white">{driver.email}</p>
                               <p className="text-[10px] opacity-50 group-hover:opacity-80">Ready for Dispatch</p>
@@ -384,7 +384,7 @@ export default function AdminApp() {
                           placeholder="ETA (mins)"
                           defaultValue={order.etaMins}
                           onBlur={(e) => handleUpdateETA(order.id, e.target.value)}
-                          className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs focus:border-primary outline-none transition-all"
+                          className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs focus:border-[#e60023] outline-none transition-all"
                         />
                       </div>
                       <div className="text-[10px] text-on-surface-variant uppercase font-bold">

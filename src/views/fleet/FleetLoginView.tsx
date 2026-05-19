@@ -50,7 +50,7 @@ export default function FleetLoginView() {
       >
         <div className="text-center space-y-2">
           <h1 className="text-4xl font-black tracking-tighter">
-            FLEET<span className="text-primary">LOGIN</span>
+            FLEET<span style={{ background: 'linear-gradient(135deg,#e60023,#ff2060)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>LOGIN</span>
           </h1>
           <p className="text-on-surface-variant text-xs uppercase tracking-[0.2em]">
             Sweet News Delivery Partners
@@ -93,7 +93,7 @@ export default function FleetLoginView() {
               type="submit"
               fullWidth
               loading={loading}
-              className="h-14 mt-4"
+              className="h-14 mt-4 btn-brand rounded-2xl"
             >
               {isLogin ? 'Sign In to Fleet' : 'Create Partner Account'} <ArrowRight className="ml-2" size={18} />
             </Button>
@@ -102,7 +102,7 @@ export default function FleetLoginView() {
           <div className="text-center">
             <button
               onClick={() => setIsLogin(!isLogin)}
-              className="text-xs text-on-surface-variant hover:text-primary transition-colors flex items-center gap-2 mx-auto"
+              className="text-xs text-white/40 hover:text-[#ff2060] transition-colors flex items-center gap-2 mx-auto"
             >
               {isLogin ? (
                 <> <UserPlus size={14} /> New here? Apply to deliver</>

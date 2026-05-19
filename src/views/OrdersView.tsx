@@ -20,7 +20,7 @@ export function OrdersView({ orders, onStartShopping }: OrdersViewProps) {
     >
       <section className="mb-10">
         <h1 className="font-display-xl text-[54px] uppercase font-black leading-[0.85] tracking-tighter mb-6 text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.15)]">
-          YOUR<br/>
+          <span style={{ background: 'linear-gradient(135deg,#e60023,#ff2060)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>YOUR</span><br/>
           <span className="text-white/30">ORDERS.</span>
         </h1>
         <p className="text-[12px] uppercase tracking-[0.25em] text-white/40 font-black">Real-Time Drop Ingress & Telemetry</p>
@@ -29,13 +29,13 @@ export function OrdersView({ orders, onStartShopping }: OrdersViewProps) {
       {/* Active simulated orders with dynamic tracker */}
       <section className="space-y-6">
         {orders.length === 0 ? (
-          <div className="text-center py-20 bg-gradient-to-b from-white/[0.02] to-transparent border border-white/[0.05] rounded-[32px] p-8">
-            <ReceiptText className="w-12 h-12 text-white/20 mx-auto mb-4 opacity-40" />
+          <div className="text-center py-20 bg-gradient-to-b from-[#e60023]/[0.04] to-transparent border border-[#e60023]/10 rounded-[32px] p-8">
+            <ReceiptText className="w-12 h-12 mx-auto mb-4 opacity-40" style={{ color: '#ff2060' }} />
             <h3 className="font-headline-md text-[14px] uppercase tracking-widest font-black mb-2 text-white">No active deliveries</h3>
             <p className="text-white/40 text-[12px] max-w-xs mx-auto leading-relaxed font-medium mb-6">Your order vault is empty. Secure premium delicacies inside our shop stage to trigger active tracking.</p>
-            <button 
+            <button
               onClick={onStartShopping}
-              className="px-8 py-3 bg-white text-black text-[10px] font-black tracking-[0.25em] rounded-full uppercase hover:bg-white/90 hover:scale-105 active:scale-95 transition-all"
+              className="px-8 py-3 btn-brand text-[10px] font-black tracking-[0.25em] rounded-full uppercase hover:scale-105 active:scale-95 transition-all"
             >
               Discover Treats
             </button>

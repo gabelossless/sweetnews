@@ -33,16 +33,16 @@ export function SearchView({
     >
       <section className="mb-10">
         <h1 className="font-display-xl text-[54px] uppercase font-black leading-[0.85] tracking-tighter mb-6 text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.15)]">
-          GLOBAL<br/>
+          <span style={{ background: 'linear-gradient(135deg,#e60023,#ff2060)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>GLOBAL</span><br/>
           <span className="text-white/30">SEARCH.</span>
         </h1>
         <div className="relative group">
-          <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-white/40 w-5 h-5 transition-colors group-focus-within:text-white" />
+          <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors text-white/40 group-focus-within:text-[#ff2060]" />
           <Input 
             autoFocus
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-16 pr-12 h-16 text-[15px] bg-white/[0.03] backdrop-blur-2xl border border-white/[0.08] rounded-full placeholder:text-white/30 focus:border-white/30 transition-all font-bold tracking-wide" 
+            className="pl-16 pr-12 h-16 text-[15px] bg-white/[0.03] backdrop-blur-2xl border border-white/[0.08] rounded-full placeholder:text-white/30 focus:border-[#e60023]/50 focus:shadow-[0_0_0_1px_rgba(230,0,35,0.3)] transition-all font-bold tracking-wide"
             placeholder="Search Drops..." 
             type="text" 
           />
@@ -63,7 +63,7 @@ export function SearchView({
             <button
               key={tag}
               onClick={() => setSearchQuery(tag)}
-              className="px-4 py-2 rounded-full bg-white/5 text-[10px] font-black uppercase tracking-wider text-white/80 hover:text-white hover:bg-white/10 transition-colors border border-white/[0.06]"
+              className="px-4 py-2 rounded-full bg-white/5 text-[10px] font-black uppercase tracking-wider text-white/80 hover:btn-brand hover:text-white hover:border-transparent transition-all border border-white/[0.06] hover:shadow-[0_4px_16px_rgba(230,0,35,0.3)]"
             >
               {tag}
             </button>

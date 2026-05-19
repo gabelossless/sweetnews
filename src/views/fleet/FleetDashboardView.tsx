@@ -45,11 +45,11 @@ export default function FleetDashboardView({ activeOrders, onStatusUpdate }: Fle
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 gap-4 mb-8">
-        <div className="bg-white/5 backdrop-blur-md p-6 rounded-[28px] border border-white/10">
-          <span className="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold block mb-1">
+        <div className="p-6 rounded-[28px] border border-[#e60023]/20" style={{ background: 'linear-gradient(135deg,rgba(230,0,35,0.12),rgba(255,32,96,0.06))' }}>
+          <span className="text-[10px] uppercase tracking-widest text-[#ff2060]/70 font-bold block mb-1">
             Assigned
           </span>
-          <span className="text-2xl font-black">{activeOrders.length}</span>
+          <span className="text-2xl font-black" style={{ background: 'linear-gradient(135deg,#e60023,#ff2060)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{activeOrders.length}</span>
         </div>
         <div className="bg-white/5 backdrop-blur-md p-6 rounded-[28px] border border-white/10">
           <span className="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold block mb-1">
@@ -105,7 +105,7 @@ export default function FleetDashboardView({ activeOrders, onStatusUpdate }: Fle
 
               <Button
                 onClick={() => onStatusUpdate(order.id, order.status)}
-                className="w-full py-4 rounded-2xl bg-primary text-white font-black"
+                className="w-full py-4 rounded-2xl btn-brand font-black"
               >
                 {order.status === 'confirmed' && 'Start Preparation'}
                 {order.status === 'cooking' && 'Pick Up Order'}
