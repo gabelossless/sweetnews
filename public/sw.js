@@ -1,68 +1,50 @@
-const SHELL_CACHE = 'sn-shell-v3';
-const ASSET_CACHE = 'sn-assets-v3';
+// Minimal, safe SPA service worker.
+// Only intercepts navigation requests — lets the browser's HTTP cache handle
+// all sub-resources (Vite hashed bundles, images, etc.) without interference.
+const SHELL_CACHE = 'sn-shell-v4';
 
-// Only the files we can reliably name — Vite hashed bundles are handled separately
-const SHELL_URLS = ['/', '/manifest.json', '/icon.svg'];
-
-// ── Install: precache the app shell ──────────────────────────────
+// ── Install: cache the app shell ─────────────────────────────────
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(SHELL_CACHE)
-      .then((cache) => cache.addAll(SHELL_URLS))
-      .then(() => self.skipWaiting())
+    caches.open(SHELL_CACHE).then((cache) =>
+      // Use allSettled so a single 404 doesn't abort the whole install
+      Promise.allSettled([
+        fetch('/').then((r) => { if (r.ok) cache.put('/', r); }),
+        fetch('/manifest.json').then((r) => { if (r.ok) cache.put('/manifest.json', r); }),
+      ])
+    ).then(() => self.skipWaiting())
   );
 });
 
-// ── Activate: evict stale caches ─────────────────────────────────
+// ── Activate: evict every old cache ──────────────────────────────
 self.addEventListener('activate', (event) => {
-  const keep = new Set([SHELL_CACHE, ASSET_CACHE]);
   event.waitUntil(
     caches.keys()
-      .then((names) => Promise.all(names.filter((n) => !keep.has(n)).map((n) => caches.delete(n))))
+      .then((names) =>
+        Promise.all(names.filter((n) => n !== SHELL_CACHE).map((n) => caches.delete(n)))
+      )
       .then(() => self.clients.claim())
   );
 });
 
-// ── Fetch ─────────────────────────────────────────────────────────
+// ── Fetch: ONLY intercept HTML navigation requests ────────────────
+// Sub-resources (JS bundles, CSS, images) are NOT intercepted.
+// Vite ships hashed assets with Cache-Control: immutable — the browser
+// handles their caching perfectly without SW involvement.
 self.addEventListener('fetch', (event) => {
   const { request } = event;
+
+  // Only handle same-origin navigations
+  if (request.method !== 'GET') return;
+  if (request.mode !== 'navigate') return;
+
   const url = new URL(request.url);
+  if (url.origin !== self.location.origin) return;
 
-  // Only intercept same-origin GETs — let Firebase, Stripe, CDNs go direct
-  if (request.method !== 'GET' || url.origin !== self.location.origin) return;
-  if (url.pathname.startsWith('/api/')) return;
-
-  // Vite hashed bundles (/assets/*.js, /assets/*.css):
-  // stale-while-revalidate — instant from cache, silently updated in background
-  if (url.pathname.startsWith('/assets/')) {
-    event.respondWith(staleWhileRevalidate(request, ASSET_CACHE));
-    return;
-  }
-
-  // App shell + navigation: network-first, offline fallback to cached index
+  // Network-first; on failure serve the cached shell so the SPA still loads offline
   event.respondWith(
-    fetch(request)
-      .then((res) => {
-        if (res.ok && request.mode === 'navigate') {
-          caches.open(SHELL_CACHE).then((c) => c.put(request, res.clone()));
-        }
-        return res;
-      })
-      .catch(() =>
-        caches.match(request).then((hit) =>
-          hit ?? (request.mode === 'navigate' ? caches.match('/') : Response.error())
-        )
-      )
+    fetch(request).catch(() =>
+      caches.match('/').then((cached) => cached ?? Response.error())
+    )
   );
 });
-
-async function staleWhileRevalidate(request, cacheName) {
-  const cache = await caches.open(cacheName);
-  const cached = await cache.match(request);
-  const networkPromise = fetch(request).then((res) => {
-    if (res.ok) cache.put(request, res.clone());
-    return res;
-  });
-  // Return cached immediately if available; otherwise wait for network
-  return cached ?? networkPromise;
-}
