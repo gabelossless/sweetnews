@@ -62,6 +62,8 @@ export function ProductCard({
           whileHover={{ scale: 1.12, rotate: 4, y: -6 }}
           transition={{ type: 'spring', stiffness: 280, damping: 18 }}
           alt={product.name}
+          loading={isFeatured ? 'eager' : 'lazy'}
+          decoding="async"
           className="w-[85%] h-[85%] object-contain drop-shadow-[0_24px_40px_rgba(0,0,0,0.85)] group-hover:drop-shadow-[0_28px_50px_rgba(230,0,35,0.2)]"
           style={{ transition: 'filter 0.4s ease' }}
           src={product.image}

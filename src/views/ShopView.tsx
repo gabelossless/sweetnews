@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { Moon, Zap } from 'lucide-react';
+import { Moon, Zap, PackageOpen } from 'lucide-react';
 import { Product } from '../types';
 import { categories, products } from '../data/products';
 import { CategoryChip } from '../components/molecules/CategoryChip';
@@ -184,20 +184,42 @@ export function ShopView({
           </span>
         </div>
 
-        <motion.div layout className="grid grid-cols-2 gap-4">
-          <AnimatePresence mode="popLayout">
-            {filteredGrid.map((product, idx) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                isFeatured={false}
-                onAdd={() => onAddToCart(product)}
-                animationDelay={idx * 0.05}
-                className="w-full"
-              />
-            ))}
-          </AnimatePresence>
-        </motion.div>
+        {filteredGrid.length > 0 ? (
+          <motion.div layout className="grid grid-cols-2 gap-4">
+            <AnimatePresence mode="popLayout">
+              {filteredGrid.map((product, idx) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  isFeatured={false}
+                  onAdd={() => onAddToCart(product)}
+                  animationDelay={idx * 0.05}
+                  className="w-full"
+                />
+              ))}
+            </AnimatePresence>
+          </motion.div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center py-16 px-6 rounded-[32px] border border-dashed border-white/[0.08] bg-white/[0.01]"
+          >
+            <PackageOpen className="w-10 h-10 text-white/15 mx-auto mb-4" strokeWidth={1.5} />
+            <h3 className="font-headline-md text-[13px] uppercase tracking-widest font-black text-white/80 mb-1">
+              Vault Empty
+            </h3>
+            <p className="text-[11px] text-white/35 max-w-[220px] mx-auto leading-relaxed">
+              No drops in this category tonight. Try another.
+            </p>
+            <button
+              onClick={() => setSelectedCategory('all')}
+              className="mt-5 px-5 py-2 rounded-full btn-brand text-[10px] uppercase tracking-[0.2em] font-black"
+            >
+              Show All Drops
+            </button>
+          </motion.div>
+        )}
       </section>
     </motion.div>
   );
