@@ -11,13 +11,15 @@ interface ShopViewProps {
   setSelectedCategory: (category: string) => void;
   onAddToCart: (product: Product) => void;
   onNavigateToSearch: () => void;
+  onNavigateToNews: () => void;
 }
 
 export function ShopView({
   selectedCategory,
   setSelectedCategory,
   onAddToCart,
-  onNavigateToSearch
+  onNavigateToSearch,
+  onNavigateToNews,
 }: ShopViewProps) {
   const filteredHorizontal = products.filter(
     (p) => selectedCategory === 'all' || p.categoryId === selectedCategory
@@ -87,7 +89,11 @@ export function ShopView({
                 name={category.name}
                 icon={category.icon}
                 isActive={selectedCategory === category.id}
-                onClick={() => setSelectedCategory(category.id)}
+                onClick={() =>
+                  category.id === 'news'
+                    ? onNavigateToNews()
+                    : setSelectedCategory(category.id)
+                }
               />
             </motion.div>
           ))}

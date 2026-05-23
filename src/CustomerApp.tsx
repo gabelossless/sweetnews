@@ -28,12 +28,13 @@ import { ShopView } from './views/ShopView';
 import { SearchView } from './views/SearchView';
 import { OrdersView } from './views/OrdersView';
 import { ProfileView } from './views/ProfileView';
+import { AboutView } from './views/AboutView';
 
 export default function CustomerApp() {
   useGeolocation();
   const { user } = useAuth();
 
-  const [activeTab, setActiveTab] = useState<'shop' | 'search' | 'orders' | 'profile'>('shop');
+  const [activeTab, setActiveTab] = useState<'shop' | 'search' | 'orders' | 'profile' | 'news'>('shop');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -254,6 +255,7 @@ export default function CustomerApp() {
               setSelectedCategory={setSelectedCategory}
               onAddToCart={handleAddToCart}
               onNavigateToSearch={() => setActiveTab('search')}
+              onNavigateToNews={() => setActiveTab('news')}
             />
           )}
 
@@ -279,6 +281,11 @@ export default function CustomerApp() {
             <ProfileView
               isOnline={isOnline}
             />
+          )}
+
+          {/* 5. ABOUT / NEWS VIEW */}
+          {activeTab === 'news' && (
+            <AboutView onBack={() => setActiveTab('shop')} />
           )}
 
         </AnimatePresence>
