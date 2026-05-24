@@ -14,7 +14,7 @@ import { useAuth } from './context/AuthContext';
 import { Product } from './types';
 import { createOrder, subscribeToCustomerOrders } from './lib/orders';
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_test_TYooMQauvdEDq54NiTphI7jx');
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY ?? '');
 
 // Components
 import { NavButton } from './components/molecules/NavButton';
