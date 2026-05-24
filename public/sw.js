@@ -1,85 +1,50 @@
-const STATIC_CACHE_NAME = 'sweetnews-static-v2';
-const DYNAMIC_CACHE_NAME = 'sweetnews-dynamic-v1';
+// Minimal, safe SPA service worker.
+// Only intercepts navigation requests — lets the browser's HTTP cache handle
+// all sub-resources (Vite hashed bundles, images, etc.) without interference.
+const SHELL_CACHE = 'sn-shell-v4';
 
-const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/src/main.tsx',
-  '/src/App.tsx',
-  '/src/index.css'
-];
-
-// Install listener - cache app shell
+// ── Install: cache the app shell ─────────────────────────────────
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(STATIC_CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
-    }).then(() => self.skipWaiting())
+    caches.open(SHELL_CACHE).then((cache) =>
+      // Use allSettled so a single 404 doesn't abort the whole install
+      Promise.allSettled([
+        fetch('/').then((r) => { if (r.ok) cache.put('/', r); }),
+        fetch('/manifest.json').then((r) => { if (r.ok) cache.put('/manifest.json', r); }),
+      ])
+    ).then(() => self.skipWaiting())
   );
 });
 
-// Activate listener - clean up old caches
+// ── Activate: evict every old cache ──────────────────────────────
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== STATIC_CACHE_NAME && cacheName !== DYNAMIC_CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    }).then(() => self.clients.claim())
+    caches.keys()
+      .then((names) =>
+        Promise.all(names.filter((n) => n !== SHELL_CACHE).map((n) => caches.delete(n)))
+      )
+      .then(() => self.clients.claim())
   );
 });
 
-// Fetch listener with safety bypass filters
+// ── Fetch: ONLY intercept HTML navigation requests ────────────────
+// Sub-resources (JS bundles, CSS, images) are NOT intercepted.
+// Vite ships hashed assets with Cache-Control: immutable — the browser
+// handles their caching perfectly without SW involvement.
 self.addEventListener('fetch', (event) => {
   const { request } = event;
+
+  // Only handle same-origin navigations
+  if (request.method !== 'GET') return;
+  if (request.mode !== 'navigate') return;
+
   const url = new URL(request.url);
+  if (url.origin !== self.location.origin) return;
 
-  // 1. Bypass non-GET operations and active API queries
-  if (request.method !== 'GET' || url.pathname.includes('/api/') || url.origin !== self.location.origin) {
-    return; // Pass-through directly to network
-  }
-
-  // 2. Cache-first strategy for static resources
-  if (ASSETS_TO_CACHE.includes(url.pathname)) {
-    event.respondWith(
-      caches.match(request).then((cachedResponse) => {
-        return cachedResponse || fetch(request).then((response) => {
-          return caches.open(STATIC_CACHE_NAME).then((cache) => {
-            cache.put(request, response.clone());
-            return response;
-          });
-        });
-      })
-    );
-    return;
-  }
-
-  // 3. Network-first strategy with dynamic cache update and offline fallback
+  // Network-first; on failure serve the cached shell so the SPA still loads offline
   event.respondWith(
-    fetch(request)
-      .then((networkResponse) => {
-        if (networkResponse && networkResponse.status === 200) {
-          const responseToCache = networkResponse.clone();
-          caches.open(DYNAMIC_CACHE_NAME).then((cache) => {
-            cache.put(request, responseToCache);
-          });
-        }
-        return networkResponse;
-      })
-      .catch(() => {
-        return caches.match(request).then((cachedResponse) => {
-          if (cachedResponse) {
-            return cachedResponse;
-          }
-          if (request.mode === 'navigate') {
-            return caches.match('/index.html');
-          }
-        });
-      })
+    fetch(request).catch(() =>
+      caches.match('/').then((cached) => cached ?? Response.error())
+    )
   );
 });

@@ -1,22 +1,37 @@
 {
-  "name": "Sweet News Delivery",
+  "name": "Sweet News",
   "short_name": "Sweet News",
-  "description": "Premium midnight snack delivery application with zero latency.",
+  "description": "Premium midnight snack delivery.",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#000000",
-  "theme_color": "#e60023",
+  "theme_color": "#000000",
   "icons": [
     {
-      "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='192' height='192' viewBox='0 0 192 192'><rect width='192' height='192' fill='%23000000'/><circle cx='96' cy='96' r='48' fill='%23e60023'/><path d='M96 70 L96 122 M70 96 L122 96' stroke='%23ffffff' stroke-width='8' stroke-linecap='round'/></svg>",
-      "sizes": "192x192",
-      "type": "image/svg+xml"
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
     },
     {
-      "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'><rect width='512' height='512' fill='%23000000'/><circle cx='256' cy='256' r='128' fill='%23e60023'/><path d='M256 180 L256 332 M180 256 L332 256' stroke='%23ffffff' stroke-width='20' stroke-linecap='round'/></svg>",
-      "sizes": "512x512",
-      "type": "image/svg+xml"
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["food", "shopping"],
+  "shortcuts": [
+    {
+      "name": "Shop Now",
+      "url": "/",
+      "description": "Browse midnight drops"
+    },
+    {
+      "name": "My Orders",
+      "url": "/?tab=orders",
+      "description": "Track your deliveries"
     }
   ]
 }

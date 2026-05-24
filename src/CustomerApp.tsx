@@ -21,18 +21,20 @@ import { NavButton } from './components/molecules/NavButton';
 import { CartSheet } from './components/organisms/CartSheet';
 import { CheckoutForm } from './components/organisms/CheckoutForm';
 import { InstallPrompt } from './components/pwa/InstallPrompt';
+import { Logo } from './components/atoms/Logo';
 
 // Views
 import { ShopView } from './views/ShopView';
 import { SearchView } from './views/SearchView';
 import { OrdersView } from './views/OrdersView';
 import { ProfileView } from './views/ProfileView';
+import { AboutView } from './views/AboutView';
 
 export default function CustomerApp() {
   useGeolocation();
   const { user } = useAuth();
 
-  const [activeTab, setActiveTab] = useState<'shop' | 'search' | 'orders' | 'profile'>('shop');
+  const [activeTab, setActiveTab] = useState<'shop' | 'search' | 'orders' | 'profile' | 'news'>('shop');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -149,33 +151,51 @@ export default function CustomerApp() {
       {/* TopAppBar */}
       <header className="fixed top-0 w-full flex justify-between items-center px-6 pt-[max(env(safe-area-inset-top,54px),24px)] pb-6 bg-gradient-to-b from-[#000000] via-[#000000]/80 to-transparent z-50 md:max-w-md md:mx-auto md:left-1/2 md:-translate-x-1/2">
         <div className="flex items-center gap-3">
-          <motion.button 
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setActiveTab('profile')}
-            aria-label="View member profile"
-            className="w-12 h-12 rounded-full bg-white/5 overflow-hidden border-2 border-white/20 shadow-sm cursor-pointer relative group bg-transparent border-none outline-none"
-          >
-            {user?.photoURL ? (
-              <img
-                alt="User Profile"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-                src={user.photoURL}
-              />
-            ) : (
-              <div className="w-full h-full bg-white/5 flex items-center justify-center text-white text-lg font-bold">
-                {user?.displayName?.[0]?.toUpperCase() ?? '?'}
-              </div>
-            )}
-            {/* Online Badge status */}
-            <div className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border border-black ${isOnline ? 'bg-white shadow-[0_0_10px_rgba(255,255,255,1)]' : 'bg-white/20'}`} />
-          </motion.button>
+          {(() => {
+            const initial =
+              user?.displayName?.[0]?.toUpperCase() ??
+              user?.email?.[0]?.toUpperCase() ??
+              null;
+            return (
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setActiveTab('profile')}
+                aria-label={user ? 'View member profile' : 'Sign in to your account'}
+                className="w-12 h-12 rounded-full overflow-hidden border border-white/[0.08] shadow-sm cursor-pointer relative group bg-white/[0.04]"
+              >
+                {user?.photoURL ? (
+                  <img
+                    alt=""
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                    src={user.photoURL}
+                  />
+                ) : initial ? (
+                  <div className="w-full h-full flex items-center justify-center text-white text-base font-black tracking-wide">
+                    {initial}
+                  </div>
+                ) : (
+                  <Logo size={48} className="w-full h-full" />
+                )}
+                {/* Connection status dot — green online, dim red offline */}
+                <div
+                  className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-black ${
+                    isOnline
+                      ? 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.7)]'
+                      : 'bg-white/15'
+                  }`}
+                />
+              </motion.button>
+            );
+          })()}
         </div>
-        <div 
+        <button
+          type="button"
           onClick={() => setActiveTab('shop')}
-          className="text-[20px] font-headline-lg font-black tracking-[0.25em] text-white uppercase drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] cursor-pointer select-none"
+          aria-label="Sweet News — go to shop"
+          className="text-[20px] font-headline-lg font-black tracking-[0.25em] text-white uppercase drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] cursor-pointer select-none bg-transparent border-0 p-0"
         >
           SWEETNEWS
-        </div>
+        </button>
         <div className="flex items-center gap-3">
           <motion.button 
             whileTap={{ scale: 0.9 }}
@@ -235,6 +255,7 @@ export default function CustomerApp() {
               setSelectedCategory={setSelectedCategory}
               onAddToCart={handleAddToCart}
               onNavigateToSearch={() => setActiveTab('search')}
+              onNavigateToNews={() => setActiveTab('news')}
             />
           )}
 
@@ -260,6 +281,11 @@ export default function CustomerApp() {
             <ProfileView
               isOnline={isOnline}
             />
+          )}
+
+          {/* 5. ABOUT / NEWS VIEW */}
+          {activeTab === 'news' && (
+            <AboutView onBack={() => setActiveTab('shop')} />
           )}
 
         </AnimatePresence>

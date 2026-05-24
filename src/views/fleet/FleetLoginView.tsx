@@ -42,83 +42,89 @@ export default function FleetLoginView() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-black text-white flex flex-col items-center justify-center px-6 py-12">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.35, ease: 'easeOut' }}
-        className="w-full max-w-sm space-y-8"
-      >
-        <div className="text-center space-y-2">
-          <h1 className="text-4xl font-black tracking-tighter">
-            FLEET<span style={{ background: 'linear-gradient(135deg,#e60023,#ff2060)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>LOGIN</span>
-          </h1>
-          <p className="text-on-surface-variant text-xs uppercase tracking-[0.2em]">
-            Sweet News Delivery Partners
-          </p>
-        </div>
-
-        <div className="w-full bg-white/5 border border-white/10 rounded-3xl p-6 space-y-6">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {!isLogin && (
-              <Input
-                label="Full Name"
-                placeholder="John Doe"
-                required
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              />
-            )}
-
-            <Input
-              label="Email Address"
-              placeholder="name@example.com"
-              type="email"
-              required
-              icon={<Mail size={16} />}
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            />
-
-            <Input
-              label="Password"
-              placeholder="••••••••"
-              type="password"
-              required
-              icon={<Lock size={16} />}
-              value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-            />
-
-            <Button
-              type="submit"
-              variant="brand"
-              fullWidth
-              loading={loading}
-              className="h-14 mt-4 rounded-2xl text-base"
-            >
-              {isLogin ? 'Sign In to Fleet' : 'Create Partner Account'} <ArrowRight className="ml-2" size={18} />
-            </Button>
-          </form>
-
-          <div className="text-center">
-            <button
-              onClick={() => setIsLogin(!isLogin)}
-              className="text-xs text-white/40 hover:text-[#ff2060] transition-colors flex items-center gap-2 mx-auto"
-            >
-              {isLogin ? (
-                <><UserPlus size={14} /> New here? Apply to deliver</>
-              ) : (
-                <><LogIn size={14} /> Already a partner? Sign in</>
-              )}
-            </button>
+    // fixed inset-0 + overflow-y-auto is the most reliable full-screen pattern on iOS Safari
+    <div className="fixed inset-0 bg-black text-white overflow-y-auto">
+      <div className="flex min-h-full flex-col items-center justify-center px-6 py-12">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, ease: 'easeOut' }}
+          className="w-full space-y-8"
+          style={{ maxWidth: '384px' }}
+        >
+          {/* Header */}
+          <div className="text-center space-y-2">
+            <h1 className="text-4xl font-black tracking-tighter">
+              FLEET<span style={{ background: 'linear-gradient(135deg,#e60023,#ff2060)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>LOGIN</span>
+            </h1>
+            <p className="text-white/40 text-xs uppercase tracking-widest">
+              Sweet News Delivery Partners
+            </p>
           </div>
-        </div>
 
-        <p className="text-[10px] text-center text-white/20 px-8">
-          By signing in, you agree to the Sweet News Delivery Partner Terms of Service and Privacy Policy.
-        </p>
-      </motion.div>
+          {/* Form card */}
+          <div className="w-full bg-white/5 border border-white/10 rounded-3xl p-6 space-y-6">
+            <form onSubmit={handleSubmit} className="w-full space-y-4">
+              {!isLogin && (
+                <Input
+                  label="Full Name"
+                  placeholder="John Doe"
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                />
+              )}
+
+              <Input
+                label="Email Address"
+                placeholder="name@example.com"
+                type="email"
+                required
+                icon={<Mail size={16} />}
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              />
+
+              <Input
+                label="Password"
+                placeholder="••••••••"
+                type="password"
+                required
+                icon={<Lock size={16} />}
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              />
+
+              <Button
+                type="submit"
+                variant="brand"
+                fullWidth
+                loading={loading}
+                className="h-14 mt-4 rounded-2xl text-base"
+              >
+                {isLogin ? 'Sign In to Fleet' : 'Create Partner Account'} <ArrowRight className="ml-2" size={18} />
+              </Button>
+            </form>
+
+            <div className="text-center">
+              <button
+                onClick={() => setIsLogin(!isLogin)}
+                className="text-xs text-white/40 hover:text-[#ff2060] transition-colors flex items-center gap-2 mx-auto"
+              >
+                {isLogin ? (
+                  <><UserPlus size={14} /> New here? Apply to deliver</>
+                ) : (
+                  <><LogIn size={14} /> Already a partner? Sign in</>
+                )}
+              </button>
+            </div>
+          </div>
+
+          <p className="text-[10px] text-center text-white/20 px-4">
+            By signing in, you agree to the Sweet News Delivery Partner Terms of Service and Privacy Policy.
+          </p>
+        </motion.div>
+      </div>
     </div>
   );
 }

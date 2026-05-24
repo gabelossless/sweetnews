@@ -4,9 +4,9 @@ export const categories = [
   { id: 'all', name: 'All', icon: '✨' },
   { id: 'exotic', name: 'Exotic Finds', icon: '🌏' },
   { id: 'organic', name: 'Organic & Fresh', icon: '🌱' },
-  { id: 'drinks', name: 'Craft Drinks', icon: '🥤' },
+  { id: 'drinks', name: 'Snacks', icon: '🍿' },
   { id: 'local', name: 'Local Deli', icon: '🥪' },
-  { id: 'sweet', name: 'Sweets', icon: '🍬' }
+  { id: 'news', name: 'News', icon: '🦉' },
 ];
 
 export const products: Product[] = [
@@ -53,7 +53,7 @@ export const products: Product[] = [
     price: 18.00,
     tag: 'Imported',
     image: 'https://images.unsplash.com/photo-1569864358641-52bfa353a1bf?q=80&w=600&auto=format&fit=crop',
-    categoryId: 'sweet'
+    categoryId: 'drinks'
   },
   {
     id: '6',
@@ -98,6 +98,6 @@ export const products: Product[] = [
     price: 7.25,
     tag: null,
     image: 'https://images.unsplash.com/photo-1548883354-94bcfe321cbb?q=80&w=600&auto=format&fit=crop',
-    categoryId: 'sweet'
+    categoryId: 'drinks'
   }
 ];
