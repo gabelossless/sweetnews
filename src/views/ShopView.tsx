@@ -215,7 +215,7 @@ export function ShopView({
             <h3 className="font-headline-md text-[13px] uppercase tracking-widest font-black text-white/80 mb-1">
               Vault Empty
             </h3>
-            <p className="text-[11px] text-white/35 max-w-[220px] mx-auto leading-relaxed">
+            <p className="text-[11px] text-white/35 leading-relaxed">
               No drops in this category tonight. Try another.
             </p>
             <button

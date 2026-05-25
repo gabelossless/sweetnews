@@ -260,7 +260,7 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
             <h3 className="text-2xl font-black text-white mb-2 uppercase tracking-tight">
               {role === 'driver_active' ? 'Courier Dispatch' : 'Earn with Sweet News'}
             </h3>
-            <p className="text-[12px] text-white/35 max-w-[240px] leading-relaxed mb-6 font-medium">
+            <p className="text-[12px] text-white/35 max-w-xs leading-relaxed mb-6 font-medium">
               {role === 'driver_active'
                 ? 'Your fleet terminal is active. Ready for your next high-yield delivery run?'
                 : role === 'driver_pending'
