@@ -1,5 +1,8 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronRight, Bell, Wifi, WifiOff, ShieldCheck, Car, Crown, Check } from 'lucide-react';
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from '../lib/firebase';
+import { requestPermissionAndGetToken } from '../lib/fcm';
 import { useProfileStore } from '../store/profile';
 import { useAuth } from '../context/AuthContext';
 import { WaitlistModal } from '../components/organisms/WaitlistModal';
@@ -10,10 +13,12 @@ interface ProfileViewProps {
 }
 
 export function ProfileView({ isOnline }: ProfileViewProps) {
-  const { role } = useAuth();
+  const { user, role } = useAuth();
   const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
   const [nameSaved, setNameSaved] = useState(false);
   const [addressSaved, setAddressSaved] = useState(false);
+  const [pushLoading, setPushLoading] = useState(false);
+  const [pushError, setPushError] = useState<string | null>(null);
 
   const deliveryName = useProfileStore((state) => state.deliveryName);
   const deliveryAddress = useProfileStore((state) => state.deliveryAddress);
@@ -38,6 +43,25 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
     setAddressSaved(false);
     if (addressTimer.current) clearTimeout(addressTimer.current);
     addressTimer.current = setTimeout(() => setAddressSaved(true), 1000);
+  };
+
+  const handlePushToggle = async () => {
+    setPushError(null);
+    if (pushNotifications) {
+      setPushNotifications(false);
+      return;
+    }
+    setPushLoading(true);
+    const token = await requestPermissionAndGetToken();
+    setPushLoading(false);
+    if (!token) {
+      setPushError('Permission denied or not supported. Enable notifications in browser settings.');
+      return;
+    }
+    setPushNotifications(true);
+    if (user) {
+      updateDoc(doc(db, 'users', user.uid), { fcmToken: token }).catch(() => {});
+    }
   };
 
   return (
@@ -282,37 +306,43 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
           </h3>
 
           {/* Push notifications toggle */}
-          <div className="flex justify-between items-center py-1">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-white">
-                <Bell size={15} strokeWidth={1.5} />
+          <div className="space-y-2">
+            <div className="flex justify-between items-center py-1">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-white">
+                  <Bell size={15} strokeWidth={1.5} />
+                </div>
+                <div>
+                  <p className="text-[12px] text-white font-black uppercase tracking-wider">
+                    Push Notifications
+                  </p>
+                  <p className="text-[10px] text-white/30 font-medium">Real-time dispatch alerts.</p>
+                </div>
               </div>
-              <div>
-                <p className="text-[12px] text-white font-black uppercase tracking-wider">
-                  Push Notifications
-                </p>
-                <p className="text-[10px] text-white/30 font-medium">Real-time dispatch alerts.</p>
-              </div>
-            </div>
 
-            {/* Toggle */}
-            <motion.button
-              onClick={() => setPushNotifications(!pushNotifications)}
-              aria-label="Toggle push notifications"
-              className={`relative w-12 h-6 rounded-full p-0.5 transition-colors duration-300 focus:outline-none ${
-                pushNotifications
-                  ? 'bg-gradient-to-r from-[#e60023] to-[#ff2060] shadow-[0_2px_12px_rgba(230,0,35,0.5)]'
-                  : 'bg-white/10'
-              }`}
-            >
-              <motion.div
-                layout
-                transition={{ type: 'spring', stiffness: 700, damping: 35 }}
-                className={`w-5 h-5 rounded-full shadow-md ${
-                  pushNotifications ? 'bg-white translate-x-6' : 'bg-white/70 translate-x-0'
-                } transition-transform duration-300`}
-              />
-            </motion.button>
+              {/* Toggle */}
+              <motion.button
+                onClick={handlePushToggle}
+                disabled={pushLoading}
+                aria-label="Toggle push notifications"
+                className={`relative w-12 h-6 rounded-full p-0.5 transition-colors duration-300 focus:outline-none disabled:opacity-50 ${
+                  pushNotifications
+                    ? 'bg-gradient-to-r from-[#e60023] to-[#ff2060] shadow-[0_2px_12px_rgba(230,0,35,0.5)]'
+                    : 'bg-white/10'
+                }`}
+              >
+                <motion.div
+                  layout
+                  transition={{ type: 'spring', stiffness: 700, damping: 35 }}
+                  className={`w-5 h-5 rounded-full shadow-md ${
+                    pushNotifications ? 'bg-white translate-x-6' : 'bg-white/70 translate-x-0'
+                  } transition-transform duration-300`}
+                />
+              </motion.button>
+            </div>
+            {pushError && (
+              <p className="text-[10px] text-red-400 pl-12 leading-relaxed">{pushError}</p>
+            )}
           </div>
 
           {/* Online / Offline status */}

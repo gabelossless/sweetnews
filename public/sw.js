@@ -48,3 +48,35 @@ self.addEventListener('fetch', (event) => {
     )
   );
 });
+
+// ── Push: show notification when app is in background ────────────
+self.addEventListener('push', (event) => {
+  const data = event.data ? event.data.json() : {};
+  event.waitUntil(
+    self.registration.showNotification(data.title ?? 'Sweet News', {
+      body: data.body ?? '',
+      icon: '/icon.svg',
+      badge: '/icon.svg',
+      data: { url: data.url ?? '/' },
+    })
+  );
+});
+
+// ── Notification click: focus or open the app ────────────────────
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const targetUrl = event.notification.data?.url ?? '/';
+  event.waitUntil(
+    self.clients
+      .matchAll({ type: 'window', includeUncontrolled: true })
+      .then((clients) => {
+        const existing = clients.find((c) => c.url.includes(self.location.origin));
+        if (existing) {
+          existing.focus();
+          existing.navigate(targetUrl);
+        } else {
+          self.clients.openWindow(targetUrl);
+        }
+      })
+  );
+});

@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
-import { 
-  collection, 
-  query, 
-  onSnapshot, 
-  orderBy, 
-  doc, 
+import {
+  collection,
+  query,
+  onSnapshot,
+  orderBy,
+  doc,
   where,
   writeBatch,
-  updateDoc
+  updateDoc,
+  getDoc
 } from 'firebase/firestore';
 import { db } from './lib/firebase';
 import { useAuth } from './context/AuthContext';
@@ -80,9 +81,24 @@ export default function AdminApp() {
     }
   };
 
-  const handleAssign = async (orderId: string, driverId: string) => {
+  const handleAssign = async (orderId: string, driverId: string, customerId: string) => {
     try {
       await assignDriver(orderId, driverId);
+      // Notify customer via push (fire-and-forget)
+      const customerDoc = await getDoc(doc(db, 'users', customerId));
+      const fcmToken = customerDoc.data()?.fcmToken as string | undefined;
+      if (fcmToken) {
+        fetch('/api/push-notify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            token: fcmToken,
+            title: '🦉 Driver Assigned',
+            body: 'Your order is confirmed! Your driver is getting your order ready.',
+            url: '/?tab=orders',
+          }),
+        }).catch(() => {});
+      }
     } catch (error) {
       console.error('Error assigning driver:', error);
     }
@@ -321,6 +337,17 @@ export default function AdminApp() {
                   <div className="w-full lg:w-80 shrink-0 border-l border-white/5 lg:pl-8 flex flex-col">
                     <span className="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold block mb-4">Assign Logistics</span>
                     
+                    {(() => {
+                      const ownerDriverUid = import.meta.env.VITE_OWNER_DRIVER_UID as string | undefined;
+                      return !order.driverId && ownerDriverUid ? (
+                        <button
+                          onClick={() => handleAssign(order.id, ownerDriverUid, order.customerId)}
+                          className="w-full mb-3 py-3 rounded-2xl btn-brand font-black text-[11px] uppercase tracking-widest shadow-[0_4px_16px_rgba(230,0,35,0.4)]"
+                        >
+                          ⚡ Assign to Me
+                        </button>
+                      ) : null;
+                    })()}
                     {order.driverId ? (
                       <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-4">
                         <p className="text-xs text-emerald-500 font-bold mb-1 flex items-center gap-2">
@@ -358,7 +385,7 @@ export default function AdminApp() {
                           activeDrivers.map(driver => (
                             <button
                               key={driver.uid}
-                              onClick={() => handleAssign(order.id, driver.uid)}
+                              onClick={() => handleAssign(order.id, driver.uid, order.customerId)}
                               className="w-full bg-white/5 hover:btn-brand border border-white/10 rounded-2xl p-4 text-left transition-all group"
                             >
                               <p className="text-sm font-bold group-hover:text-white">{driver.email}</p>

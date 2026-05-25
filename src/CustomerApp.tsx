@@ -83,33 +83,47 @@ export default function CustomerApp() {
     };
   }, []);
 
-  const handlePlaceOrder = async (details: { name: string; address: string; paymentMethodId?: string }) => {
+  const handlePlaceOrder = async (details: { name: string; address: string; paymentIntentId: string }) => {
     if (!user) {
       showToast('Please sign in to place an order');
       return;
     }
 
     setIsProcessing(true);
-    
-    // Auto sync back to profile store
+
     useProfileStore.getState().setDeliveryName(details.name);
     useProfileStore.getState().setDeliveryAddress(details.address);
 
+    const orderItems = [...cartItems];
+    const total = orderItems.reduce((acc, item) => acc + item.price * item.quantity, 0) + 3.99;
+
     try {
-      await createOrder({
+      const orderId = await createOrder({
         customerId: user.uid,
         customerName: details.name,
-        items: [...cartItems],
-        total: cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0) + 3.99,
+        items: orderItems,
+        total,
         date: new Date().toLocaleDateString(),
         address: details.address,
-        paymentMethodId: details.paymentMethodId,
       });
+
+      // Fire-and-forget owner notification (does not block checkout success)
+      fetch('/api/notify-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orderId,
+          customerName: details.name,
+          address: details.address,
+          items: orderItems.map((i) => ({ name: i.name, quantity: i.quantity, price: i.price })),
+          total,
+        }),
+      }).catch(() => {});
 
       setIsProcessing(false);
       setIsOrderPlaced(true);
       clearCart();
-      
+
       setTimeout(() => {
         setIsCheckoutOpen(false);
         setIsOrderPlaced(false);

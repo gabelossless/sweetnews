@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from './lib/firebase';
 import { useAuth } from './context/AuthContext';
 import { subscribeToDriverOrders, updateOrderStatus } from './lib/orders';
 import { ActiveOrder } from './types';
@@ -21,7 +23,7 @@ export default function FleetApp() {
     return () => unsubscribe();
   }, [user, role]);
 
-  const handleStatusUpdate = async (orderId: string, currentStatus: string) => {
+  const handleStatusUpdate = async (orderId: string, currentStatus: string, customerId: string) => {
     let nextStatus: ActiveOrder['status'] = 'cooking';
     let progress = 50;
 
@@ -38,6 +40,27 @@ export default function FleetApp() {
 
     try {
       await updateOrderStatus(orderId, nextStatus, progress);
+
+      // Notify customer on key status milestones
+      if (nextStatus === 'delivering' || nextStatus === 'delivered') {
+        const customerDoc = await getDoc(doc(db, 'users', customerId));
+        const fcmToken = customerDoc.data()?.fcmToken as string | undefined;
+        if (fcmToken) {
+          const isDelivered = nextStatus === 'delivered';
+          fetch('/api/push-notify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              token: fcmToken,
+              title: isDelivered ? '✅ Order Delivered' : '🚗 On the Way',
+              body: isDelivered
+                ? 'Your order has been delivered. Enjoy!'
+                : 'Your driver is en route with your order.',
+              url: '/?tab=orders',
+            }),
+          }).catch(() => {});
+        }
+      }
     } catch (error) {
       console.error('Status update failed:', error);
     }

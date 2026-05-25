@@ -11,7 +11,7 @@ import { sanitizeString } from '../../lib/utils';
 interface CheckoutFormProps {
   isOpen: boolean;
   onClose: () => void;
-  onPlaceOrder: (details: { name: string; address: string; paymentMethodId?: string }) => void;
+  onPlaceOrder: (details: { name: string; address: string; paymentIntentId: string }) => void;
   isProcessing: boolean;
   isOrderPlaced: boolean;
 }
@@ -46,6 +46,7 @@ export function CheckoutForm({
   const [deliveryName, setLocalName] = useState(savedName);
   const [deliveryAddress, setLocalAddress] = useState(savedAddress);
   const [cardError, setCardError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,22 +60,56 @@ export function CheckoutForm({
     const cardElement = elements.getElement(CardElement);
     if (!cardElement) return;
 
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
-      type: 'card',
-      card: cardElement,
-      billing_details: { name: sanitizeString(deliveryName) },
-    });
+    setIsSubmitting(true);
 
-    if (error) {
-      setCardError(error.message ?? 'Card error. Please try again.');
-      return;
+    try {
+      // Step 1: Create PaymentIntent server-side
+      const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+      const totalCents = Math.round((subtotal + 3.99) * 100);
+
+      const chargeRes = await fetch('/api/charge', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: totalCents }),
+      });
+
+      const chargeData = await chargeRes.json() as { clientSecret?: string; error?: string };
+
+      if (!chargeRes.ok || !chargeData.clientSecret) {
+        setCardError(chargeData.error ?? 'Payment could not be initialised. Please try again.');
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Step 2: Confirm payment with card element
+      const { paymentIntent, error } = await stripe.confirmCardPayment(chargeData.clientSecret, {
+        payment_method: {
+          card: cardElement,
+          billing_details: { name: sanitizeString(deliveryName) },
+        },
+      });
+
+      if (error) {
+        setCardError(error.message ?? 'Card declined. Please try another card.');
+        setIsSubmitting(false);
+        return;
+      }
+
+      if (paymentIntent?.status !== 'succeeded') {
+        setCardError('Payment was not completed. Please try again.');
+        setIsSubmitting(false);
+        return;
+      }
+
+      onPlaceOrder({
+        name: sanitizeString(deliveryName),
+        address: sanitizeString(deliveryAddress),
+        paymentIntentId: paymentIntent.id,
+      });
+    } catch {
+      setCardError('A network error occurred. Please check your connection and try again.');
+      setIsSubmitting(false);
     }
-
-    onPlaceOrder({
-      name: sanitizeString(deliveryName),
-      address: sanitizeString(deliveryAddress),
-      paymentMethodId: paymentMethod.id,
-    });
   };
 
   const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
@@ -193,11 +228,11 @@ export function CheckoutForm({
                       
                       <Button
                         type="submit"
-                        disabled={isProcessing || !stripe || !elements || cartItems.length === 0}
+                        disabled={isProcessing || isSubmitting || !stripe || !elements || cartItems.length === 0}
                         whileTapScale={0.95}
                         className="w-full py-5 btn-brand font-headline-md uppercase tracking-[0.2em] text-[12px] rounded-full transition-all disabled:opacity-30 disabled:shadow-none disabled:cursor-not-allowed font-black"
                       >
-                        {isProcessing ? 'Processing...' : `Pay $${total.toFixed(2)}`}
+                        {isSubmitting || isProcessing ? 'Processing...' : `Pay $${total.toFixed(2)}`}
                       </Button>
                     </div>
                   </div>

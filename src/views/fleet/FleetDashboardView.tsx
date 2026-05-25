@@ -16,7 +16,7 @@ import { ActiveOrder } from '../../types';
 
 interface FleetDashboardViewProps {
   activeOrders: ActiveOrder[];
-  onStatusUpdate: (orderId: string, currentStatus: string) => void;
+  onStatusUpdate: (orderId: string, currentStatus: string, customerId: string) => void;
 }
 
 export default function FleetDashboardView({ activeOrders, onStatusUpdate }: FleetDashboardViewProps) {
@@ -104,7 +104,7 @@ export default function FleetDashboardView({ activeOrders, onStatusUpdate }: Fle
               </div>
 
               <Button
-                onClick={() => onStatusUpdate(order.id, order.status)}
+                onClick={() => onStatusUpdate(order.id, order.status, order.customerId)}
                 className="w-full py-4 rounded-2xl btn-brand font-black"
               >
                 {order.status === 'confirmed' && 'Start Preparation'}
