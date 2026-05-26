@@ -15,11 +15,11 @@ export default function FleetPendingView() {
       >
         <div className="flex justify-center">
           <div className="relative">
-            <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
-              <Clock className="w-12 h-12 text-primary animate-pulse" />
+            <div className="w-24 h-24 rounded-full bg-amber-400/10 flex items-center justify-center">
+              <Clock className="w-12 h-12 text-amber-400 animate-pulse" />
             </div>
             <div className="absolute -bottom-2 -right-2 bg-black border border-white/10 rounded-full p-2">
-              <ShieldCheck className="w-6 h-6 text-primary" />
+              <ShieldCheck className="w-6 h-6 text-amber-400" />
             </div>
           </div>
         </div>
@@ -34,11 +34,11 @@ export default function FleetPendingView() {
         <div className="bg-white/5 border border-white/10 rounded-2xl p-6 space-y-4">
           <div className="flex items-center gap-4 text-left">
             <div className="w-2 h-2 rounded-full bg-primary" />
-            <p className="text-xs font-medium text-white/80">Background Check: <span className="text-primary">Processing</span></p>
+            <p className="text-xs font-medium text-white/80">Background Check: <span className="text-amber-400">Processing</span></p>
           </div>
           <div className="flex items-center gap-4 text-left">
             <div className="w-2 h-2 rounded-full bg-primary" />
-            <p className="text-xs font-medium text-white/80">Vehicle Verification: <span className="text-primary">Pending Review</span></p>
+            <p className="text-xs font-medium text-white/80">Vehicle Verification: <span className="text-amber-400">Pending Review</span></p>
           </div>
         </div>
 

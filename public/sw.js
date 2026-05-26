@@ -10,7 +10,6 @@ self.addEventListener('install', (event) => {
       // Use allSettled so a single 404 doesn't abort the whole install
       Promise.allSettled([
         fetch('/').then((r) => { if (r.ok) cache.put('/', r); }),
-        fetch('/manifest.json').then((r) => { if (r.ok) cache.put('/manifest.json', r); }),
       ])
     ).then(() => self.skipWaiting())
   );

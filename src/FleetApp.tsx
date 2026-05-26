@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from './lib/firebase';
 import { useAuth } from './context/AuthContext';
-import { subscribeToDriverOrders, updateOrderStatus } from './lib/orders';
+import { subscribeToDriverOrders, subscribeToDriverHistory, updateOrderStatus } from './lib/orders';
 import { ActiveOrder } from './types';
 import FleetLoginView from './views/fleet/FleetLoginView';
 import FleetApplyView from './views/fleet/FleetApplyView';
@@ -12,15 +12,19 @@ import FleetDashboardView from './views/fleet/FleetDashboardView';
 export default function FleetApp() {
   const { user, role } = useAuth();
   const [activeOrders, setActiveOrders] = useState<ActiveOrder[]>([]);
+  const [deliveredOrders, setDeliveredOrders] = useState<ActiveOrder[]>([]);
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'history' | 'profile'>('dashboard');
 
   useEffect(() => {
     if (role !== 'driver_active' || !user) return;
 
-    const unsubscribe = subscribeToDriverOrders(user.uid, (orders) => {
-      setActiveOrders(orders);
-    });
+    const unsubActive = subscribeToDriverOrders(user.uid, setActiveOrders);
+    const unsubHistory = subscribeToDriverHistory(user.uid, setDeliveredOrders);
 
-    return () => unsubscribe();
+    return () => {
+      unsubActive();
+      unsubHistory();
+    };
   }, [user, role]);
 
   const handleStatusUpdate = async (orderId: string, currentStatus: string, customerId: string) => {
@@ -41,7 +45,6 @@ export default function FleetApp() {
     try {
       await updateOrderStatus(orderId, nextStatus, progress);
 
-      // Notify customer on key status milestones
       if (nextStatus === 'delivering' || nextStatus === 'delivered') {
         const customerDoc = await getDoc(doc(db, 'users', customerId));
         const fcmToken = customerDoc.data()?.fcmToken as string | undefined;
@@ -73,6 +76,9 @@ export default function FleetApp() {
   return (
     <FleetDashboardView
       activeOrders={activeOrders}
+      deliveredOrders={deliveredOrders}
+      activeTab={activeTab}
+      onTabChange={setActiveTab}
       onStatusUpdate={handleStatusUpdate}
     />
   );

@@ -55,7 +55,7 @@ export default function FleetLoginView() {
           {/* Header */}
           <div className="text-center space-y-2">
             <h1 className="text-4xl font-black tracking-tighter">
-              FLEET<span style={{ background: 'linear-gradient(135deg,#e60023,#ff2060)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>LOGIN</span>
+              FLEET<span style={{ background: 'linear-gradient(135deg,#f59e0b,#f97316)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>LOGIN</span>
             </h1>
             <p className="text-white/40 text-xs uppercase tracking-widest">
               Sweet News Delivery Partners
@@ -109,7 +109,7 @@ export default function FleetLoginView() {
             <div className="text-center">
               <button
                 onClick={() => setIsLogin(!isLogin)}
-                className="text-xs text-white/40 hover:text-[#ff2060] transition-colors flex items-center gap-2 mx-auto"
+                className="text-xs text-white/40 hover:text-amber-400 transition-colors flex items-center gap-2 mx-auto"
               >
                 {isLogin ? (
                   <><UserPlus size={14} /> New here? Apply to deliver</>

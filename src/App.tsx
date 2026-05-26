@@ -11,7 +11,21 @@ function AppShell() {
   return <div className="min-h-screen bg-black" />;
 }
 
+// On fleet.sweetnews.shop, render FleetApp directly — no /fleet path prefix needed
+const isFleetDomain =
+  typeof window !== 'undefined' && window.location.hostname.startsWith('fleet.');
+
 export default function App() {
+  if (isFleetDomain) {
+    return (
+      <AuthProvider>
+        <Suspense fallback={<AppShell />}>
+          <FleetApp />
+        </Suspense>
+      </AuthProvider>
+    );
+  }
+
   return (
     <BrowserRouter>
       <AuthProvider>
