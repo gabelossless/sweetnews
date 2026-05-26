@@ -21,3 +21,28 @@ export const sanitizeObject = <T extends Record<string, any>>(obj: T): T => {
   }
   return sanitized;
 };
+
+/** Basic RFC-5322-ish email check. Catches obvious typos, not adversarial input. */
+export const isValidEmail = (s: string): boolean =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s.trim());
+
+/** Phone is valid if it contains 7–15 digits (E.164 max). Ignores spacing/punctuation. */
+export const isValidPhone = (s: string): boolean => {
+  const digits = s.replace(/\D/g, '');
+  return digits.length >= 7 && digits.length <= 15;
+};
+
+/** String is non-empty after trim and within length bounds. */
+export const isNonEmpty = (s: string, min = 2, max = 200): boolean => {
+  const t = s.trim();
+  return t.length >= min && t.length <= max;
+};
+
+/** Builds a deep-link URL to open the user's preferred maps app for a given address. */
+export const getMapUrl = (address: string): string => {
+  const encoded = encodeURIComponent(address);
+  const isIOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent);
+  return isIOS
+    ? `https://maps.apple.com/?q=${encoded}`
+    : `https://www.google.com/maps/search/?api=1&query=${encoded}`;
+};

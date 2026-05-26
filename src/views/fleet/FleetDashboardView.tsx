@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { Box, ChevronRight, Clock, MapPin, Navigation, Package, User } from 'lucide-react';
 import { Button } from '../../components/atoms/Button';
 import { ActiveOrder } from '../../types';
+import { getMapUrl } from '../../lib/utils';
 import FleetHistoryView from './FleetHistoryView';
 import FleetProfileView from './FleetProfileView';
 
@@ -11,14 +12,6 @@ interface FleetDashboardViewProps {
   activeTab: 'dashboard' | 'history' | 'profile';
   onTabChange: (tab: 'dashboard' | 'history' | 'profile') => void;
   onStatusUpdate: (orderId: string, currentStatus: string, customerId: string) => void;
-}
-
-function getMapUrl(address: string): string {
-  const encoded = encodeURIComponent(address);
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  return isIOS
-    ? `maps.apple.com/?q=${encoded}`
-    : `https://www.google.com/maps/search/?api=1&query=${encoded}`;
 }
 
 interface StatusStyle {

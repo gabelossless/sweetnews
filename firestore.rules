@@ -33,9 +33,25 @@ service cloud.firestore {
       );
     }
 
-    // Waitlist (Public write, Admin read)
+    // Waitlist (Public create with validation, Admin read/update/delete)
     match /waitlist/{entryId} {
-      allow create: if true;
+      allow create: if
+        request.resource.data.keys().hasOnly(['fullName','email','phone','vehicleType','city','status','source','userAgent','submittedAt','createdAt'])
+        && request.resource.data.email is string
+        && request.resource.data.email.size() > 4
+        && request.resource.data.email.size() <= 200
+        && request.resource.data.email.matches('^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$')
+        && request.resource.data.phone is string
+        && request.resource.data.phone.size() <= 50
+        && request.resource.data.fullName is string
+        && request.resource.data.fullName.size() > 1
+        && request.resource.data.fullName.size() <= 200
+        && request.resource.data.city is string
+        && request.resource.data.city.size() > 1
+        && request.resource.data.city.size() <= 200
+        && request.resource.data.vehicleType is string
+        && request.resource.data.vehicleType.size() <= 200
+        && request.resource.data.status == 'waiting';
       allow read, update, delete: if isAdmin();
     }
     
