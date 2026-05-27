@@ -2,7 +2,8 @@ import { Product } from '../types';
 
 export const categories = [
   { id: 'all',           name: 'All',             icon: '✨' },
-  { id: 'drinks',        name: 'Snacks',           icon: '🍿' },
+  { id: 'snacks',        name: 'Snacks',           icon: '🍿' },
+  { id: 'drinks',        name: 'Drinks',           icon: '🥤' },
   { id: 'fanfavorite',   name: 'Fan Favorite',     icon: '⭐' },
   { id: 'latenightfix',  name: 'Late Night Fix',   icon: '🌙' },
   { id: 'organic',       name: 'Organic & Fresh',  icon: '🌱' },
@@ -12,6 +13,7 @@ export const categories = [
 ];
 
 export const products: Product[] = [
+  // ── Snacks ────────────────────────────────────────────────
   {
     id: '1',
     name: 'Doritos Nacho Cheese',
@@ -19,7 +21,7 @@ export const products: Product[] = [
     price: 1.99,
     tag: 'Popular',
     image: '',
-    categoryId: 'drinks',
+    categoryId: 'snacks',
   },
   {
     id: '2',
@@ -28,7 +30,7 @@ export const products: Product[] = [
     price: 1.99,
     tag: 'Popular',
     image: '',
-    categoryId: 'drinks',
+    categoryId: 'snacks',
   },
   {
     id: '3',
@@ -37,7 +39,7 @@ export const products: Product[] = [
     price: 1.49,
     tag: null,
     image: '',
-    categoryId: 'drinks',
+    categoryId: 'snacks',
   },
   {
     id: '4',
@@ -46,7 +48,7 @@ export const products: Product[] = [
     price: 1.99,
     tag: 'New',
     image: '',
-    categoryId: 'drinks',
+    categoryId: 'snacks',
   },
   {
     id: '5',
@@ -100,7 +102,7 @@ export const products: Product[] = [
     price: 2.49,
     tag: null,
     image: '',
-    categoryId: 'drinks',
+    categoryId: 'snacks',
   },
   {
     id: '11',
@@ -109,7 +111,7 @@ export const products: Product[] = [
     price: 2.99,
     tag: 'Fresh',
     image: '',
-    categoryId: 'drinks',
+    categoryId: 'snacks',
   },
   {
     id: '12',
@@ -118,6 +120,122 @@ export const products: Product[] = [
     price: 1.49,
     tag: null,
     image: '',
+    categoryId: 'snacks',
+  },
+
+  // ── Drinks — Sodas & Carbonated ───────────────────────────
+  {
+    id: '13',
+    name: 'Dr Pepper (12 oz)',
+    description: 'The newly crowned #2 soda in America, packing 23 legendary flavors.',
+    price: 1.99,
+    tag: 'Popular',
+    image: '',
     categoryId: 'drinks',
+  },
+  {
+    id: '14',
+    name: 'Sprite (12 oz)',
+    description: 'Crisp, clean lemon-lime flavor to cut through the sweet cravings.',
+    price: 1.49,
+    tag: null,
+    image: '',
+    categoryId: 'drinks',
+  },
+  {
+    id: '15',
+    name: 'Coca-Cola Classic (12 oz)',
+    description: 'The timeless, icy-cold gold standard of cola refreshment.',
+    price: 1.49,
+    tag: 'Popular',
+    image: '',
+    categoryId: 'drinks',
+  },
+
+  // ── Drinks — Juices & Hydration ───────────────────────────
+  {
+    id: '16',
+    name: 'Simply Orange (11.5 oz)',
+    description: 'Never concentrated, never frozen — 100% pure squeezed orange juice.',
+    price: 2.99,
+    tag: 'Fresh',
+    image: '',
+    categoryId: 'drinks',
+  },
+  {
+    id: '17',
+    name: "Welch's Grape Juice (10 oz)",
+    description: 'Bold, deeply refreshing, packed with 100% of your daily Vitamin C.',
+    price: 1.99,
+    tag: null,
+    image: '',
+    categoryId: 'drinks',
+  },
+  {
+    id: '18',
+    name: 'Arizona Green Tea (20 oz)',
+    description: 'Iconic smooth blend of green tea and natural honey — never goes out of style.',
+    price: 1.99,
+    tag: 'Popular',
+    image: '',
+    categoryId: 'drinks',
+  },
+
+  // ── Organic — Functional & Prebiotic ─────────────────────
+  {
+    id: '19',
+    name: 'Poppi Strawberry Lemonade',
+    description: 'A brilliant, gut-friendly fizz that tastes like pure summer juice.',
+    price: 3.49,
+    tag: 'Fresh',
+    image: '',
+    categoryId: 'organic',
+  },
+  {
+    id: '20',
+    name: 'Olipop Vintage Cola',
+    description: 'A healthy take on classic cola with plant fibers and prebiotics.',
+    price: 3.49,
+    tag: null,
+    image: '',
+    categoryId: 'organic',
+  },
+  {
+    id: '21',
+    name: 'Marandú Sparkling Yerba Mate',
+    description: 'Clean, jitter-free focus powered by South American yerba mate.',
+    price: 3.49,
+    tag: 'Popular',
+    image: '',
+    categoryId: 'organic',
+  },
+  {
+    id: '22',
+    name: 'Harmless Harvest Coconut Water',
+    description: 'Cult-favorite naturally pink coconut water — like cracking open a fresh coconut.',
+    price: 4.99,
+    tag: 'Popular',
+    image: '',
+    categoryId: 'organic',
+  },
+
+  // ── Exotic — Whole Foods Exclusives ──────────────────────
+  {
+    id: '23',
+    name: 'Ghia Le Spray Aperitif',
+    description: 'Bitter, brilliant, alcohol-free social tonic that feels like a night out.',
+    price: 4.99,
+    tag: 'New',
+    image: '',
+    categoryId: 'exotic',
+  },
+  {
+    id: '24',
+    name: 'De La Calle Tepache',
+    description: 'Fizzy traditional Mexican fermented pineapple with sweet-heat chamoy kick.',
+    price: 2.99,
+    tag: 'Fresh',
+    image: '',
+    categoryId: 'exotic',
   },
 ];
