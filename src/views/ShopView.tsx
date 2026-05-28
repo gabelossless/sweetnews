@@ -76,16 +76,19 @@ export function ShopView({
 
       {/* Category Chips */}
       <section className="mb-6">
-        <div className="flex overflow-x-auto hide-scrollbar gap-3 pb-2 -mx-6 px-6 md:mx-0 md:px-1">
+        <div
+          className="flex overflow-x-auto hide-scrollbar gap-2.5 pb-1 -mx-6 px-6 md:mx-0 md:px-1"
+          style={{ maskImage: 'linear-gradient(to right, black 85%, transparent 100%)' }}
+        >
           {categories.map((category, i) => (
             <motion.div
               key={category.id}
               initial={{ opacity: 0, x: 10 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.05, duration: 0.25 }}
+              transition={{ delay: i * 0.04, duration: 0.22 }}
+              className="flex-shrink-0"
             >
               <CategoryChip
-                id={category.id}
                 name={category.name}
                 icon={category.icon}
                 isActive={selectedCategory === category.id}
@@ -97,6 +100,8 @@ export function ShopView({
               />
             </motion.div>
           ))}
+          {/* Spacer so last chip isn't hidden by the fade */}
+          <div className="w-8 flex-shrink-0" aria-hidden />
         </div>
       </section>
 
