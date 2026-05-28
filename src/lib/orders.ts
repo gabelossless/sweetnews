@@ -1,14 +1,15 @@
-import { 
-  collection, 
-  addDoc, 
-  updateDoc, 
-  doc, 
-  query, 
-  where, 
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  doc,
+  query,
+  where,
   onSnapshot,
   orderBy,
   serverTimestamp,
-  getDoc
+  getDoc,
+  limit
 } from 'firebase/firestore';
 import { db } from './firebase';
 import { ActiveOrder, OrderStatus } from '../types';
@@ -93,6 +94,28 @@ export const subscribeToDriverOrders = (driverId: string, callback: (orders: Act
     where('driverId', '==', driverId),
     where('status', 'in', ['confirmed', 'cooking', 'delivering']),
     orderBy('createdAt', 'desc')
+  );
+
+  return onSnapshot(q, (snapshot) => {
+    const orders = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+      createdAt: (doc.data().createdAt as any)?.toDate?.()?.toISOString() || new Date().toISOString()
+    })) as ActiveOrder[];
+    callback(orders);
+  });
+};
+
+/**
+ * Subscribes to the last 50 delivered orders for a specific driver (for history tab).
+ */
+export const subscribeToDriverHistory = (driverId: string, callback: (orders: ActiveOrder[]) => void) => {
+  const q = query(
+    collection(db, 'orders'),
+    where('driverId', '==', driverId),
+    where('status', '==', 'delivered'),
+    orderBy('createdAt', 'desc'),
+    limit(50)
   );
 
   return onSnapshot(q, (snapshot) => {

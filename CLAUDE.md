@@ -133,20 +133,27 @@ Strict Atomic Design:
 
 ## Product Catalog
 
-Static local data in `src/data/products.ts` — not Firestore. 10 products across 6 categories:
+Static local data in `src/data/products.ts` — not Firestore. **42 products across 8 active categories** (+ `all` and `news` which are synthetic):
 
 | id | Display Name | Notes |
 |---|---|---|
 | `all` | All | Synthetic — shows all products |
-| `exotic` | Exotic | Products available |
-| `organic` | Organic | Products available |
-| `drinks` | Snacks | Previously "Craft Drinks" — products available |
-| `local` | Local | Products available |
+| `snacks` | Snacks | Chips, candy, cookies (bulk packaged) |
+| `drinks` | Drinks | Sodas, juices, hydration |
+| `fanfavorite` | Fan Favorite | High-demand staples (Oreos, Chips Ahoy) |
+| `latenightfix` | Late Night Fix | Insomnia Cookies, Krispy Kreme, Cheez-It |
+| `organic` | Organic & Fresh | Prebiotic sodas, fruit snacks, coconut water |
+| `exotic` | Exotic Finds | Whole Foods exclusives, artisan items |
+| `local` | Local Deli | Denver-area vendors: Crumbl, Cheesecake Factory, Tru Fles |
 | `news` | News | **Navigation-only** — no products; clicking navigates to AboutView |
 
-**The `news` category has no products.** Its chip click is intercepted before it reaches the filter logic. Do not add products with `categoryId: 'news'`.
+**The `news` category has no products.** Its chip click is intercepted in `ShopView` before reaching filter logic. Do not add products with `categoryId: 'news'`.
 
-Adding products means editing `src/data/products.ts`.
+**Product images** are currently empty strings (`image: ''`). `ProductCard` renders a styled name-based placeholder tile when `image` is falsy — no broken image icons. Add URLs directly in `products.ts` when photos are ready.
+
+**Customizable products** (Crumbl, Insomnia Cookies, Krispy Kreme) have a `customizationMatrix?: CustomizationStep[]` field defined in `src/types/index.ts`. The selection UI is not yet built — these products currently add to cart without customization. See `CustomizationStep` and `CustomizationOption` interfaces in `src/types/index.ts`.
+
+Adding or editing products means editing `src/data/products.ts` only.
 
 ## PWA
 

@@ -1,31 +1,27 @@
 import { motion } from 'motion/react';
 
 interface CategoryChipProps {
-  id: string;
   name: string;
   icon: string;
   isActive: boolean;
   onClick: () => void;
 }
 
-export function CategoryChip({ 
-  name, 
-  icon, 
-  isActive, 
-  onClick 
-}: CategoryChipProps) {
+export function CategoryChip({ name, icon, isActive, onClick }: CategoryChipProps) {
   return (
     <motion.button
-      whileTap={{ scale: 0.95 }}
-      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.91 }}
       onClick={onClick}
-      className={`h-9 px-4 rounded-full flex items-center gap-1.5 transition-all text-[13px] font-medium whitespace-nowrap scrollbar-hide border ${
-        isActive
-          ? 'btn-brand border-transparent shadow-[0_4px_20px_rgba(230,0,35,0.35)]'
-          : 'bg-[#0f0f0f] text-on-surface-variant border-white/[0.06] hover:bg-white/[0.05]'
-      }`}
+      className={`
+        h-11 px-5 rounded-full flex items-center gap-2 whitespace-nowrap select-none
+        text-[13px] font-bold tracking-wide transition-colors duration-150
+        ${isActive
+          ? 'bg-white text-black shadow-[0_4px_20px_rgba(255,255,255,0.12)]'
+          : 'bg-white/[0.05] text-white/55 border border-white/[0.07] active:bg-white/[0.10]'
+        }
+      `}
     >
-      <span>{icon}</span>
+      <span className="text-[15px] leading-none">{icon}</span>
       <span>{name}</span>
     </motion.button>
   );

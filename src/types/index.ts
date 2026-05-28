@@ -1,3 +1,16 @@
+export interface CustomizationOption {
+  name: string;
+  upcharge: number;
+}
+
+export interface CustomizationStep {
+  step_name: string;
+  selection_type: 'exact' | 'up_to';
+  min_selections: number;
+  max_selections: number;
+  options: CustomizationOption[];
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -6,6 +19,7 @@ export interface Product {
   tag: string | null;
   image: string;
   categoryId: string;
+  customizationMatrix?: CustomizationStep[];
 }
 
 export type OrderStatus = 'pending' | 'confirmed' | 'cooking' | 'delivering' | 'delivered' | 'cancelled';

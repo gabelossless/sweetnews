@@ -157,7 +157,7 @@ export function SearchView({
             <h3 className="font-headline-md text-[14px] uppercase tracking-widest font-black mb-2 text-white">
               Delicacy Not Found
             </h3>
-            <p className="text-white/35 text-[12px] max-w-xs mx-auto leading-relaxed font-medium">
+            <p className="text-white/35 text-[12px] leading-relaxed font-medium">
               Try checking your spelling or explore another item in the vault.
             </p>
           </motion.div>

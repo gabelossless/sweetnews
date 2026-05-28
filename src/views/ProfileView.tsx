@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronRight, Bell, Wifi, WifiOff, ShieldCheck, Car, Crown, Check } from 'lucide-react';
+import { ChevronRight, Bell, Wifi, WifiOff, ShieldCheck, Crown, Check } from 'lucide-react';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { requestPermissionAndGetToken } from '../lib/fcm';
@@ -235,64 +235,46 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
         </div>
 
         {/* ── Fleet Partner Card ──────────────────────────────── */}
-        <motion.div
-          whileHover={{ scale: 1.01 }}
-          className="relative overflow-hidden glass-panel rounded-[32px] p-8 shadow-[0_8px_32px_rgba(0,0,0,0.5)] group transition-all duration-500"
-        >
-          {/* Big ghost car icon */}
-          <div className="absolute top-0 right-0 p-7 opacity-[0.04] group-hover:opacity-[0.07] transition-opacity duration-500">
-            <Car size={90} className="text-white" />
-          </div>
+        <div className="glass-panel rounded-[28px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+          <h3 className="text-lg font-black text-white tracking-tight mb-1.5">
+            {role === 'driver_active'
+              ? 'Fleet Terminal'
+              : role === 'driver_pending'
+              ? 'Application Pending'
+              : 'Drive for Sweet News'}
+          </h3>
+          <p className="text-sm text-white/55 leading-relaxed mb-5">
+            {role === 'driver_active'
+              ? 'Your fleet terminal is active. Open it to view active deliveries.'
+              : role === 'driver_pending'
+              ? "We'll email you when a slot opens in your city."
+              : 'Deliver in your city on your schedule. Apply in 30 seconds.'}
+          </p>
 
-          {/* Shimmer sweep */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 rounded-[32px]" />
+          {role !== 'driver_pending' && (
+            <motion.button
+              whileTap={{ scale: 0.97 }}
+              onClick={() => {
+                if (role === 'driver_active') {
+                  window.location.href = '/fleet';
+                } else {
+                  setIsWaitlistOpen(true);
+                }
+              }}
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-white text-black hover:bg-white/90 transition-colors text-[13px] font-bold rounded-full"
+            >
+              {role === 'driver_active' ? 'Open terminal' : 'Join waitlist'}
+              <ChevronRight size={14} strokeWidth={2.5} />
+            </motion.button>
+          )}
 
-          <div className="relative z-10">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-7 h-7 rounded-full flex items-center justify-center bg-white/[0.06] border border-white/[0.1]">
-                <ShieldCheck size={13} className="text-white/50" />
-              </div>
-              <span className="text-[9px] uppercase font-black tracking-[0.2em] text-white/50">
-                {role === 'driver_active' ? 'Active Partner' : 'Fleet Protocol'}
-              </span>
+          {role === 'driver_pending' && (
+            <div className="inline-flex items-center gap-2 text-[11px] text-white/50 font-medium">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+              Application under review
             </div>
-
-            <h3 className="text-2xl font-black text-white mb-2 uppercase tracking-tight">
-              {role === 'driver_active' ? 'Courier Dispatch' : 'Earn with Sweet News'}
-            </h3>
-            <p className="text-[12px] text-white/35 max-w-[240px] leading-relaxed mb-6 font-medium">
-              {role === 'driver_active'
-                ? 'Your fleet terminal is active. Ready for your next high-yield delivery run?'
-                : role === 'driver_pending'
-                ? "Your application is under review by HQ. We'll alert you once approved."
-                : 'Join our elite delivery fleet. Turn late nights into high-yield earnings.'}
-            </p>
-
-            {role !== 'driver_pending' && (
-              <motion.button
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.94 }}
-                onClick={() => {
-                  if (role === 'driver_active') {
-                    window.location.href = '/fleet';
-                  } else {
-                    setIsWaitlistOpen(true);
-                  }
-                }}
-                className="px-6 py-3 btn-brand text-[10px] font-black uppercase tracking-widest rounded-full shadow-[0_6px_20px_rgba(230,0,35,0.4)] hover:shadow-[0_8px_28px_rgba(230,0,35,0.6)] transition-shadow"
-              >
-                {role === 'driver_active' ? 'Fleet Terminal' : 'Join Fleet Waitlist'}
-              </motion.button>
-            )}
-
-            {role === 'driver_pending' && (
-              <div className="inline-flex items-center gap-2 px-6 py-3 bg-white/[0.04] border border-white/[0.08] text-white/40 text-[10px] uppercase font-black tracking-widest rounded-full">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-live-pulse" />
-                Application Pending
-              </div>
-            )}
-          </div>
-        </motion.div>
+          )}
+        </div>
 
         <WaitlistModal
           isOpen={isWaitlistOpen}

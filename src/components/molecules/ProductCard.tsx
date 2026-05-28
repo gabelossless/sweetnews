@@ -58,16 +58,28 @@ export function ProductCard({
 
       {/* Product Image */}
       <div className="aspect-square relative z-10 flex items-center justify-center mb-4">
-        <motion.img
-          whileHover={{ scale: 1.12, rotate: 4, y: -6 }}
-          transition={{ type: 'spring', stiffness: 280, damping: 18 }}
-          alt={product.name}
-          loading={isFeatured ? 'eager' : 'lazy'}
-          decoding="async"
-          className="w-[85%] h-[85%] object-contain drop-shadow-[0_24px_40px_rgba(0,0,0,0.85)] group-hover:drop-shadow-[0_28px_50px_rgba(230,0,35,0.2)]"
-          style={{ transition: 'filter 0.4s ease' }}
-          src={product.image}
-        />
+        {product.image ? (
+          <motion.img
+            whileHover={{ scale: 1.12, rotate: 4, y: -6 }}
+            transition={{ type: 'spring', stiffness: 280, damping: 18 }}
+            alt={product.name}
+            loading={isFeatured ? 'eager' : 'lazy'}
+            decoding="async"
+            className="w-[85%] h-[85%] object-contain drop-shadow-[0_24px_40px_rgba(0,0,0,0.85)] group-hover:drop-shadow-[0_28px_50px_rgba(230,0,35,0.2)]"
+            style={{ transition: 'filter 0.4s ease' }}
+            src={product.image}
+          />
+        ) : (
+          <motion.div
+            whileHover={{ scale: 1.08, y: -4 }}
+            transition={{ type: 'spring', stiffness: 280, damping: 18 }}
+            className="w-[85%] h-[85%] rounded-[20px] bg-white/[0.04] border border-white/[0.07] flex items-center justify-center"
+          >
+            <span className="text-[11px] font-black uppercase tracking-widest text-white/20 text-center px-2 leading-snug">
+              {product.name.split(' ').slice(0, 2).join('\n')}
+            </span>
+          </motion.div>
+        )}
 
         {/* Tag Badge */}
         {product.tag && (

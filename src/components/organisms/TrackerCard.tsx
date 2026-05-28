@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
-import { Clock, MapPin, Star, Mail, User, AlertCircle } from 'lucide-react';
+import { ChevronDown, MapPin, Star, Mail, User, AlertCircle, Navigation } from 'lucide-react';
 import { ActiveOrder } from '../../types';
 import { submitOrderRating } from '../../lib/orders';
+import { getMapUrl } from '../../lib/utils';
 
 interface TrackerCardProps {
   order: ActiveOrder;
@@ -11,29 +12,32 @@ interface TrackerCardProps {
 const STATUS_LABELS: Record<string, string> = {
   confirmed: 'Confirmed',
   cooking: 'Preparing',
-  delivering: 'On the Way',
+  delivering: 'On the way',
   delivered: 'Delivered',
   cancelled: 'Cancelled',
   pending: 'Pending',
 };
 
-const STATUS_MESSAGES: Record<string, string> = {
-  confirmed: 'Your order is confirmed and being prepared.',
-  cooking: 'Packing your order now.',
-  delivering: 'Your driver is on the way.',
-};
-
-const PROGRESS_STEPS = ['Confirmed', 'Preparing', 'On the Way', 'Delivered'];
+const PROGRESS_STEPS = ['Confirmed', 'Preparing', 'On the way', 'Delivered'];
 const STEP_STATUSES = ['confirmed', 'cooking', 'delivering', 'delivered'];
+
+function formatEta(etaMins: number): { absolute: string; relative: string } {
+  const arrive = new Date(Date.now() + etaMins * 60_000);
+  const absolute = arrive.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+  const relative = etaMins < 1 ? 'arriving now' : `in ~${etaMins} min`;
+  return { absolute, relative };
+}
 
 export function TrackerCard({ order }: TrackerCardProps) {
   const [rating, setRating] = useState(order.rating ?? 0);
   const [hoverRating, setHoverRating] = useState(0);
+  const [itemsExpanded, setItemsExpanded] = useState(false);
 
   const isActive = order.status !== 'delivered' && order.status !== 'cancelled';
   const isCancelled = order.status === 'cancelled';
   const isDelivered = order.status === 'delivered';
   const shortId = order.id.slice(-6).toUpperCase();
+  const itemCount = order.items.reduce((t, i) => t + i.quantity, 0);
 
   const supportMailUrl = `mailto:sweetnewsowl@gmail.com?subject=Order%20%23${shortId}&body=Hi%2C%20I%20need%20help%20with%20order%20%23${shortId}.%20`;
 
@@ -50,157 +54,201 @@ export function TrackerCard({ order }: TrackerCardProps) {
   };
 
   const currentStepIndex = STEP_STATUSES.indexOf(order.status);
+  const eta = isActive && order.etaMins ? formatEta(order.etaMins) : null;
+  const visibleItems = itemsExpanded || isActive ? order.items : order.items.slice(0, 1);
+  const hiddenCount = order.items.length - 1;
 
   return (
     <div
-      className={`rounded-[28px] border p-6 relative overflow-hidden transition-all ${
+      className={`rounded-[24px] border p-5 relative ${
         isCancelled
-          ? 'border-white/[0.04] opacity-50 grayscale bg-white/[0.01]'
+          ? 'border-white/[0.04] opacity-60 bg-white/[0.01]'
           : isActive
-          ? 'border-white/[0.12] bg-white/[0.02]'
-          : 'border-white/[0.06] bg-white/[0.015]'
+          ? 'border-white/[0.10] bg-white/[0.02]'
+          : 'border-white/[0.05] bg-white/[0.01]'
       }`}
     >
-      {/* Active glow stripe */}
-      {isActive && (
-        <div
-          className="absolute top-0 left-0 right-0 h-[1px] opacity-60"
-          style={{
-            background:
-              'linear-gradient(90deg, transparent, #e60023, #ff2060, transparent)',
-          }}
-        />
+      {/* ── ETA hero (active orders only) ────────────────── */}
+      {isActive && eta && (
+        <div className="mb-5">
+          <p className="text-[10px] uppercase tracking-[0.25em] text-white/35 font-bold mb-1">
+            Arriving by
+          </p>
+          <p className="text-2xl font-black text-white tracking-tight leading-none">
+            {eta.absolute}
+          </p>
+          <p className="text-xs text-white/45 mt-1">{eta.relative}</p>
+        </div>
       )}
 
-      {/* ── Header row ──────────────────────────────── */}
-      <div className="flex justify-between items-start mb-5">
+      {isActive && !eta && (
+        <div className="mb-5">
+          <p className="text-[10px] uppercase tracking-[0.25em] text-white/35 font-bold mb-1">
+            Status
+          </p>
+          <p className="text-xl font-black text-white tracking-tight leading-none">
+            Calculating ETA…
+          </p>
+        </div>
+      )}
+
+      {/* ── Header (status + order id + total) ──────────── */}
+      <div className="flex justify-between items-start mb-4">
         <div>
-          <div className="flex items-center gap-2 mb-1.5">
-            <span
-              className={`text-[9px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full ${
-                isCancelled
-                  ? 'bg-white/5 text-white/30 border border-white/[0.05]'
-                  : isDelivered
-                  ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/15'
-                  : 'btn-brand shadow-[0_2px_10px_rgba(230,0,35,0.35)]'
-              }`}
-            >
-              {STATUS_LABELS[order.status] ?? order.status}
-            </span>
-            {order.etaMins && isActive && (
-              <span className="text-[9px] font-black text-white/50 bg-white/[0.05] border border-white/[0.07] px-2 py-0.5 rounded-full tracking-widest">
-                ETA {order.etaMins}m
-              </span>
-            )}
-          </div>
-          <p className="text-[10px] text-white/30 font-black uppercase tracking-[0.15em]">
+          <span
+            className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full border ${
+              isCancelled
+                ? 'bg-white/[0.03] text-white/35 border-white/[0.05]'
+                : isDelivered
+                ? 'bg-emerald-500/[0.08] text-emerald-400 border-emerald-500/[0.15]'
+                : 'bg-white/[0.06] text-white border-white/[0.08]'
+            }`}
+          >
+            {STATUS_LABELS[order.status] ?? order.status}
+          </span>
+          <p className="text-[10px] text-white/30 font-medium mt-2 tracking-wide">
             #{shortId} · {order.date}
           </p>
         </div>
-
         <div className="text-right">
-          <p className="text-xl font-black text-white tracking-tighter">
+          <p className="text-lg font-black text-white tracking-tight">
             ${order.total.toFixed(2)}
           </p>
-          <p className="text-[9px] text-white/25 font-black uppercase tracking-widest mt-0.5">
-            {order.items.reduce((t, i) => t + i.quantity, 0)} items
+          <p className="text-[10px] text-white/30 mt-0.5">
+            {itemCount} {itemCount === 1 ? 'item' : 'items'}
           </p>
         </div>
       </div>
 
-      {/* ── Driver identity ──────────────────────────── */}
-      {(order.driverId || order.driverSnapshot) && (
-        <div className="mb-5 flex items-center gap-3 bg-white/[0.02] border border-white/[0.05] p-3 rounded-[18px]">
-          {order.driverSnapshot?.photo ? (
-            <img
-              src={order.driverSnapshot.photo}
-              alt="Driver"
-              className="w-9 h-9 rounded-full object-cover border border-white/10 flex-shrink-0"
-            />
-          ) : (
-            <div className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0">
-              <User className="text-white/30" size={14} />
-            </div>
-          )}
-          <div className="flex-1 min-w-0">
-            <p className="text-[8px] uppercase tracking-[0.2em] text-white/35 font-black mb-0.5">
-              Your Driver
-            </p>
-            <p className="font-black text-xs text-white uppercase tracking-wider truncate">
-              {order.driverSnapshot?.name ?? 'Sweet News Driver'}
-            </p>
-          </div>
-          <a
-            href={supportMailUrl}
-            className="p-2 rounded-full bg-white/5 border border-white/[0.07] hover:bg-white/10 transition-colors text-white/40 hover:text-white flex-shrink-0"
-            aria-label="Contact support"
-          >
-            <Mail size={13} />
-          </a>
-        </div>
-      )}
-
-      {/* ── Progress tracker (active orders) ─────────── */}
+      {/* ── Progress (active only) ──────────────────────── */}
       {isActive && (
-        <div className="mb-5 bg-white/[0.015] p-4 rounded-[20px] border border-white/[0.04]">
-          {/* Step labels */}
-          <div className="flex justify-between mb-3">
+        <div className="mb-5">
+          <div className="flex justify-between mb-2">
             {PROGRESS_STEPS.map((step, i) => (
               <span
                 key={step}
-                className={`text-[8px] font-black uppercase tracking-wider transition-colors ${
+                className={`text-[9px] font-bold transition-colors ${
                   i === currentStepIndex
                     ? 'text-white'
                     : i < currentStepIndex
-                    ? 'text-white/40'
-                    : 'text-white/15'
+                    ? 'text-white/50'
+                    : 'text-white/20'
                 }`}
               >
                 {step}
               </span>
             ))}
           </div>
-
-          {/* Progress bar */}
-          <div className="relative h-1 bg-white/[0.06] rounded-full overflow-hidden">
+          <div className="relative h-[3px] bg-white/[0.06] rounded-full overflow-hidden">
             <motion.div
-              className="absolute inset-y-0 left-0 rounded-full"
-              style={{
-                background: 'linear-gradient(90deg, #e60023, #ff2060)',
-                boxShadow: '0 0 12px rgba(230,0,35,0.6)',
-              }}
+              className="absolute inset-y-0 left-0 rounded-full bg-white/90"
               initial={{ width: 0 }}
               animate={{ width: `${order.progress}%` }}
-              transition={{ duration: 1.2, ease: 'easeOut' }}
+              transition={{ duration: 1.0, ease: 'easeOut' }}
             />
           </div>
-
-          {/* Status message */}
-          {STATUS_MESSAGES[order.status] && (
-            <div className="flex items-center gap-2.5 mt-4 pt-4 border-t border-white/[0.04]">
-              <div className="relative w-7 h-7 rounded-full bg-white/[0.04] border border-white/[0.07] flex items-center justify-center flex-shrink-0">
-                <span className="absolute animate-ping w-full h-full rounded-full bg-white/5 opacity-40" />
-                <Clock size={12} className="text-white/50" />
-              </div>
-              <p className="text-[11px] text-white/50 font-medium leading-relaxed">
-                {STATUS_MESSAGES[order.status]}
-              </p>
-            </div>
-          )}
         </div>
       )}
 
-      {/* ── Rating (delivered/cancelled) ─────────────── */}
-      {!isActive && !isCancelled && (
-        <div className="mb-5 p-4 bg-white/[0.015] rounded-[20px] border border-white/[0.04] text-center">
-          <p className="text-[9px] font-black mb-3 uppercase tracking-[0.25em] text-white/50">
-            Rate Your Experience
+      {/* ── Driver row ──────────────────────────────────── */}
+      {(order.driverId || order.driverSnapshot) && (
+        <div className="flex items-center gap-3 mb-5 pb-5 border-b border-white/[0.05]">
+          {order.driverSnapshot?.photo ? (
+            <img
+              src={order.driverSnapshot.photo}
+              alt="Driver"
+              className="w-9 h-9 rounded-full object-cover flex-shrink-0"
+            />
+          ) : (
+            <div className="w-9 h-9 rounded-full bg-white/[0.06] flex items-center justify-center flex-shrink-0">
+              <User className="text-white/40" size={15} />
+            </div>
+          )}
+          <div className="flex-1 min-w-0">
+            <p className="text-[10px] text-white/40 font-medium mb-0.5">Your driver</p>
+            <p className="text-sm font-bold text-white truncate">
+              {order.driverSnapshot?.name ?? 'Sweet News Driver'}
+            </p>
+          </div>
+          <a
+            href={supportMailUrl}
+            className="p-2 rounded-full text-white/40 hover:text-white hover:bg-white/[0.05] transition-colors flex-shrink-0"
+            aria-label="Contact support"
+          >
+            <Mail size={14} />
+          </a>
+        </div>
+      )}
+
+      {/* ── Dispatching notice (active, no driver yet) ── */}
+      {!order.driverId && isActive && (
+        <div className="flex items-center gap-2 mb-5 text-[11px] text-white/55">
+          <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+          Finding you a driver…
+        </div>
+      )}
+
+      {/* ── Tappable address ────────────────────────────── */}
+      <a
+        href={getMapUrl(order.address)}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center gap-2.5 mb-4 py-2.5 px-3 -mx-1 rounded-xl hover:bg-white/[0.03] transition-colors"
+      >
+        <MapPin size={13} className="text-white/40 flex-shrink-0" />
+        <span className="text-xs text-white/65 truncate flex-1">{order.address}</span>
+        <Navigation size={11} className="text-white/25 flex-shrink-0" />
+      </a>
+
+      {/* ── Items (collapsible for past orders) ─────────── */}
+      <div className="space-y-1.5">
+        {visibleItems.map((item) => (
+          <div
+            key={item.id}
+            className="flex items-center gap-3 py-2"
+          >
+            <img
+              src={item.image}
+              alt={item.name}
+              className="w-8 h-8 object-cover rounded-lg flex-shrink-0"
+            />
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-bold text-white truncate">{item.name}</p>
+              <p className="text-[10px] text-white/35">
+                {item.quantity}× · ${item.price.toFixed(2)}
+              </p>
+            </div>
+            <p className="text-xs text-white/50 flex-shrink-0">
+              ${(item.price * item.quantity).toFixed(2)}
+            </p>
+          </div>
+        ))}
+
+        {!isActive && hiddenCount > 0 && (
+          <button
+            onClick={() => setItemsExpanded((v) => !v)}
+            className="flex items-center gap-1 text-[11px] text-white/40 hover:text-white/70 transition-colors pt-1"
+          >
+            {itemsExpanded ? 'Show less' : `Show ${hiddenCount} more`}
+            <ChevronDown
+              size={12}
+              className={`transition-transform ${itemsExpanded ? 'rotate-180' : ''}`}
+            />
+          </button>
+        )}
+      </div>
+
+      {/* ── Rating (delivered only) ─────────────────────── */}
+      {isDelivered && (
+        <div className="mt-5 pt-5 border-t border-white/[0.05]">
+          <p className="text-[10px] font-medium text-white/45 mb-2.5">
+            {rating > 0 ? 'Thanks for your feedback' : 'Rate your delivery'}
           </p>
-          <div className="flex justify-center gap-1.5 mb-2">
+          <div className="flex gap-1.5">
             {[1, 2, 3, 4, 5].map((star) => (
               <motion.button
                 key={star}
-                whileHover={{ scale: 1.2 }}
+                whileHover={{ scale: 1.15 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => handleRate(star)}
                 onMouseEnter={() => !order.rating && setHoverRating(star)}
@@ -209,86 +257,29 @@ export function TrackerCard({ order }: TrackerCardProps) {
                 aria-label={`Rate ${star} star${star > 1 ? 's' : ''}`}
               >
                 <Star
-                  size={22}
+                  size={20}
                   fill={(hoverRating || rating) >= star ? '#FFFFFF' : 'transparent'}
                   className={
-                    (hoverRating || rating) >= star ? 'text-white' : 'text-white/15'
+                    (hoverRating || rating) >= star ? 'text-white' : 'text-white/20'
                   }
                 />
               </motion.button>
             ))}
           </div>
-          <p className="text-[8px] font-black text-white/30 uppercase tracking-[0.2em]">
-            {rating > 0 ? '✓ Review submitted' : 'Tap to rate'}
-          </p>
         </div>
       )}
 
-      {/* ── Cancelled notice ─────────────────────────── */}
+      {/* ── Cancelled notice ────────────────────────────── */}
       {isCancelled && (
-        <div className="mb-5 p-4 bg-white/[0.01] rounded-[20px] border border-white/[0.04] flex items-center gap-3">
-          <AlertCircle size={14} className="text-white/30 flex-shrink-0" />
-          <p className="text-[11px] text-white/30 font-medium">
+        <div className="mt-4 pt-4 border-t border-white/[0.04] flex items-center gap-2">
+          <AlertCircle size={13} className="text-white/35 flex-shrink-0" />
+          <p className="text-xs text-white/45">
             {(order as ActiveOrder & { cancellationReason?: string }).cancellationReason
               ? `Cancelled: ${(order as ActiveOrder & { cancellationReason?: string }).cancellationReason}`
               : 'This order was cancelled.'}
           </p>
         </div>
       )}
-
-      {/* ── Items list ───────────────────────────────── */}
-      <div className="space-y-2">
-        <p className="text-[8px] uppercase tracking-[0.25em] text-white/25 font-black px-0.5 mb-1.5">
-          Items
-        </p>
-        {order.items.map((item) => (
-          <div
-            key={item.id}
-            className="flex items-center gap-3 bg-white/[0.01] p-3 rounded-[16px] border border-white/[0.03] hover:bg-white/[0.03] transition-colors"
-          >
-            <img
-              src={item.image}
-              alt={item.name}
-              className="w-9 h-9 object-cover rounded-xl border border-white/[0.06] flex-shrink-0"
-            />
-            <div className="flex-1 min-w-0">
-              <p className="text-xs font-black text-white truncate uppercase tracking-wide">
-                {item.name}
-              </p>
-              <p className="text-[10px] text-white/35 font-medium">
-                {item.quantity}× · ${item.price.toFixed(2)}
-              </p>
-            </div>
-            <p className="text-[11px] font-black text-white/50 flex-shrink-0">
-              ${(item.price * item.quantity).toFixed(2)}
-            </p>
-          </div>
-        ))}
-      </div>
-
-      {/* ── Footer ───────────────────────────────────── */}
-      <div className="mt-5 pt-4 border-t border-white/[0.04] space-y-3">
-        <div className="flex items-center gap-2 text-[10px] text-white/35 font-medium">
-          <MapPin size={11} className="text-white/25 flex-shrink-0" />
-          <span className="truncate">{order.address}</span>
-        </div>
-
-        {!order.driverId && isActive && (
-          <div className="flex items-center gap-2 text-[9px] text-white/50 font-black bg-white/[0.03] px-3 py-2.5 rounded-xl border border-white/[0.06] uppercase tracking-widest">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse flex-shrink-0" />
-            Dispatching your driver...
-          </div>
-        )}
-
-        {!isActive && (
-          <a
-            href={supportMailUrl}
-            className="flex items-center justify-center gap-2 py-3 bg-white/[0.03] hover:bg-white/[0.06] rounded-2xl text-[9px] font-black uppercase tracking-[0.2em] text-white/40 hover:text-white/70 transition-all border border-white/[0.05]"
-          >
-            <Mail size={11} /> Contact Support
-          </a>
-        )}
-      </div>
     </div>
   );
 }

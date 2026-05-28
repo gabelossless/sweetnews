@@ -37,12 +37,12 @@ export function ShopView({
       transition={{ duration: 0.28, ease: [0.25, 0.1, 0.25, 1] }}
     >
       {/* Hero Header */}
-      <section className="mt-8 mb-10 px-2">
+      <section className="mt-2 mb-4 px-2">
         <motion.h1
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
-          className="font-display-xl text-[54px] uppercase font-black leading-[0.85] tracking-tighter mb-6 text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.12)]"
+          className="font-display-xl text-[36px] uppercase font-black leading-[0.85] tracking-tighter mb-3 text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.12)]"
         >
           <span
             style={{
@@ -65,7 +65,7 @@ export function ShopView({
           onClick={onNavigateToSearch}
           className="relative group cursor-pointer"
         >
-          <div className="w-full h-16 pl-6 pr-4 glass-panel rounded-full flex items-center text-white/35 text-[13px] tracking-widest uppercase font-black shadow-[0_15px_40px_rgba(0,0,0,0.7)] transition-all duration-300 group-hover:border-white/[0.12] group-hover:bg-white/[0.05]">
+          <div role="button" aria-label="Search products" className="w-full h-14 pl-6 pr-4 glass-panel rounded-full flex items-center text-white/35 text-[13px] tracking-widest uppercase font-black shadow-[0_15px_40px_rgba(0,0,0,0.7)] transition-all duration-300 group-hover:border-white/[0.12] group-hover:bg-white/[0.05]">
             <span>Discover Premium...</span>
           </div>
           <div className="absolute right-4 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full btn-brand flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-[0_4px_12px_rgba(230,0,35,0.5)]">
@@ -75,17 +75,20 @@ export function ShopView({
       </section>
 
       {/* Category Chips */}
-      <section className="mb-8">
-        <div className="flex overflow-x-auto hide-scrollbar gap-3 pb-2 -mx-6 px-6 md:mx-0 md:px-1">
+      <section className="mb-6">
+        <div
+          className="flex overflow-x-auto hide-scrollbar gap-2.5 pb-1 -mx-6 px-6 md:mx-0 md:px-1"
+          style={{ maskImage: 'linear-gradient(to right, black 85%, transparent 100%)' }}
+        >
           {categories.map((category, i) => (
             <motion.div
               key={category.id}
               initial={{ opacity: 0, x: 10 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.05, duration: 0.25 }}
+              transition={{ delay: i * 0.04, duration: 0.22 }}
+              className="flex-shrink-0"
             >
               <CategoryChip
-                id={category.id}
                 name={category.name}
                 icon={category.icon}
                 isActive={selectedCategory === category.id}
@@ -97,11 +100,13 @@ export function ShopView({
               />
             </motion.div>
           ))}
+          {/* Spacer so last chip isn't hidden by the fade */}
+          <div className="w-8 flex-shrink-0" aria-hidden />
         </div>
       </section>
 
       {/* Stage Zero — Horizontal Scroll */}
-      <section className="mb-12">
+      <section className="mb-8">
         <div className="flex justify-between items-end mb-6 px-2">
           <div>
             <p className="text-[9px] tracking-[0.3em] text-white/30 uppercase font-black mb-1">Tonight's</p>
@@ -134,7 +139,7 @@ export function ShopView({
       </section>
 
       {/* Midnight Reserve Banner */}
-      <section className="mb-12 px-2">
+      <section className="mb-8 px-2">
         <motion.div
           whileHover={{ scale: 1.015 }}
           whileTap={{ scale: 0.985 }}
@@ -215,7 +220,7 @@ export function ShopView({
             <h3 className="font-headline-md text-[13px] uppercase tracking-widest font-black text-white/80 mb-1">
               Vault Empty
             </h3>
-            <p className="text-[11px] text-white/35 max-w-[220px] mx-auto leading-relaxed">
+            <p className="text-[11px] text-white/35 leading-relaxed">
               No drops in this category tonight. Try another.
             </p>
             <button

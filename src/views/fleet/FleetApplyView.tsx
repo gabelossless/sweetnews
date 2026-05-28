@@ -57,7 +57,7 @@ export default function FleetApplyView() {
         className="max-w-md mx-auto w-full space-y-8"
       >
         <header className="space-y-2">
-          <div className="w-12 h-12 rounded-2xl btn-brand flex items-center justify-center mb-4">
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(135deg,#f59e0b,#f97316)' }}>
             <Truck className="text-white w-6 h-6" />
           </div>
           <h1 className="text-3xl font-black tracking-tight">Become a Partner</h1>
@@ -96,13 +96,13 @@ export default function FleetApplyView() {
             <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-3">Partner Benefits</h4>
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-[10px] text-on-surface-variant">
-                <CheckCircle2 size={12} className="text-primary" /> Instant payouts after every shift
+                <CheckCircle2 size={12} className="text-amber-400" /> Instant payouts after every shift
               </div>
               <div className="flex items-center gap-2 text-[10px] text-on-surface-variant">
-                <CheckCircle2 size={12} className="text-primary" /> Premium route optimization
+                <CheckCircle2 size={12} className="text-amber-400" /> Premium route optimization
               </div>
               <div className="flex items-center gap-2 text-[10px] text-on-surface-variant">
-                <CheckCircle2 size={12} className="text-primary" /> Exclusive "Sweet News" driver perks
+                <CheckCircle2 size={12} className="text-amber-400" /> Exclusive "Sweet News" driver perks
               </div>
             </div>
           </div>
@@ -111,7 +111,8 @@ export default function FleetApplyView() {
             type="submit"
             fullWidth
             loading={loading}
-            className="h-14 text-base font-bold btn-brand rounded-2xl"
+            className="h-14 text-base font-bold rounded-2xl"
+            style={{ background: 'linear-gradient(135deg,#f59e0b,#f97316)' }}
           >
             Submit Application <ArrowRight className="ml-2" size={18} />
           </Button>
