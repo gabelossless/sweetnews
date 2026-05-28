@@ -1,7 +1,9 @@
 import { motion, AnimatePresence, useDragControls } from 'motion/react';
-import { X, ShoppingBag, Minus, Plus, Truck, ShieldCheck } from 'lucide-react';
+import { X, ShoppingBag, Minus, Plus, Truck, ShieldCheck, Lock } from 'lucide-react';
 import { useCartStore } from '../../store/cart';
 import { Button } from '../atoms/Button';
+import { products } from '../../data/products';
+import { Product } from '../../types';
 
 interface CartSheetProps {
   isOpen: boolean;
@@ -10,15 +12,28 @@ interface CartSheetProps {
 }
 
 const DELIVERY_FEE = 3.99;
+const ORDER_MINIMUM = 10;
+const UPSELL_THRESHOLD = 20;
 
 export function CartSheet({ isOpen, onClose, onCheckout }: CartSheetProps) {
   const cartItemsCount = useCartStore((state) => state.getTotalItems());
   const cartItems = useCartStore((state) => state.items);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
+  const addItem = useCartStore((state) => state.addItem);
   const dragControls = useDragControls();
 
   const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const orderTotal = subtotal + DELIVERY_FEE;
+
+  const cartItemIds = new Set(cartItems.map((i) => i.id));
+  const belowMinimum = subtotal < ORDER_MINIMUM;
+  const amountNeeded = ORDER_MINIMUM - subtotal;
+  const minProgress = Math.min((subtotal / ORDER_MINIMUM) * 100, 100);
+  const showUpsell = subtotal > 0 && subtotal < UPSELL_THRESHOLD;
+  const upsellItems = [...products]
+    .filter((p) => !cartItemIds.has(p.id) && p.categoryId !== 'news')
+    .sort((a, b) => b.price - a.price)
+    .slice(0, 4);
 
   return (
     <AnimatePresence>
@@ -54,7 +69,7 @@ export function CartSheet({ isOpen, onClose, onCheckout }: CartSheetProps) {
                        md:max-w-md md:mx-auto md:left-1/2 md:-translate-x-1/2"
             style={{ background: 'linear-gradient(180deg, #0a0a0a 0%, #000000 100%)', backdropFilter: 'blur(60px)' }}
           >
-            {/* Drag handle — touch to drag */}
+            {/* Drag handle */}
             <div
               className="flex justify-center pt-3 pb-1 cursor-grab active:cursor-grabbing touch-none"
               onPointerDown={(e) => dragControls.start(e)}
@@ -87,7 +102,6 @@ export function CartSheet({ isOpen, onClose, onCheckout }: CartSheetProps) {
             {/* Body */}
             <div className="flex-1 overflow-y-auto hide-scrollbar">
               {cartItemsCount === 0 ? (
-                /* Empty state */
                 <div className="flex flex-col items-center justify-center h-full text-center px-6 py-12">
                   <motion.div
                     initial={{ scale: 0.75, opacity: 0 }}
@@ -126,12 +140,14 @@ export function CartSheet({ isOpen, onClose, onCheckout }: CartSheetProps) {
                           transition={{ type: 'spring', stiffness: 320, damping: 26 }}
                           className="flex gap-4 items-center bg-white/[0.025] p-4 rounded-[22px] border border-white/[0.05] hover:border-white/[0.09] transition-colors"
                         >
-                          <div className="w-16 h-16 rounded-2xl overflow-hidden bg-white/5 flex-shrink-0">
-                            <img
-                              src={item.image}
-                              alt={item.name}
-                              className="w-full h-full object-cover"
-                            />
+                          <div className="w-16 h-16 rounded-2xl overflow-hidden bg-white/[0.04] border border-white/[0.06] flex-shrink-0 flex items-center justify-center">
+                            {item.image ? (
+                              <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                            ) : (
+                              <span className="text-[9px] font-black text-white/20 uppercase tracking-wide text-center px-1 leading-tight">
+                                {item.name.split(' ').slice(0, 2).join('\n')}
+                              </span>
+                            )}
                           </div>
                           <div className="flex-1 min-w-0">
                             <h4 className="text-[13px] font-black uppercase tracking-wide text-white truncate">
@@ -140,7 +156,6 @@ export function CartSheet({ isOpen, onClose, onCheckout }: CartSheetProps) {
                             <p className="text-[11px] text-white/40 font-medium mt-0.5">
                               ${item.price.toFixed(2)} each
                             </p>
-                            {/* Stepper */}
                             <div className="flex items-center gap-2 mt-2.5">
                               <button
                                 onClick={() => updateQuantity(item.id, item.quantity - 1)}
@@ -174,8 +189,68 @@ export function CartSheet({ isOpen, onClose, onCheckout }: CartSheetProps) {
                     </AnimatePresence>
                   </div>
 
+                  {/* Upsell rail */}
+                  <AnimatePresence>
+                    {showUpsell && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.25 }}
+                        className="mt-6 overflow-hidden"
+                      >
+                        <p className="text-[9px] uppercase tracking-[0.3em] text-white/30 font-black px-1 mb-3">
+                          Add to your order
+                        </p>
+                        <div
+                          className="flex gap-3 overflow-x-auto hide-scrollbar pb-2 -mx-6 px-6"
+                          style={{ maskImage: 'linear-gradient(to right, black 80%, transparent 100%)' }}
+                        >
+                          {upsellItems.map((product) => (
+                            <UpsellCard
+                              key={product.id}
+                              product={product}
+                              onAdd={() => addItem({ id: product.id, name: product.name, price: product.price, image: product.image })}
+                            />
+                          ))}
+                          <div className="w-6 flex-shrink-0" aria-hidden />
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
                   {/* Order summary */}
                   <div className="mt-8 space-y-4">
+                    {/* Minimum progress */}
+                    <AnimatePresence>
+                      {belowMinimum && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -8 }}
+                          transition={{ duration: 0.2 }}
+                          className="rounded-2xl bg-amber-500/[0.07] border border-amber-400/20 px-4 py-3"
+                        >
+                          <div className="flex justify-between items-center mb-2">
+                            <p className="text-[10px] text-white/40 font-bold uppercase tracking-widest">
+                              Order minimum
+                            </p>
+                            <p className="text-[10px] text-amber-400 font-black">
+                              Add ${amountNeeded.toFixed(2)} more
+                            </p>
+                          </div>
+                          <div className="h-1 bg-white/[0.06] rounded-full overflow-hidden">
+                            <motion.div
+                              className="h-full bg-amber-400 rounded-full"
+                              initial={{ width: 0 }}
+                              animate={{ width: `${minProgress}%` }}
+                              transition={{ duration: 0.5, ease: 'easeOut' }}
+                            />
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
                     {/* Delivery info */}
                     <div className="flex items-center gap-3 px-1 py-3 border-t border-white/[0.04]">
                       <div className="w-8 h-8 rounded-full bg-white/[0.04] border border-white/[0.06] flex items-center justify-center flex-shrink-0">
@@ -207,15 +282,23 @@ export function CartSheet({ isOpen, onClose, onCheckout }: CartSheetProps) {
                       </motion.span>
                     </div>
 
-                    {/* Checkout CTA */}
-                    <Button
-                      onClick={onCheckout}
-                      disabled={cartItems.length === 0}
-                      whileTapScale={0.95}
-                      className="w-full py-5 btn-brand font-headline-md uppercase tracking-[0.2em] text-[12px] rounded-full disabled:opacity-30 disabled:shadow-none disabled:cursor-not-allowed font-black shadow-[0_10px_32px_rgba(230,0,35,0.5)] hover:shadow-[0_12px_40px_rgba(230,0,35,0.65)] transition-shadow"
-                    >
-                      Proceed to Checkout →
-                    </Button>
+                    {/* Checkout CTA — locked below minimum */}
+                    {belowMinimum ? (
+                      <div className="w-full py-4 rounded-full bg-amber-500/[0.08] border border-amber-400/25 flex items-center justify-center gap-2">
+                        <Lock size={12} className="text-amber-400/70" />
+                        <p className="text-[11px] font-black uppercase tracking-widest text-amber-400">
+                          Add ${amountNeeded.toFixed(2)} to unlock checkout
+                        </p>
+                      </div>
+                    ) : (
+                      <Button
+                        onClick={onCheckout}
+                        whileTapScale={0.95}
+                        className="w-full py-5 btn-brand font-headline-md uppercase tracking-[0.2em] text-[12px] rounded-full font-black shadow-[0_10px_32px_rgba(230,0,35,0.5)] hover:shadow-[0_12px_40px_rgba(230,0,35,0.65)] transition-shadow"
+                      >
+                        Proceed to Checkout →
+                      </Button>
+                    )}
 
                     {/* Trust signals */}
                     <div className="flex items-center justify-center gap-2 pt-2 text-[9px] uppercase font-black tracking-[0.2em] text-white/20">
@@ -230,6 +313,45 @@ export function CartSheet({ isOpen, onClose, onCheckout }: CartSheetProps) {
         </>
       )}
     </AnimatePresence>
+  );
+}
+
+function UpsellCard({ product, onAdd }: { product: Product; onAdd: () => void }) {
+  return (
+    <motion.div
+      whileTap={{ scale: 0.95 }}
+      className="flex-shrink-0 w-[120px] rounded-[20px] bg-white/[0.03] border border-white/[0.06] p-3 flex flex-col gap-2"
+    >
+      {/* Image / placeholder */}
+      <div className="w-full aspect-square rounded-[14px] bg-white/[0.04] border border-white/[0.05] flex items-center justify-center overflow-hidden">
+        {product.image ? (
+          <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+        ) : (
+          <span className="text-[8px] font-black text-white/20 uppercase tracking-wide text-center px-1 leading-tight">
+            {product.name.split(' ').slice(0, 2).join('\n')}
+          </span>
+        )}
+      </div>
+
+      {/* Name + price */}
+      <div className="flex-1">
+        <p className="text-[10px] font-black text-white/80 leading-tight line-clamp-2 uppercase tracking-wide">
+          {product.name}
+        </p>
+        <p className="text-[11px] font-black text-white mt-0.5">
+          ${product.price.toFixed(2)}
+        </p>
+      </div>
+
+      {/* Add button */}
+      <button
+        onClick={onAdd}
+        aria-label={`Add ${product.name}`}
+        className="w-full py-1.5 rounded-full bg-white/[0.08] hover:bg-white/[0.14] active:scale-95 border border-white/[0.1] transition-all text-[10px] font-black text-white/70 uppercase tracking-wider"
+      >
+        + Add
+      </button>
+    </motion.div>
   );
 }
 
