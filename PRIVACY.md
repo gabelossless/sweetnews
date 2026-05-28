@@ -209,9 +209,7 @@ To exercise any of these rights, contact us at **sweetnewsowl@gmail.com**.
 
 We do not engage in automated decision-making or profiling that produces legal or similarly significant effects.
 
-**Colorado Residents:** Colorado's Privacy Act (CPA) provides residents with additional rights including the right to opt out of certain data processing. Contact us at the email above to exercise these rights. [CONFIRM APPLICABILITY WITH LEGAL COUNSEL.]
-
-**California Residents:** If you are a California resident, the California Consumer Privacy Act (CCPA/CPRA) may provide you with additional rights. Because we do not sell personal information, many CCPA provisions related to opt-out of sale do not apply. [CONFIRM APPLICABILITY WITH LEGAL COUNSEL.]
+**Applicable Privacy Laws:** Sweet News is located in Denver, Colorado. We comply with all applicable state and federal privacy laws. If you have questions about your privacy rights under your state's laws, please contact us at sweetnewsowl@gmail.com and we will assist you.
 
 ---
 
