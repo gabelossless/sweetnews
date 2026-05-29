@@ -8,3 +8,6 @@ coverage/
 !.env.example
 
 .vercel
+
+# Local utility script output — contains external CDN URLs, not for version control
+scripts/product-images-output.json
