@@ -1,11 +1,12 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronRight, Bell, Wifi, WifiOff, ShieldCheck, Crown, Check } from 'lucide-react';
+import { ChevronRight, Bell, Wifi, WifiOff, ShieldCheck, Crown, Check, LogOut } from 'lucide-react';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { requestPermissionAndGetToken } from '../lib/fcm';
 import { useProfileStore } from '../store/profile';
 import { useAuth } from '../context/AuthContext';
 import { WaitlistModal } from '../components/organisms/WaitlistModal';
+import { OwlMascot } from '../components/atoms/OwlMascot';
 import { useState, useRef } from 'react';
 
 interface ProfileViewProps {
@@ -13,7 +14,7 @@ interface ProfileViewProps {
 }
 
 export function ProfileView({ isOnline }: ProfileViewProps) {
-  const { user, role } = useAuth();
+  const { user, role, login, logout } = useAuth();
   const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
   const [nameSaved, setNameSaved] = useState(false);
   const [addressSaved, setAddressSaved] = useState(false);
@@ -63,6 +64,70 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
       updateDoc(doc(db, 'users', user.uid), { fcmToken: token }).catch(() => {});
     }
   };
+
+  /* ── Signed-out screen ──────────────────────────────────────── */
+  if (!user) {
+    return (
+      <motion.div
+        key="profile-signed-out"
+        initial={{ opacity: 0, y: 18 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -18 }}
+        transition={{ duration: 0.28, ease: [0.25, 0.1, 0.25, 1] }}
+        className="mt-4 min-h-[70vh] px-2 flex flex-col items-center justify-center text-center"
+      >
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.1, type: 'spring', stiffness: 280, damping: 22 }}
+          className="mb-8"
+        >
+          <OwlMascot size={90} />
+        </motion.div>
+
+        <h2 className="text-[28px] font-black uppercase tracking-tighter text-white leading-tight mb-2">
+          Sign in to
+          <br />
+          <span
+            style={{
+              background: 'linear-gradient(135deg,#e60023,#ff2060)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}
+          >
+            Sweet News
+          </span>
+        </h2>
+        <p className="text-[12px] text-white/35 font-medium mb-10 leading-relaxed max-w-[240px]">
+          Save your address, track orders in real time, and unlock member rewards.
+        </p>
+
+        <motion.button
+          whileTap={{ scale: 0.96 }}
+          whileHover={{ scale: 1.02 }}
+          onClick={login}
+          className="flex items-center gap-3 bg-white text-black font-black text-[13px] px-6 py-4 rounded-full shadow-[0_8px_32px_rgba(255,255,255,0.15)] hover:bg-white/90 transition-colors w-full max-w-[280px] justify-center"
+        >
+          {/* Google G logo */}
+          <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden>
+            <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
+            <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/>
+            <path d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/>
+            <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+          </svg>
+          Continue with Google
+        </motion.button>
+
+        <p className="text-[10px] text-white/20 mt-6 leading-relaxed max-w-[260px]">
+          By signing in you agree to our{' '}
+          <a href="/privacy" className="text-white/35 underline hover:text-white/60 transition-colors">
+            Privacy Policy
+          </a>
+          .
+        </p>
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div
@@ -128,7 +193,7 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
                   Sweet News Member
                 </p>
                 <h3 className="text-xl font-black uppercase tracking-wide text-white leading-tight">
-                  {deliveryName || 'Night Owl'}
+                  {deliveryName || user.displayName?.split(' ')[0] || 'Night Owl'}
                 </h3>
               </div>
               <motion.div
@@ -360,6 +425,33 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
               }`}
             />
           </div>
+        </div>
+
+        {/* ── Account ─────────────────────────────────────────── */}
+        <div className="glass-panel rounded-[28px] px-6 py-5 flex items-center justify-between shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+          <div className="flex items-center gap-3">
+            {user.photoURL ? (
+              <img src={user.photoURL} alt="" className="w-9 h-9 rounded-full object-cover border border-white/10" />
+            ) : (
+              <div className="w-9 h-9 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center text-white text-sm font-black">
+                {(user.displayName?.[0] ?? user.email?.[0] ?? '?').toUpperCase()}
+              </div>
+            )}
+            <div>
+              <p className="text-[12px] font-black text-white leading-tight truncate max-w-[180px]">
+                {user.displayName ?? 'Member'}
+              </p>
+              <p className="text-[10px] text-white/35 truncate max-w-[180px]">{user.email}</p>
+            </div>
+          </div>
+          <motion.button
+            whileTap={{ scale: 0.92 }}
+            onClick={logout}
+            aria-label="Sign out"
+            className="w-9 h-9 rounded-full bg-white/[0.04] border border-white/[0.07] flex items-center justify-center hover:bg-white/10 transition-colors"
+          >
+            <LogOut size={14} className="text-white/40" strokeWidth={2} />
+          </motion.button>
         </div>
 
         {/* Footer trust line */}
