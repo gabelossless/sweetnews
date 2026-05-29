@@ -49,6 +49,8 @@ export function CartSheet({ isOpen, onClose, onCheckout }: CartSheetProps) {
             className="fixed inset-0 bg-black/60 backdrop-blur-md z-[60]"
           />
 
+          {/* Positioning wrapper — aligns to bottom on mobile, centers on desktop */}
+          <div className="fixed inset-0 z-[70] flex items-end justify-center pointer-events-none md:items-center">
           {/* Sheet */}
           <motion.div
             drag="y"
@@ -63,15 +65,17 @@ export function CartSheet({ isOpen, onClose, onCheckout }: CartSheetProps) {
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 260, mass: 0.9 }}
-            className="fixed bottom-0 left-0 w-full h-[88vh] rounded-t-[48px] z-[70] flex flex-col
+            className="pointer-events-auto w-full max-w-[430px]
+                       h-[88vh] md:h-auto md:max-h-[88vh]
+                       rounded-t-[48px] md:rounded-[32px]
+                       flex flex-col
                        shadow-[0_-24px_80px_rgba(0,0,0,0.95),inset_0_1px_0_rgba(255,255,255,0.08)]
-                       border-t border-white/[0.07]
-                       md:max-w-md md:mx-auto md:left-1/2 md:-translate-x-1/2"
-            style={{ background: 'linear-gradient(180deg, #0a0a0a 0%, #000000 100%)', backdropFilter: 'blur(60px)' }}
+                       border-t border-white/[0.07] md:border md:border-white/[0.08]"
+            style={{ background: 'linear-gradient(180deg, #0a0a0a 0%, #000000 100%)' }}
           >
-            {/* Drag handle */}
+            {/* Drag handle — hidden on desktop where drag-to-close isn't expected */}
             <div
-              className="flex justify-center pt-3 pb-1 cursor-grab active:cursor-grabbing touch-none"
+              className="flex justify-center pt-3 pb-1 cursor-grab active:cursor-grabbing touch-none md:hidden"
               onPointerDown={(e) => dragControls.start(e)}
             >
               <div className="w-10 h-1 bg-white/15 rounded-full hover:bg-white/30 transition-colors" />
@@ -100,7 +104,7 @@ export function CartSheet({ isOpen, onClose, onCheckout }: CartSheetProps) {
             </div>
 
             {/* Body */}
-            <div className="flex-1 overflow-y-auto hide-scrollbar">
+            <div className="flex-1 min-h-0 overflow-y-auto hide-scrollbar">
               {cartItemsCount === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full text-center px-6 py-12">
                   <motion.div
@@ -310,6 +314,7 @@ export function CartSheet({ isOpen, onClose, onCheckout }: CartSheetProps) {
               )}
             </div>
           </motion.div>
+          </div>
         </>
       )}
     </AnimatePresence>
