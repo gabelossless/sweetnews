@@ -137,6 +137,12 @@ export default function CustomerApp() {
   };
 
   const handleCheckoutTrigger = () => {
+    if (!user) {
+      showToast('Sign in to place an order');
+      setIsCartOpen(false);
+      setActiveTab('profile');
+      return;
+    }
     setIsCartOpen(false);
     setIsCheckoutOpen(true);
   };
@@ -149,14 +155,14 @@ export default function CustomerApp() {
   };
 
   const handleAddToCart = (product: Product) => {
+    const isNew = !cartItems.some((i) => i.id === product.id);
     addItem({
       id: product.id,
       name: product.name,
       price: product.price,
       image: product.image
     });
-    
-    showToast(`Added ${product.name} to cart`);
+    if (isNew) showToast(`Added to cart`);
   };
 
   return (
