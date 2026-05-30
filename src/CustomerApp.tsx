@@ -166,10 +166,10 @@ export default function CustomerApp() {
   };
 
   return (
-    <div className={`bg-background text-on-background min-h-screen pb-[120px] pt-[160px] font-body-md selection:bg-white selection:text-black overflow-x-hidden ${isStandalone ? 'standalone-layout' : ''}`}>
+    <div className={`bg-background text-on-background min-h-screen pb-[120px] pt-[128px] font-body-md selection:bg-white selection:text-black overflow-x-hidden ${isStandalone ? 'standalone-layout' : ''}`}>
 
       {/* TopAppBar */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-black/85 backdrop-blur-xl border-b border-white/[0.05] md:max-w-[430px] md:left-1/2 md:-translate-x-1/2">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-black/85 backdrop-blur-xl border-b border-white/[0.05] md:w-[430px] md:left-1/2 md:right-auto md:-translate-x-1/2">
         <div className="px-5 pt-[max(env(safe-area-inset-top),12px)]">
           {/* Row 1: Brand + Cart */}
           <div className="flex items-center justify-between py-2.5">
@@ -227,7 +227,7 @@ export default function CustomerApp() {
       </header>
 
       {/* Main Pages Container */}
-      <main className="px-6 md:max-w-4xl md:mx-auto">
+      <main className="px-6 max-w-[430px] mx-auto">
         <AnimatePresence mode="wait">
           
           {/* 1. SHOP VIEW */}
@@ -273,7 +273,7 @@ export default function CustomerApp() {
       </main>
 
       {/* BottomNavBar Pill */}
-      <nav className="fixed bottom-[calc(env(safe-area-inset-bottom,34px)+16px)] left-1/2 -translate-x-1/2 w-[90%] md:max-w-sm z-50 flex justify-around items-center px-4 py-3.5 bg-[#050505]/70 backdrop-blur-3xl rounded-[32px] border border-white/[0.08] shadow-[0_20px_40px_rgba(0,0,0,0.8),_inset_0_1px_0_rgba(255,255,255,0.1)] transition-all duration-300">
+      <nav className="fixed bottom-[calc(env(safe-area-inset-bottom,0px)+16px)] left-1/2 -translate-x-1/2 w-[92%] max-w-[400px] z-50 flex justify-around items-center px-4 py-3.5 bg-[#050505]/70 backdrop-blur-3xl rounded-[32px] border border-white/[0.08] shadow-[0_20px_40px_rgba(0,0,0,0.8),_inset_0_1px_0_rgba(255,255,255,0.1)] transition-all duration-300">
         <NavButton 
           icon={<Store />} 
           label="Shop" 
