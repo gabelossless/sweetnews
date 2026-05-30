@@ -324,7 +324,13 @@ export default function AdminApp() {
                     <div className="flex gap-2 overflow-x-auto pb-4">
                       {order.items.map((item, idx) => (
                         <div key={idx} className="bg-white/5 rounded-2xl p-3 flex items-center gap-3 min-w-[200px] border border-white/5">
-                          <img src={item.image} className="w-10 h-10 rounded-xl object-cover" alt="" />
+                          {item.image ? (
+                            <img src={item.image} className="w-10 h-10 rounded-xl object-cover" alt="" />
+                          ) : (
+                            <div className="w-10 h-10 rounded-xl bg-white/[0.06] flex items-center justify-center text-[8px] font-black text-white/25 uppercase text-center leading-tight px-0.5">
+                              {item.name.split(' ').slice(0, 2).join('\n')}
+                            </div>
+                          )}
                           <div>
                             <p className="text-xs font-bold truncate w-24">{item.name}</p>
                             <p className="text-[10px] opacity-50">Qty: {item.quantity}</p>
@@ -356,7 +362,11 @@ export default function AdminApp() {
                         <p className="text-sm font-medium">Driver UID: {order.driverId.slice(0, 12)}...</p>
                         <select 
                           className="w-full mt-4 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-xs"
-                          onChange={(e) => updateOrderStatus(order.id, e.target.value as any, 50)}
+                          onChange={(e) => {
+                            const s = e.target.value as 'cooking' | 'delivering' | 'delivered';
+                            const progress = s === 'delivered' ? 100 : s === 'delivering' ? 75 : 50;
+                            updateOrderStatus(order.id, s, progress);
+                          }}
                         >
                           <option value="">Update Status</option>
                           <option value="cooking">Move to Cooking</option>

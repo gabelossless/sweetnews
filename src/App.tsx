@@ -6,6 +6,7 @@ import { AuthProvider } from './context/AuthContext';
 const CustomerApp = lazy(() => import('./CustomerApp'));
 const AdminApp = lazy(() => import('./AdminApp'));
 const FleetApp = lazy(() => import('./FleetApp'));
+const PrivacyView = lazy(() => import('./views/PrivacyView'));
 
 function AppShell() {
   return <div className="min-h-screen bg-black" />;
@@ -43,6 +44,14 @@ export default function App() {
             element={
               <Suspense fallback={<AppShell />}>
                 <FleetApp />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/privacy"
+            element={
+              <Suspense fallback={<AppShell />}>
+                <PrivacyView />
               </Suspense>
             }
           />
