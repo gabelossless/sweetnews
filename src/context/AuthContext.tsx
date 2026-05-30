@@ -1,10 +1,12 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { 
-  onAuthStateChanged, 
-  User, 
-  signOut, 
-  signInWithPopup, 
-  GoogleAuthProvider 
+import {
+  onAuthStateChanged,
+  User,
+  signOut,
+  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
+  GoogleAuthProvider
 } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { auth, db } from '../lib/firebase';
@@ -36,6 +38,14 @@ const AuthContext = createContext<AuthContextType>({
 
 export const useAuth = () => useContext(AuthContext);
 
+// Detect iOS standalone (PWA installed to home screen) — popups are blocked there.
+const isIOSStandalone =
+  typeof window !== 'undefined' &&
+  ('standalone' in window.navigator
+    ? (window.navigator as Record<string, unknown>).standalone === true
+    : window.matchMedia('(display-mode: standalone)').matches &&
+      /iphone|ipad|ipod/i.test(window.navigator.userAgent));
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -44,7 +54,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
+      if (isIOSStandalone) {
+        // Popup is blocked on iOS PWA — use redirect flow instead.
+        await signInWithRedirect(auth, provider);
+      } else {
+        await signInWithPopup(auth, provider);
+      }
     } catch (error) {
       console.error('Login failed:', error);
     }
@@ -59,22 +74,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    // Pick up any pending redirect result (iOS standalone sign-in flow).
+    getRedirectResult(auth).catch(() => {});
+
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       try {
-        setUser(user);
-        
-        if (user) {
-          const userDocRef = doc(db, 'users', user.uid);
+        setUser(firebaseUser);
+
+        if (firebaseUser) {
+          const userDocRef = doc(db, 'users', firebaseUser.uid);
           const userDoc = await getDoc(userDocRef);
-          
+
           if (userDoc.exists()) {
             setProfile(userDoc.data() as UserProfile);
           } else {
             const newProfile: UserProfile = {
-              uid: user.uid,
-              email: user.email || '',
-              displayName: user.displayName,
-              photoURL: user.photoURL,
+              uid: firebaseUser.uid,
+              email: firebaseUser.email || '',
+              displayName: firebaseUser.displayName,
+              photoURL: firebaseUser.photoURL,
               role: 'customer',
               createdAt: new Date().toISOString(),
             };
@@ -108,7 +126,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {loading ? (
+        <div className="min-h-screen bg-black" aria-hidden />
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
   );
 };
