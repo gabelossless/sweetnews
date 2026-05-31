@@ -22,6 +22,7 @@ import { NavButton } from './components/molecules/NavButton';
 import { CartSheet } from './components/organisms/CartSheet';
 import { CheckoutForm } from './components/organisms/CheckoutForm';
 import { CustomizationSheet } from './components/organisms/CustomizationSheet';
+import { ProductDetailSheet } from './components/organisms/ProductDetailSheet';
 import { InstallPrompt } from './components/pwa/InstallPrompt';
 import { OwlMascot } from './components/atoms/OwlMascot';
 
@@ -44,6 +45,7 @@ export default function CustomerApp() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isOrderPlaced, setIsOrderPlaced] = useState(false);
   const [customizingProduct, setCustomizingProduct] = useState<Product | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   // Standalone mode layout adjustment helper
   const isStandalone = useIsStandalone();
@@ -181,6 +183,17 @@ export default function CustomerApp() {
     setCustomizingProduct(null);
   };
 
+  const handleAddFromDetail = (product: Product) => {
+    const isNew = !cartItems.some((i) => i.id === product.id);
+    addItem({ id: product.id, name: product.name, price: product.price, image: product.image });
+    if (isNew) showToast('Added to cart');
+  };
+
+  const handleCustomizeFromDetail = (product: Product) => {
+    setSelectedProduct(null);
+    setCustomizingProduct(product);
+  };
+
   return (
     <div className={`bg-background text-on-background min-h-screen pb-[120px] pt-[128px] font-body-md selection:bg-white selection:text-black overflow-x-hidden ${isStandalone ? 'standalone-layout' : ''}`}>
 
@@ -264,6 +277,7 @@ export default function CustomerApp() {
               selectedCategory={selectedCategory}
               setSelectedCategory={setSelectedCategory}
               onAddToCart={handleAddToCart}
+              onViewProduct={setSelectedProduct}
               onNavigateToNews={() => setActiveTab('news')}
             />
           )}
@@ -274,6 +288,7 @@ export default function CustomerApp() {
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
               onAddToCart={handleAddToCart}
+              onViewProduct={setSelectedProduct}
             />
           )}
 
@@ -345,6 +360,14 @@ export default function CustomerApp() {
           isOrderPlaced={isOrderPlaced}
         />
       </Elements>
+
+      {/* Product Detail Sheet */}
+      <ProductDetailSheet
+        product={selectedProduct}
+        onClose={() => setSelectedProduct(null)}
+        onAdd={handleAddFromDetail}
+        onCustomize={handleCustomizeFromDetail}
+      />
 
       {/* Customization Sheet */}
       <CustomizationSheet

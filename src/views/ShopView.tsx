@@ -10,6 +10,7 @@ interface ShopViewProps {
   selectedCategory: string;
   setSelectedCategory: (category: string) => void;
   onAddToCart: (product: Product) => void;
+  onViewProduct: (product: Product) => void;
   onNavigateToNews: () => void;
 }
 
@@ -17,6 +18,7 @@ export function ShopView({
   selectedCategory,
   setSelectedCategory,
   onAddToCart,
+  onViewProduct,
   onNavigateToNews,
 }: ShopViewProps) {
   const filteredHorizontal = products.filter(
@@ -89,6 +91,7 @@ export function ShopView({
                 product={product}
                 isFeatured={idx === 0}
                 onAdd={() => onAddToCart(product)}
+                onView={() => onViewProduct(product)}
                 animationDelay={idx * 0.06}
                 className="w-[162px] md:w-[182px] flex-shrink-0"
               />
@@ -163,6 +166,7 @@ export function ShopView({
                   product={product}
                   isFeatured={false}
                   onAdd={() => onAddToCart(product)}
+                  onView={() => onViewProduct(product)}
                   animationDelay={idx * 0.05}
                   className="w-full"
                 />

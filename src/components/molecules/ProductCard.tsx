@@ -7,6 +7,7 @@ interface ProductCardProps {
   product: Product;
   isFeatured?: boolean;
   onAdd: () => void;
+  onView?: () => void;
   className?: string;
   animationDelay?: number;
 }
@@ -15,6 +16,7 @@ export function ProductCard({
   product,
   isFeatured = false,
   onAdd,
+  onView,
   className = '',
   animationDelay = 0,
 }: ProductCardProps) {
@@ -31,7 +33,14 @@ export function ProductCard({
       className={`flex flex-col ${className}`}
     >
       {/* Image container */}
-      <div className="relative w-full aspect-square rounded-[16px] overflow-hidden mb-2.5 bg-[#111111]">
+      <div
+        className={`relative w-full aspect-square rounded-[16px] overflow-hidden mb-2.5 bg-[#111111] ${onView ? 'cursor-pointer' : ''}`}
+        onClick={onView}
+        role={onView ? 'button' : undefined}
+        aria-label={onView ? `View ${product.name} details` : undefined}
+        tabIndex={onView ? 0 : undefined}
+        onKeyDown={onView ? (e) => e.key === 'Enter' && onView() : undefined}
+      >
 
         {/* Image or placeholder */}
         {product.image ? (
@@ -78,7 +87,7 @@ export function ProductCard({
               exit={{ scale: 0.6, opacity: 0 }}
               transition={{ type: 'spring', stiffness: 500, damping: 26 }}
               whileTap={{ scale: 0.86 }}
-              onClick={onAdd}
+              onClick={(e) => { e.stopPropagation(); onAdd(); }}
               aria-label={`Add ${product.name}`}
               className="absolute bottom-2.5 right-2.5 w-8 h-8 rounded-full bg-[#ff2d55] flex items-center justify-center shadow-[0_4px_12px_rgba(255,45,85,0.45)] hover:bg-[#e60023] transition-colors"
             >
@@ -92,6 +101,7 @@ export function ProductCard({
               exit={{ scale: 0.6, opacity: 0 }}
               transition={{ type: 'spring', stiffness: 500, damping: 26 }}
               className="absolute bottom-2.5 right-2.5 flex items-center gap-1 bg-[#ff2d55] rounded-full px-1.5 py-1 shadow-[0_4px_12px_rgba(255,45,85,0.45)]"
+              onClick={(e) => e.stopPropagation()}
             >
               <button
                 onClick={() => updateQuantity(product.id, quantity - 1)}
@@ -109,7 +119,7 @@ export function ProductCard({
                 {quantity}
               </motion.span>
               <button
-                onClick={onAdd}
+                onClick={(e) => { e.stopPropagation(); onAdd(); }}
                 aria-label="Increase quantity"
                 className="w-5 h-5 rounded-full flex items-center justify-center hover:bg-white/25 active:scale-90 transition-all"
               >
@@ -121,7 +131,14 @@ export function ProductCard({
       </div>
 
       {/* Product info */}
-      <div className="px-0.5">
+      <div
+        className={`px-0.5 ${onView ? 'cursor-pointer' : ''}`}
+        onClick={onView}
+        role={onView ? 'button' : undefined}
+        tabIndex={onView ? 0 : undefined}
+        onKeyDown={onView ? (e) => e.key === 'Enter' && onView() : undefined}
+        aria-label={onView ? `View ${product.name} details` : undefined}
+      >
         <h3 className="text-[13px] font-semibold text-white/90 truncate leading-tight mb-0.5">
           {product.name}
         </h3>

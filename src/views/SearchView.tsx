@@ -9,6 +9,7 @@ interface SearchViewProps {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   onAddToCart: (product: Product) => void;
+  onViewProduct: (product: Product) => void;
 }
 
 const TRENDING_TAGS = ['Wagyu', 'Truffle', 'Macarons', 'Acai', 'Detox'];
@@ -16,7 +17,8 @@ const TRENDING_TAGS = ['Wagyu', 'Truffle', 'Macarons', 'Acai', 'Detox'];
 export function SearchView({
   searchQuery,
   setSearchQuery,
-  onAddToCart
+  onAddToCart,
+  onViewProduct,
 }: SearchViewProps) {
   const filteredProducts = products.filter(
     (p) =>
@@ -136,6 +138,7 @@ export function SearchView({
                   product={product}
                   isFeatured={false}
                   onAdd={() => onAddToCart(product)}
+                  onView={() => onViewProduct(product)}
                   animationDelay={idx * 0.05}
                   className="w-full"
                 />

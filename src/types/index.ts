@@ -19,6 +19,7 @@ export interface Product {
   tag: string | null;
   image: string;
   categoryId: string;
+  allergens?: string;
   customizationMatrix?: CustomizationStep[];
 }
 
