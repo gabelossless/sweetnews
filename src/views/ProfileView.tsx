@@ -14,7 +14,7 @@ interface ProfileViewProps {
 }
 
 export function ProfileView({ isOnline }: ProfileViewProps) {
-  const { user, role, login, logout } = useAuth();
+  const { user, role, login, logout, loginError } = useAuth();
   const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
   const [nameSaved, setNameSaved] = useState(false);
   const [addressSaved, setAddressSaved] = useState(false);
@@ -117,6 +117,12 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
           </svg>
           Continue with Google
         </motion.button>
+
+        {loginError && (
+          <p className="text-[11px] text-red-400 mt-4 max-w-[280px] text-center leading-relaxed px-2">
+            {loginError}
+          </p>
+        )}
 
         <p className="text-[10px] text-white/20 mt-6 leading-relaxed max-w-[260px]">
           By signing in you agree to our{' '}

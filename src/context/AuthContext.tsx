@@ -16,6 +16,7 @@ interface AuthContextType {
   user: User | null;
   profile: UserProfile | null;
   loading: boolean;
+  loginError: string | null;
   isAdmin: boolean;
   isDriver: boolean;
   isDriverPending: boolean;
@@ -28,6 +29,7 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   profile: null,
   loading: true,
+  loginError: null,
   isAdmin: false,
   isDriver: false,
   isDriverPending: false,
@@ -50,8 +52,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loginError, setLoginError] = useState<string | null>(null);
 
   const login = async () => {
+    setLoginError(null);
     const provider = new GoogleAuthProvider();
     try {
       if (isIOSStandalone) {
@@ -62,6 +66,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     } catch (error) {
       console.error('Login failed:', error);
+      const code = (error as { code?: string }).code ?? '';
+      if (code === 'auth/unauthorized-domain') {
+        setLoginError('This domain is not authorized in Firebase. Add it to Authorized Domains in Firebase Console.');
+      } else if (code === 'auth/popup-blocked') {
+        setLoginError('Popup was blocked. Please allow popups for this site and try again.');
+      } else if (code === 'auth/popup-closed-by-user') {
+        // User dismissed — not an error
+      } else {
+        setLoginError('Sign-in failed. Please try again.');
+      }
     }
   };
 
@@ -116,6 +130,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     user,
     profile,
     loading,
+    loginError,
     isAdmin: profile?.role === 'admin',
     isDriver: profile?.role === 'driver_active',
     isDriverPending: profile?.role === 'driver_pending',
