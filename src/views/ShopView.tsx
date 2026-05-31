@@ -1,10 +1,12 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { Moon, PackageOpen } from 'lucide-react';
+import { Moon, PackageOpen, Sparkles } from 'lucide-react';
 import { Product } from '../types';
 import { categories, products } from '../data/products';
 import { CategoryChip } from '../components/molecules/CategoryChip';
 import { ProductCard } from '../components/molecules/ProductCard';
 import { Button } from '../components/atoms/Button';
+import { useCartStore } from '../store/cart';
+import { getCartRecommendations } from '../utils/recommendations';
 
 interface ShopViewProps {
   selectedCategory: string;
@@ -21,6 +23,9 @@ export function ShopView({
   onViewProduct,
   onNavigateToNews,
 }: ShopViewProps) {
+  const cartItems = useCartStore((state) => state.items);
+  const recommendations = getCartRecommendations(cartItems, products);
+
   const filteredHorizontal = products.filter(
     (p) => selectedCategory === 'all' || p.categoryId === selectedCategory
   );
@@ -140,6 +145,45 @@ export function ShopView({
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-900 ease-in-out rounded-[40px]" />
         </motion.div>
       </section>
+
+      {/* Cart-Based Recommendations */}
+      <AnimatePresence>
+        {recommendations.length > 0 && (
+          <motion.section
+            key="recommendations"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.3 }}
+            className="mb-8 px-2"
+          >
+            <div className="flex justify-between items-end mb-4">
+              <div>
+                <p className="text-[9px] tracking-[0.3em] text-on-surface-variant uppercase font-black mb-1 flex items-center gap-1.5">
+                  <Sparkles className="w-3 h-3 text-primary" />
+                  Based on your cart
+                </p>
+                <h2 className="font-headline-md text-[16px] tracking-[0.2em] uppercase font-black text-on-background">
+                  You Might Like
+                </h2>
+              </div>
+            </div>
+            <div className="flex overflow-x-auto hide-scrollbar gap-4 pb-4 -mx-6 px-6 md:mx-0 md:px-1 pt-1">
+              {recommendations.map((product, idx) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  isFeatured={false}
+                  onAdd={() => onAddToCart(product)}
+                  onView={() => onViewProduct(product)}
+                  animationDelay={idx * 0.06}
+                  className="w-[162px] md:w-[200px] flex-shrink-0"
+                />
+              ))}
+            </div>
+          </motion.section>
+        )}
+      </AnimatePresence>
 
       {/* The Vault — 2-col Grid */}
       <section className="mb-8 px-2">
