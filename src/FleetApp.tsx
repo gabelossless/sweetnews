@@ -45,22 +45,19 @@ export default function FleetApp() {
     try {
       await updateOrderStatus(orderId, nextStatus, progress);
 
-      if (nextStatus === 'delivering' || nextStatus === 'delivered') {
+      if (nextStatus === 'cooking' || nextStatus === 'delivering' || nextStatus === 'delivered') {
         const customerDoc = await getDoc(doc(db, 'users', customerId));
         const fcmToken = customerDoc.data()?.fcmToken as string | undefined;
         if (fcmToken) {
-          const isDelivered = nextStatus === 'delivered';
+          const messages: Record<string, { title: string; body: string }> = {
+            cooking:    { title: '🍳 Order Being Prepared', body: "Your driver is getting your order ready. Hang tight!" },
+            delivering: { title: '🚗 On the Way',           body: 'Your driver is en route with your order.' },
+            delivered:  { title: '✅ Order Delivered',       body: 'Your order has been delivered. Enjoy!' },
+          };
           fetch('/api/push-notify', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              token: fcmToken,
-              title: isDelivered ? '✅ Order Delivered' : '🚗 On the Way',
-              body: isDelivered
-                ? 'Your order has been delivered. Enjoy!'
-                : 'Your driver is en route with your order.',
-              url: '/?tab=orders',
-            }),
+            body: JSON.stringify({ token: fcmToken, ...messages[nextStatus], url: '/?tab=orders' }),
           }).catch(() => {});
         }
       }

@@ -1,6 +1,7 @@
 import { motion, AnimatePresence, useDragControls } from 'motion/react';
-import { X, ShoppingBag, Minus, Plus, Truck, ShieldCheck, Lock } from 'lucide-react';
+import { X, ShoppingBag, Minus, Plus, Truck, ShieldCheck, Lock, Moon } from 'lucide-react';
 import { useCartStore } from '../../store/cart';
+import { useDeliveryHours } from '../../hooks/useDeliveryHours';
 import { Button } from '../atoms/Button';
 import { products } from '../../data/products';
 import { Product } from '../../types';
@@ -16,6 +17,7 @@ const ORDER_MINIMUM = 10;
 const UPSELL_THRESHOLD = 20;
 
 export function CartSheet({ isOpen, onClose, onCheckout }: CartSheetProps) {
+  const { isOpen: isDeliveryOpen, opensAt } = useDeliveryHours();
   const cartItemsCount = useCartStore((state) => state.getTotalItems());
   const cartItems = useCartStore((state) => state.items);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
@@ -291,8 +293,20 @@ export function CartSheet({ isOpen, onClose, onCheckout }: CartSheetProps) {
                       </motion.span>
                     </div>
 
-                    {/* Checkout CTA — locked below minimum */}
-                    {belowMinimum ? (
+                    {/* Checkout CTA */}
+                    {!isDeliveryOpen ? (
+                      <div className="w-full py-4 rounded-full bg-white/[0.03] border border-white/[0.07] flex flex-col items-center justify-center gap-1.5">
+                        <div className="flex items-center gap-2">
+                          <Moon size={12} className="text-white/30" strokeWidth={1.5} />
+                          <p className="text-[11px] font-black uppercase tracking-widest text-white/30">
+                            We're Closed
+                          </p>
+                        </div>
+                        <p className="text-[9px] text-white/20 font-medium">
+                          Deliveries available 9 PM – 4 AM · Opens {opensAt}
+                        </p>
+                      </div>
+                    ) : belowMinimum ? (
                       <div className="w-full py-4 rounded-full bg-amber-500/[0.08] border border-amber-400/25 flex items-center justify-center gap-2">
                         <Lock size={12} className="text-amber-400/70" />
                         <p className="text-[11px] font-black uppercase tracking-widest text-amber-400">

@@ -10,6 +10,7 @@ import { useOrdersStore } from './store/orders';
 import { useToastStore } from './store/toast';
 import { useIsStandalone } from './hooks/useIsStandalone';
 import { useGeolocation } from './hooks/useGeolocation';
+import { useDeliveryHours } from './hooks/useDeliveryHours';
 import { useAuth } from './context/AuthContext';
 import { Product } from './types';
 import { createOrder, subscribeToCustomerOrders } from './lib/orders';
@@ -46,6 +47,7 @@ export default function CustomerApp() {
 
   // Standalone mode layout adjustment helper
   const isStandalone = useIsStandalone();
+  const { isOpen: isDeliveryOpen, opensAt } = useDeliveryHours();
 
   // Profile fields & Offline state syncing
   const [isOnline, setIsOnline] = useState(typeof navigator !== 'undefined' ? navigator.onLine : true);
@@ -194,7 +196,19 @@ export default function CustomerApp() {
               className="flex items-center gap-2 cursor-pointer select-none bg-transparent border-0 p-0"
             >
               <OwlMascot size={34} />
-              <span className="text-[17px] font-black tracking-tight text-white">Sweet News</span>
+              <div className="flex flex-col items-start">
+                <span className="text-[17px] font-black tracking-tight text-white leading-tight">Sweet News</span>
+                {isDeliveryOpen ? (
+                  <span className="flex items-center gap-1 text-[9px] font-black uppercase tracking-[0.18em] text-emerald-400 leading-none">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-live-pulse" />
+                    Live Now
+                  </span>
+                ) : (
+                  <span className="text-[9px] font-black uppercase tracking-[0.18em] text-white/25 leading-none">
+                    Opens {opensAt}
+                  </span>
+                )}
+              </div>
             </button>
             <motion.button
               whileTap={{ scale: 0.9 }}
