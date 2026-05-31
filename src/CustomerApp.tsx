@@ -198,7 +198,7 @@ export default function CustomerApp() {
     <div className={`bg-background text-on-background min-h-screen pb-[120px] md:pb-12 pt-[128px] md:pt-[82px] font-body-md selection:bg-white selection:text-black overflow-x-hidden ${isStandalone ? 'standalone-layout' : ''}`}>
 
       {/* TopAppBar */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-black/85 backdrop-blur-xl border-b border-white/[0.05]">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-on-background/[0.07]">
         <div className="px-5 md:px-8 pt-[max(env(safe-area-inset-top),12px)] md:max-w-[1280px] md:mx-auto">
           {/* Row 1: Brand + [Desktop Nav] + Cart */}
           <div className="flex items-center justify-between py-2.5 md:py-3.5">
@@ -210,14 +210,14 @@ export default function CustomerApp() {
             >
               <OwlMascot size={34} />
               <div className="flex flex-col items-start">
-                <span className="text-[17px] font-black tracking-tight text-white leading-tight">Sweet News</span>
+                <span className="text-[17px] font-black tracking-tight text-on-background leading-tight">Sweet News</span>
                 {isDeliveryOpen ? (
-                  <span className="flex items-center gap-1 text-[9px] font-black uppercase tracking-[0.18em] text-emerald-400 leading-none">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-live-pulse" />
+                  <span className="flex items-center gap-1 text-[9px] font-black uppercase tracking-[0.18em] text-emerald-600 leading-none">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-live-pulse" />
                     Live Now
                   </span>
                 ) : (
-                  <span className="text-[9px] font-black uppercase tracking-[0.18em] text-white/25 leading-none">
+                  <span className="text-[9px] font-black uppercase tracking-[0.18em] text-on-surface-variant leading-none">
                     Opens {opensAt}
                   </span>
                 )}
@@ -240,8 +240,8 @@ export default function CustomerApp() {
                   onClick={() => setActiveTab(item.id)}
                   className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-wider transition-all duration-200 ${
                     activeTab === item.id
-                      ? 'bg-white/10 text-white border border-white/[0.12]'
-                      : 'text-white/45 hover:text-white/75 hover:bg-white/[0.05]'
+                      ? 'bg-on-background/[0.07] text-on-background border border-on-background/[0.12]'
+                      : 'text-on-surface-variant hover:text-on-background/75 hover:bg-on-background/[0.05]'
                   }`}
                 >
                   {item.icon}
@@ -254,7 +254,7 @@ export default function CustomerApp() {
               whileTap={{ scale: 0.9 }}
               onClick={() => setIsCartOpen(true)}
               aria-label="Open shopping cart"
-              className="w-10 h-10 relative flex items-center justify-center rounded-full text-white hover:bg-white/10 transition-colors duration-200"
+              className="w-10 h-10 relative flex items-center justify-center rounded-full text-on-background hover:bg-on-background/[0.07] transition-colors duration-200"
             >
               <motion.div
                 key={cartItemsCount}
@@ -285,7 +285,7 @@ export default function CustomerApp() {
             <div
               role="button"
               aria-label="Search products"
-              className="w-full h-10 pl-4 pr-4 glass-panel rounded-full flex items-center gap-2.5 text-white/35 text-[11px] tracking-widest uppercase font-black cursor-pointer hover:bg-white/[0.05] transition-colors"
+              className="w-full h-10 pl-4 pr-4 glass-panel rounded-full flex items-center gap-2.5 text-on-surface-variant text-[11px] tracking-widest uppercase font-black cursor-pointer hover:bg-on-background/[0.05] transition-colors"
             >
               <Search className="w-3.5 h-3.5 flex-shrink-0" strokeWidth={2.5} />
               <span>Search products...</span>
@@ -343,7 +343,7 @@ export default function CustomerApp() {
       </main>
 
       {/* BottomNavBar Pill (mobile only) */}
-      <nav className="md:hidden fixed bottom-[calc(env(safe-area-inset-bottom,0px)+16px)] left-1/2 -translate-x-1/2 w-[92%] max-w-[400px] z-50 flex justify-around items-center px-4 py-3.5 bg-[#050505]/70 backdrop-blur-3xl rounded-[32px] border border-white/[0.08] shadow-[0_20px_40px_rgba(0,0,0,0.8),_inset_0_1px_0_rgba(255,255,255,0.1)] transition-all duration-300">
+      <nav className="md:hidden fixed bottom-[calc(env(safe-area-inset-bottom,0px)+16px)] left-1/2 -translate-x-1/2 w-[92%] max-w-[400px] z-50 flex justify-around items-center px-4 py-3.5 bg-surface/80 backdrop-blur-3xl rounded-[32px] border border-on-background/[0.09] shadow-[0_20px_40px_rgba(42,26,31,0.12),_inset_0_1px_0_rgba(255,255,255,0.6)] transition-all duration-300">
         <NavButton 
           icon={<Store />} 
           label="Shop" 
@@ -410,9 +410,9 @@ export default function CustomerApp() {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className="fixed bottom-[100px] left-1/2 -translate-x-1/2 z-[100] flex items-center gap-3 bg-white text-black px-5 py-3.5 rounded-full shadow-2xl md:bottom-28 border border-white/10"
+            className="fixed bottom-[100px] left-1/2 -translate-x-1/2 z-[100] flex items-center gap-3 bg-[#2a1a1f] text-white px-5 py-3.5 rounded-full shadow-[0_12px_40px_rgba(42,26,31,0.25)] md:bottom-28 border border-white/10"
           >
-            <CheckCircle2 className="w-5 h-5 text-emerald-500 fill-emerald-500/10" />
+            <CheckCircle2 className="w-5 h-5 text-emerald-400 fill-emerald-400/20" />
             <span className="font-label-bold text-[13px] font-bold">{toastMessage}</span>
           </motion.div>
         )}

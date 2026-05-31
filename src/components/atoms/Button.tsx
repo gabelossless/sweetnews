@@ -26,11 +26,11 @@ export function Button({
   const variants = {
     // Red → pink gradient — main CTA
     brand: 'btn-brand font-black',
-    // Clean white — secondary CTA
-    primary: 'bg-white text-black hover:bg-white/90 shadow-[0_10px_30px_rgba(255,255,255,0.12)] font-black',
-    secondary: 'bg-white/5 border border-white/10 text-white hover:bg-white/10 font-black',
-    outline: 'bg-transparent border border-white/10 text-white hover:bg-white/5 font-black',
-    ghost: 'bg-transparent text-white/60 hover:text-white hover:bg-white/5',
+    // Clean surface — secondary CTA
+    primary: 'bg-surface text-on-background hover:bg-surface-dim shadow-[0_10px_30px_rgba(42,26,31,0.10)] font-black',
+    secondary: 'bg-on-background/[0.05] border border-on-background/[0.09] text-on-background hover:bg-on-background/[0.07] font-black',
+    outline: 'bg-transparent border border-on-background/[0.09] text-on-background hover:bg-on-background/[0.05] font-black',
+    ghost: 'bg-transparent text-on-surface-variant hover:text-on-background hover:bg-on-background/[0.05]',
   };
 
   const baseStyles =

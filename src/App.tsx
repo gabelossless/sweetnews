@@ -9,7 +9,7 @@ const FleetApp = lazy(() => import('./FleetApp'));
 const PrivacyView = lazy(() => import('./views/PrivacyView'));
 
 function AppShell() {
-  return <div className="min-h-screen bg-black" />;
+  return <div className="min-h-screen bg-background" />;
 }
 
 // On fleet.sweetnews.shop, render FleetApp directly — no /fleet path prefix needed

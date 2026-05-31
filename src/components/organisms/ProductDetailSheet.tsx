@@ -43,7 +43,7 @@ export function ProductDetailSheet({ product, onClose, onAdd, onCustomize }: Pro
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[58] bg-black/70 backdrop-blur-sm"
+            className="fixed inset-0 z-[58] bg-[#2a1a1f]/40 backdrop-blur-sm"
             onClick={onClose}
           />
 
@@ -56,18 +56,18 @@ export function ProductDetailSheet({ product, onClose, onAdd, onCustomize }: Pro
               exit={{ y: '100%' }}
               transition={{ type: 'spring', stiffness: 340, damping: 36 }}
               className="pointer-events-auto w-full max-w-[430px] max-h-[92vh] flex flex-col
-                         bg-[#080808] rounded-t-[36px] border border-white/[0.07]
-                         shadow-[0_-24px_80px_rgba(0,0,0,0.9)]"
+                         bg-surface rounded-t-[36px] border border-on-background/[0.07]
+                         shadow-[0_-24px_80px_rgba(42,26,31,0.12)]"
             >
               {/* Handle + close */}
               <div className="flex justify-center pt-3 flex-shrink-0 relative">
-                <div className="w-10 h-1 rounded-full bg-white/20" />
+                <div className="w-10 h-1 rounded-full bg-on-background/[0.15]" />
                 <button
                   onClick={onClose}
-                  className="absolute right-5 top-2 w-8 h-8 rounded-full bg-white/[0.07] border border-white/[0.09] flex items-center justify-center hover:bg-white/12 transition-colors"
+                  className="absolute right-5 top-2 w-8 h-8 rounded-full bg-on-background/[0.05] border border-on-background/[0.09] flex items-center justify-center hover:bg-on-background/[0.09] transition-colors"
                   aria-label="Close"
                 >
-                  <X size={14} className="text-white/60" />
+                  <X size={14} className="text-on-surface-variant" />
                 </button>
               </div>
 
@@ -95,7 +95,7 @@ export function ProductDetailSheet({ product, onClose, onAdd, onCustomize }: Pro
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center p-8">
-                      <span className="text-[22px] font-black uppercase tracking-widest text-white/10 text-center leading-snug">
+                      <span className="text-[22px] font-black uppercase tracking-widest text-on-background/30 text-center leading-snug">
                         {product.name.split(' ').slice(0, 3).join('\n')}
                       </span>
                     </div>
@@ -104,7 +104,7 @@ export function ProductDetailSheet({ product, onClose, onAdd, onCustomize }: Pro
                   {/* Featured badge */}
                   {product.tag && (
                     <div className="absolute top-4 left-4">
-                      <span className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider bg-black/60 backdrop-blur-md text-white/80 px-3 py-1.5 rounded-full border border-white/[0.1]">
+                      <span className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider bg-white/80 backdrop-blur-md text-on-background/70 px-3 py-1.5 rounded-full border border-on-background/[0.09]">
                         <Sparkles size={9} strokeWidth={2.5} />
                         {product.tag}
                       </span>
@@ -117,43 +117,43 @@ export function ProductDetailSheet({ product, onClose, onAdd, onCustomize }: Pro
 
                   {/* Category badge */}
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="text-[9px] font-black uppercase tracking-[0.25em] text-white/30 px-2.5 py-1 rounded-full border border-white/[0.08] bg-white/[0.03]">
+                    <span className="text-[9px] font-black uppercase tracking-[0.25em] text-on-surface-variant px-2.5 py-1 rounded-full border border-on-background/[0.09] bg-on-background/[0.03]">
                       {CATEGORY_LABELS[product.categoryId] ?? product.categoryId}
                     </span>
                   </div>
 
                   {/* Name */}
-                  <h2 className="text-[26px] font-black uppercase tracking-tight text-white leading-[0.9] mb-3">
+                  <h2 className="text-[26px] font-black uppercase tracking-tight text-on-background leading-[0.9] mb-3">
                     {product.name}
                   </h2>
 
                   {/* Price */}
-                  <p className="text-[28px] font-black text-white leading-none mb-5">
+                  <p className="text-[28px] font-black text-on-background leading-none mb-5">
                     ${product.price.toFixed(2)}
                     {isCustomizable && (
-                      <span className="text-[13px] font-medium text-white/30 ml-2">& up</span>
+                      <span className="text-[13px] font-medium text-on-surface-variant ml-2">& up</span>
                     )}
                   </p>
 
                   {/* Description */}
-                  <p className="text-[14px] text-white/55 leading-relaxed mb-6">
+                  <p className="text-[14px] text-on-surface-variant leading-relaxed mb-6">
                     {product.description}
                   </p>
 
                   {/* Allergen section */}
-                  <div className="mb-6 p-4 rounded-[18px] bg-white/[0.025] border border-white/[0.06]">
+                  <div className="mb-6 p-4 rounded-[18px] bg-surface-dim border border-on-background/[0.07]">
                     <div className="flex items-center gap-2 mb-2">
-                      <AlertTriangle size={13} className="text-amber-400/70 flex-shrink-0" strokeWidth={2} />
-                      <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">
+                      <AlertTriangle size={13} className="text-amber-600/70 flex-shrink-0" strokeWidth={2} />
+                      <p className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant">
                         Allergen Info
                       </p>
                     </div>
                     {product.allergens && (
-                      <p className="text-[12px] text-white/65 font-medium leading-relaxed mb-2">
+                      <p className="text-[12px] text-on-background/75 font-medium leading-relaxed mb-2">
                         {product.allergens}
                       </p>
                     )}
-                    <p className="text-[11px] text-white/30 leading-relaxed">
+                    <p className="text-[11px] text-on-surface-variant leading-relaxed">
                       May contain common allergens. Check product packaging for the full ingredient list.
                     </p>
                   </div>
@@ -161,7 +161,7 @@ export function ProductDetailSheet({ product, onClose, onAdd, onCustomize }: Pro
                   {/* You May Also Like */}
                   {relatedProducts.length > 0 && (
                     <div className="mb-6">
-                      <p className="text-[10px] font-black uppercase tracking-[0.25em] text-white/30 mb-4">
+                      <p className="text-[10px] font-black uppercase tracking-[0.25em] text-on-surface-variant mb-4">
                         You May Also Like
                       </p>
                       <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-2 -mx-1 px-1">
@@ -179,7 +179,7 @@ export function ProductDetailSheet({ product, onClose, onAdd, onCustomize }: Pro
               </div>
 
               {/* Sticky footer CTA */}
-              <div className="px-6 pt-4 pb-[max(env(safe-area-inset-bottom),24px)] flex-shrink-0 border-t border-white/[0.05]">
+              <div className="px-6 pt-4 pb-[max(env(safe-area-inset-bottom),24px)] flex-shrink-0 border-t border-on-background/[0.07]">
                 <motion.button
                   whileTap={{ scale: 0.97 }}
                   onClick={() => isCustomizable ? onCustomize(product) : onAdd(product)}
@@ -209,8 +209,8 @@ interface RelatedCardProps {
 
 function RelatedCard({ product, onAdd }: RelatedCardProps) {
   return (
-    <div className="flex-shrink-0 w-[120px] bg-white/[0.03] rounded-[18px] border border-white/[0.06] overflow-hidden">
-      <div className="w-full aspect-square bg-[#111] relative">
+    <div className="flex-shrink-0 w-[120px] bg-surface-dim rounded-[18px] border border-on-background/[0.07] overflow-hidden">
+      <div className="w-full aspect-square bg-surface-dim relative">
         {product.image ? (
           <img
             src={product.image}
@@ -221,18 +221,18 @@ function RelatedCard({ product, onAdd }: RelatedCardProps) {
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center p-3">
-            <span className="text-[8px] font-black uppercase tracking-widest text-white/15 text-center leading-snug">
+            <span className="text-[8px] font-black uppercase tracking-widest text-on-background/30 text-center leading-snug">
               {product.name.split(' ').slice(0, 2).join('\n')}
             </span>
           </div>
         )}
       </div>
       <div className="p-2.5">
-        <p className="text-[11px] font-bold text-white/80 truncate leading-tight mb-0.5">
+        <p className="text-[11px] font-bold text-on-background truncate leading-tight mb-0.5">
           {product.name}
         </p>
         <div className="flex items-center justify-between mt-1.5">
-          <p className="text-[11px] font-black text-white">${product.price.toFixed(2)}</p>
+          <p className="text-[11px] font-black text-on-background">${product.price.toFixed(2)}</p>
           <button
             onClick={() => onAdd(product)}
             aria-label={`Add ${product.name}`}

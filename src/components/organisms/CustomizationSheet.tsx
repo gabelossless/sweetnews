@@ -69,7 +69,7 @@ export function CustomizationSheet({ product, onClose, onConfirm }: Props) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[70] bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-[70] bg-[#2a1a1f]/40 backdrop-blur-sm"
             onClick={onClose}
           />
 
@@ -82,38 +82,38 @@ export function CustomizationSheet({ product, onClose, onConfirm }: Props) {
               exit={{ y: '100%' }}
               transition={{ type: 'spring', stiffness: 340, damping: 36 }}
               className="pointer-events-auto w-full max-w-[430px] max-h-[88vh] flex flex-col
-                         bg-[#0a0a0a] rounded-t-[36px] border border-white/[0.07]
-                         shadow-[0_-24px_80px_rgba(0,0,0,0.8)]"
+                         bg-surface rounded-t-[36px] border border-on-background/[0.07]
+                         shadow-[0_-24px_80px_rgba(42,26,31,0.12)]"
             >
               {/* Handle */}
               <div className="flex justify-center pt-3 pb-1 flex-shrink-0">
-                <div className="w-10 h-1 rounded-full bg-white/20" />
+                <div className="w-10 h-1 rounded-full bg-on-background/[0.15]" />
               </div>
 
               {/* Header */}
               <div className="flex items-start justify-between px-6 pt-3 pb-4 flex-shrink-0">
                 <div className="flex-1 pr-3">
-                  <p className="text-[10px] font-black uppercase tracking-[0.25em] text-white/30 mb-1">
+                  <p className="text-[10px] font-black uppercase tracking-[0.25em] text-on-surface-variant mb-1">
                     Customize
                   </p>
-                  <h2 className="text-[17px] font-black uppercase tracking-tight text-white leading-tight">
+                  <h2 className="text-[17px] font-black uppercase tracking-tight text-on-background leading-tight">
                     {product.name}
                   </h2>
-                  <p className="text-[12px] text-white/40 font-medium mt-1">{step.step_name}</p>
+                  <p className="text-[12px] text-on-surface-variant font-medium mt-1">{step.step_name}</p>
                 </div>
                 <button
                   onClick={onClose}
-                  className="w-8 h-8 rounded-full bg-white/[0.06] border border-white/[0.08] flex items-center justify-center flex-shrink-0 hover:bg-white/12 transition-colors"
+                  className="w-8 h-8 rounded-full bg-on-background/[0.05] border border-on-background/[0.07] flex items-center justify-center flex-shrink-0 hover:bg-on-background/[0.09] transition-colors"
                   aria-label="Close"
                 >
-                  <X size={14} className="text-white/60" />
+                  <X size={14} className="text-on-surface-variant" />
                 </button>
               </div>
 
               {/* Progress bar */}
               <div className="px-6 pb-4 flex-shrink-0">
                 <div className="flex justify-between items-center mb-2">
-                  <p className="text-[10px] text-white/30 font-black uppercase tracking-widest">
+                  <p className="text-[10px] text-on-surface-variant font-black uppercase tracking-widest">
                     {step.selection_type === 'exact' ? 'Select exactly' : 'Select up to'} {required}
                   </p>
                   <motion.p
@@ -121,15 +121,15 @@ export function CustomizationSheet({ product, onClose, onConfirm }: Props) {
                     initial={{ scale: 1.15 }}
                     animate={{ scale: 1 }}
                     className={`text-[12px] font-black tabular-nums ${
-                      ready ? 'text-emerald-400' : atLimit ? 'text-[#e60023]' : 'text-white/50'
+                      ready ? 'text-emerald-600' : atLimit ? 'text-[#e60023]' : 'text-on-surface-variant'
                     }`}
                   >
                     {totalSelected} / {required}
                   </motion.p>
                 </div>
-                <div className="h-1 bg-white/[0.06] rounded-full overflow-hidden">
+                <div className="h-1 bg-on-background/[0.07] rounded-full overflow-hidden">
                   <motion.div
-                    className={`h-full rounded-full ${ready ? 'bg-emerald-400' : 'bg-gradient-to-r from-[#e60023] to-[#ff2060]'}`}
+                    className={`h-full rounded-full ${ready ? 'bg-emerald-500' : 'bg-gradient-to-r from-[#e60023] to-[#ff2060]'}`}
                     animate={{ width: `${progressPct}%` }}
                     transition={{ duration: 0.2, ease: 'easeOut' }}
                   />
@@ -148,15 +148,15 @@ export function CustomizationSheet({ product, onClose, onConfirm }: Props) {
                       className={`flex items-center justify-between px-4 py-3.5 rounded-[18px] border transition-all duration-200 ${
                         qty > 0
                           ? 'bg-[#e60023]/[0.08] border-[#e60023]/25'
-                          : 'bg-white/[0.025] border-white/[0.055]'
+                          : 'bg-surface-dim border-on-background/[0.09]'
                       }`}
                     >
                       <div className="flex-1 min-w-0 pr-3">
-                        <p className={`text-[13px] font-black truncate transition-colors ${qty > 0 ? 'text-white' : 'text-white/70'}`}>
+                        <p className={`text-[13px] font-black truncate transition-colors ${qty > 0 ? 'text-on-background' : 'text-on-background/75'}`}>
                           {opt.name}
                         </p>
                         {opt.upcharge > 0 && (
-                          <p className="text-[10px] text-[#ff8090] font-black mt-0.5">
+                          <p className="text-[10px] text-primary font-black mt-0.5">
                             +${opt.upcharge.toFixed(2)}
                           </p>
                         )}
@@ -172,10 +172,10 @@ export function CustomizationSheet({ product, onClose, onConfirm }: Props) {
                               exit={{ scale: 0, opacity: 0 }}
                               transition={{ type: 'spring', stiffness: 500, damping: 28 }}
                               onClick={() => decrement(opt.name)}
-                              className="w-7 h-7 rounded-full bg-white/[0.08] border border-white/[0.12] flex items-center justify-center hover:bg-white/15 active:scale-90 transition-all"
+                              className="w-7 h-7 rounded-full bg-on-background/[0.05] border border-on-background/[0.12] flex items-center justify-center hover:bg-on-background/[0.09] active:scale-90 transition-all"
                               aria-label={`Remove one ${opt.name}`}
                             >
-                              <Minus size={12} strokeWidth={2.5} className="text-white" />
+                              <Minus size={12} strokeWidth={2.5} className="text-on-background" />
                             </motion.button>
                           )}
                         </AnimatePresence>
@@ -186,7 +186,7 @@ export function CustomizationSheet({ product, onClose, onConfirm }: Props) {
                               key={qty}
                               initial={{ scale: 1.4, opacity: 0 }}
                               animate={{ scale: 1, opacity: 1 }}
-                              className="text-[13px] font-black text-white min-w-[16px] text-center tabular-nums"
+                              className="text-[13px] font-black text-on-background min-w-[16px] text-center tabular-nums"
                             >
                               {qty}
                             </motion.span>
@@ -200,11 +200,11 @@ export function CustomizationSheet({ product, onClose, onConfirm }: Props) {
                           className={`w-7 h-7 rounded-full flex items-center justify-center transition-all ${
                             canAdd
                               ? 'bg-gradient-to-br from-[#e60023] to-[#ff2060] shadow-[0_3px_12px_rgba(230,0,35,0.45)] hover:shadow-[0_4px_16px_rgba(230,0,35,0.65)]'
-                              : 'bg-white/[0.04] border border-white/[0.06]'
+                              : 'bg-on-background/[0.05] border border-on-background/[0.07]'
                           }`}
                           aria-label={`Add ${opt.name}`}
                         >
-                          <Plus size={12} strokeWidth={2.5} className={canAdd ? 'text-white' : 'text-white/20'} />
+                          <Plus size={12} strokeWidth={2.5} className={canAdd ? 'text-white' : 'text-on-background/30'} />
                         </motion.button>
                       </div>
                     </motion.div>
@@ -213,9 +213,9 @@ export function CustomizationSheet({ product, onClose, onConfirm }: Props) {
               </div>
 
               {/* Footer CTA */}
-              <div className="px-6 pt-4 pb-[max(env(safe-area-inset-bottom),24px)] flex-shrink-0 border-t border-white/[0.05]">
+              <div className="px-6 pt-4 pb-[max(env(safe-area-inset-bottom),24px)] flex-shrink-0 border-t border-on-background/[0.07]">
                 {totalUpcharge > 0 && (
-                  <p className="text-center text-[10px] text-white/35 font-black uppercase tracking-widest mb-3">
+                  <p className="text-center text-[10px] text-on-surface-variant font-black uppercase tracking-widest mb-3">
                     +${totalUpcharge.toFixed(2)} upcharge included
                   </p>
                 )}
@@ -226,7 +226,7 @@ export function CustomizationSheet({ product, onClose, onConfirm }: Props) {
                   className={`w-full py-4 rounded-full font-black text-[13px] uppercase tracking-widest transition-all flex items-center justify-center gap-2.5 ${
                     ready
                       ? 'btn-brand shadow-[0_8px_32px_rgba(230,0,35,0.45)]'
-                      : 'bg-white/[0.05] text-white/25 border border-white/[0.08]'
+                      : 'bg-on-background/[0.05] text-on-background/30 border border-on-background/[0.09]'
                   }`}
                 >
                   <ShoppingBag size={16} strokeWidth={2.5} />

@@ -142,7 +142,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   return (
     <AuthContext.Provider value={value}>
       {loading ? (
-        <div className="min-h-screen bg-black" aria-hidden />
+        <div className="min-h-screen bg-background" aria-hidden />
       ) : (
         children
       )}

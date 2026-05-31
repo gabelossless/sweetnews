@@ -19,13 +19,13 @@ interface CheckoutFormProps {
 const CARD_ELEMENT_OPTIONS = {
   style: {
     base: {
-      color: '#ffffff',
+      color: '#2a1a1f',
       fontFamily: 'Inter, sans-serif',
       fontSize: '14px',
       fontSmoothing: 'antialiased',
-      '::placeholder': { color: '#a1a1a6' },
+      '::placeholder': { color: '#7a6a6f' },
     },
-    invalid: { color: '#ff453a' },
+    invalid: { color: '#d61f2b' },
   },
 };
 
@@ -131,7 +131,7 @@ export function CheckoutForm({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 z-[80] bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-[80] bg-[#2a1a1f]/40 backdrop-blur-sm"
           />
           {/* Positioning wrapper */}
           <div className="fixed inset-0 z-[81] flex items-end md:items-center justify-center pointer-events-none">
@@ -140,20 +140,20 @@ export function CheckoutForm({
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="pointer-events-auto w-full max-w-[430px] h-[95vh] md:h-auto md:max-h-[90vh] bg-[#000]/90 backdrop-blur-[50px] rounded-t-[48px] md:rounded-[32px] flex flex-col shadow-[0_-20px_60px_rgba(0,0,0,0.9),_inset_0_1px_0_rgba(255,255,255,0.1)] border-t border-white/[0.08] md:border md:border-white/[0.08]"
+            className="pointer-events-auto w-full max-w-[430px] h-[95vh] md:h-auto md:max-h-[90vh] bg-surface backdrop-blur-[50px] rounded-t-[48px] md:rounded-[32px] flex flex-col shadow-[0_-20px_60px_rgba(42,26,31,0.12),_inset_0_1px_0_rgba(255,255,255,0.1)] border-t border-on-background/[0.09] md:border md:border-on-background/[0.09]"
           >
             <div className="flex justify-center pt-3 pb-2">
-              <div className="w-12 h-1.5 bg-white/10 rounded-full" />
+              <div className="w-12 h-1.5 bg-on-background/[0.15] rounded-full" />
             </div>
-            
-            <div className="flex justify-between items-center px-6 py-4 border-b border-white/[0.04]">
-              <h2 className="font-display-xl text-[24px] uppercase tracking-tighter font-black">Checkout</h2>
+
+            <div className="flex justify-between items-center px-6 py-4 border-b border-on-background/[0.07]">
+              <h2 className="font-display-xl text-[24px] uppercase tracking-tighter font-black text-on-background">Checkout</h2>
               <button
                 onClick={onClose}
                 aria-label="Close checkout"
-                className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 transition-colors"
+                className="w-10 h-10 flex items-center justify-center rounded-full bg-on-background/[0.05] hover:bg-on-background/[0.07] transition-colors"
               >
-                <X className="w-5 h-5 text-white/60 hover:text-white" />
+                <X className="w-5 h-5 text-on-surface-variant hover:text-on-background" />
               </button>
             </div>
 
@@ -164,10 +164,10 @@ export function CheckoutForm({
                   animate={{ scale: 1 }}
                   transition={{ type: 'spring', bounce: 0.5 }}
                 >
-                  <CheckCircle2 className="w-24 h-24 text-white mb-6 animate-pulse" />
+                  <CheckCircle2 className="w-24 h-24 text-primary mb-6 animate-pulse" />
                 </motion.div>
-                <h3 className="font-display-xl text-[36px] uppercase font-black mb-3 tracking-tighter">Order Sent</h3>
-                <p className="font-body-md text-white/40 mb-8 px-4 text-xs font-medium leading-relaxed">
+                <h3 className="font-display-xl text-[36px] uppercase font-black mb-3 tracking-tighter text-on-background">Order Sent</h3>
+                <p className="font-body-md text-on-surface-variant mb-8 px-4 text-xs font-medium leading-relaxed">
                   Your premium snacks are locked in. Redirecting you to the live tracking console...
                 </p>
               </div>
@@ -177,7 +177,7 @@ export function CheckoutForm({
                   <div className="space-y-6 flex-1 pb-4">
                     {/* Delivery Details */}
                     <section>
-                      <h3 className="font-headline-md text-[10px] text-white/40 mb-3 uppercase tracking-[0.25em] pl-1 font-black">
+                      <h3 className="font-headline-md text-[10px] text-on-surface-variant mb-3 uppercase tracking-[0.25em] pl-1 font-black">
                         Delivery Details
                       </h3>
                       <div className="space-y-3">
@@ -187,7 +187,7 @@ export function CheckoutForm({
                           placeholder="Full Name"
                           value={deliveryName}
                           onChange={(e) => setLocalName(e.target.value)}
-                          className="bg-[#0a0a0a]"
+                          className="bg-surface-dim"
                         />
                         <Input
                           required
@@ -195,45 +195,45 @@ export function CheckoutForm({
                           placeholder="Street Address"
                           value={deliveryAddress}
                           onChange={(e) => setLocalAddress(e.target.value)}
-                          className="bg-[#0a0a0a]"
+                          className="bg-surface-dim"
                         />
                         <Input
                           type="text"
                           placeholder="Apt / Suite (optional)"
                           value={deliveryApt}
                           onChange={(e) => setLocalApt(e.target.value)}
-                          className="bg-[#0a0a0a]"
+                          className="bg-surface-dim"
                         />
                       </div>
                     </section>
- 
+
                     {/* Payment — Stripe Elements */}
                     <section>
-                      <h3 className="font-headline-md text-[10px] text-white/40 mb-3 uppercase tracking-[0.25em] pl-1 font-black">
+                      <h3 className="font-headline-md text-[10px] text-on-surface-variant mb-3 uppercase tracking-[0.25em] pl-1 font-black">
                         Payment Method
                       </h3>
-                      <div className="bg-[#0a0a0a] border border-white/[0.08] rounded-2xl px-4 py-4 focus-within:border-white/20 transition-colors">
+                      <div className="bg-surface-dim border border-on-background/[0.09] rounded-2xl px-4 py-4 focus-within:border-on-background/[0.12] transition-colors">
                         <CardElement options={CARD_ELEMENT_OPTIONS} />
                       </div>
                       {cardError && (
-                        <p className="text-[12px] text-red-400 mt-2 pl-1">{cardError}</p>
+                        <p className="text-[12px] text-red-600 mt-2 pl-1">{cardError}</p>
                       )}
                     </section>
- 
+
                     {/* Order Summary */}
-                    <div className="bg-[#0a0a0a] border border-white/[0.06] rounded-[24px] p-5 mt-2">
-                      <div className="flex justify-between items-center mb-3 font-body-md text-xs text-white/40 font-medium">
+                    <div className="bg-surface-dim border border-on-background/[0.07] rounded-[24px] p-5 mt-2">
+                      <div className="flex justify-between items-center mb-3 font-body-md text-xs text-on-surface-variant font-medium">
                         <span>Subtotal</span>
                         <span>${subtotal.toFixed(2)}</span>
                       </div>
-                      <div className="flex justify-between items-center mb-3 font-body-md text-xs text-white/40 font-medium">
+                      <div className="flex justify-between items-center mb-3 font-body-md text-xs text-on-surface-variant font-medium">
                         <span>Delivery Fee</span>
                         <span>$3.99</span>
                       </div>
-                      <div className="w-full h-px bg-white/[0.06] my-3"></div>
+                      <div className="w-full h-px bg-on-background/[0.07] my-3"></div>
                       <div className="flex justify-between items-center mb-6 px-1">
-                        <span className="text-[11px] tracking-[0.2em] uppercase text-white/40 font-black">Total</span>
-                        <span className="text-[24px] font-black tracking-widest text-white">
+                        <span className="text-[11px] tracking-[0.2em] uppercase text-on-surface-variant font-black">Total</span>
+                        <span className="text-[24px] font-black tracking-widest text-on-background">
                           ${total.toFixed(2)}
                         </span>
                       </div>
@@ -252,18 +252,18 @@ export function CheckoutForm({
                 </form>
  
                 <div className="mt-4 mb-2 px-6 text-center">
-                  <p className="text-[10px] text-white/40 leading-relaxed font-medium">
+                  <p className="text-[10px] text-on-surface-variant leading-relaxed font-medium">
                     Love the speed?{' '}
                     <button
                       onClick={() => (window.location.href = '/fleet')}
-                      className="text-white font-black hover:underline bg-transparent border-none p-0 cursor-pointer uppercase tracking-wider text-[9px]"
+                      className="text-on-background font-black hover:underline bg-transparent border-none p-0 cursor-pointer uppercase tracking-wider text-[9px]"
                     >
                       Apply to be a driver
                     </button>{' '}
                     and earn on your schedule.
                   </p>
-                  <div className="flex items-center justify-center gap-2 text-[9px] uppercase font-black tracking-[0.25em] text-white/40 mt-3">
-                    <ShieldCheck size={12} className="text-white/60" /> Secure Encryption Active
+                  <div className="flex items-center justify-center gap-2 text-[9px] uppercase font-black tracking-[0.25em] text-on-surface-variant mt-3">
+                    <ShieldCheck size={12} className="text-on-surface-variant" /> Secure Encryption Active
                   </div>
                 </div>
               </>

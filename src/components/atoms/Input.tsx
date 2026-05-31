@@ -12,19 +12,19 @@ export function Input({ label, icon, className = '', id, ...props }: InputProps)
   return (
     <div className="w-full space-y-1.5 text-left">
       {label && (
-        <label htmlFor={inputId} className="block text-[10px] font-bold text-white/40 uppercase tracking-widest ml-1">
+        <label htmlFor={inputId} className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">
           {label}
         </label>
       )}
       <div className="relative group w-full">
         {icon && (
-          <div className="absolute left-5 top-1/2 -translate-y-1/2 text-white/30 group-focus-within:text-primary transition-colors">
+          <div className="absolute left-5 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary transition-colors">
             {icon}
           </div>
         )}
         <input
           id={inputId}
-          className={`w-full bg-[#141414] border border-white/[0.08] focus:border-primary/50 text-white rounded-2xl px-5 py-3.5 outline-none transition-all focus:ring-2 focus:ring-primary/20 ${icon ? 'pl-12' : ''} ${className}`}
+          className={`w-full bg-surface-dim border border-on-background/[0.09] focus:border-primary/50 text-on-background placeholder:text-on-surface-variant rounded-2xl px-5 py-3.5 outline-none transition-all focus:ring-2 focus:ring-primary/20 ${icon ? 'pl-12' : ''} ${className}`}
           {...props}
         />
       </div>

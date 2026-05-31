@@ -34,7 +34,7 @@ export function ProductCard({
     >
       {/* Image container */}
       <div
-        className={`relative w-full aspect-square rounded-[16px] overflow-hidden mb-2.5 bg-[#111111] ${onView ? 'cursor-pointer' : ''}`}
+        className={`relative w-full aspect-square rounded-[16px] overflow-hidden mb-2.5 bg-surface-dim ${onView ? 'cursor-pointer' : ''}`}
         onClick={onView}
         role={onView ? 'button' : undefined}
         aria-label={onView ? `View ${product.name} details` : undefined}
@@ -55,7 +55,7 @@ export function ProductCard({
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center p-4">
-            <span className="text-[10px] font-black uppercase tracking-widest text-white/20 text-center leading-snug">
+            <span className="text-[10px] font-black uppercase tracking-widest text-on-background/30 text-center leading-snug">
               {product.name.split(' ').slice(0, 2).join('\n')}
             </span>
           </div>
@@ -64,7 +64,7 @@ export function ProductCard({
         {/* Tag badge */}
         {product.tag && (
           <div className="absolute top-2.5 left-2.5">
-            <span className="text-[9px] font-black uppercase tracking-wider bg-black/70 backdrop-blur-sm text-white/75 px-2 py-1 rounded-full border border-white/[0.08]">
+            <span className="text-[9px] font-black uppercase tracking-wider bg-white/80 backdrop-blur-sm text-on-background/70 px-2 py-1 rounded-full border border-on-background/[0.08]">
               {product.tag}
             </span>
           </div>
@@ -139,13 +139,13 @@ export function ProductCard({
         onKeyDown={onView ? (e) => e.key === 'Enter' && onView() : undefined}
         aria-label={onView ? `View ${product.name} details` : undefined}
       >
-        <h3 className="text-[13px] font-semibold text-white/90 truncate leading-tight mb-0.5">
+        <h3 className="text-[13px] font-semibold text-on-background truncate leading-tight mb-0.5">
           {product.name}
         </h3>
-        <p className="text-[11px] text-white/40 truncate mb-1.5 leading-tight">
+        <p className="text-[11px] text-on-surface-variant truncate mb-1.5 leading-tight">
           {product.description}
         </p>
-        <p className="text-[14px] font-bold text-white leading-none">
+        <p className="text-[14px] font-bold text-on-background leading-none">
           ${product.price.toFixed(2)}
         </p>
       </div>

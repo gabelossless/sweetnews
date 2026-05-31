@@ -2,61 +2,64 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #000000;
-  --color-surface: #0a0a0a;
-  --color-surface-bright: #1a1a1a;
-  --color-surface-dim: #050505;
-  --color-surface-container-lowest: #000000;
-  --color-surface-container-low: #0f0f0f;
-  --color-surface-container: #141414;
-  --color-surface-container-high: #1c1c1e;
-  --color-surface-container-highest: #2c2c2e;
+  /* ─── Warm Cream & Cherry (light theme) ───────────────────────────
+     Background: warm ivory cream. Text: soft espresso (never pure black).
+     Surfaces: white cards on cream. Brand red→pink gradient kept intact. */
+  --color-background: #fbf8f4;            /* warm ivory cream */
+  --color-surface: #ffffff;              /* cards, sheets, modals */
+  --color-surface-bright: #ffffff;
+  --color-surface-dim: #f1eae4;          /* wells, image placeholders */
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #fbf6f2;
+  --color-surface-container: #f6efe9;
+  --color-surface-container-high: #f0e7e0;
+  --color-surface-container-highest: #eadfd8;
 
-  --color-on-background: #ffffff;
-  --color-on-surface: #ffffff;
-  --color-surface-variant: #1a1a1a;
-  --color-on-surface-variant: #a1a1a6;
+  --color-on-background: #2a1a1f;        /* soft espresso (warm near-black) */
+  --color-on-surface: #2a1a1f;
+  --color-surface-variant: #f1eae4;
+  --color-on-surface-variant: #7a6a6f;   /* warm muted mauve-gray */
 
-  --color-primary: #e60023;
-  --color-pink: #ff2060;
+  --color-primary: #e60023;              /* cherry red — kept */
+  --color-pink: #ff2060;                 /* sweet pink — kept */
   --color-on-primary: #ffffff;
-  --color-primary-container: #5c000e;
-  --color-on-primary-container: #ffdad6;
+  --color-primary-container: #ffe1e3;    /* light blush container */
+  --color-on-primary-container: #5c000e;
 
-  --color-secondary: #ffffff;
-  --color-on-secondary: #000000;
-  --color-secondary-container: #262626;
-  --color-on-secondary-container: #ffffff;
+  --color-secondary: #2a1a1f;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #f0e7e0;
+  --color-on-secondary-container: #2a1a1f;
 
-  --color-tertiary: #a1a1a6;
-  --color-on-tertiary: #000000;
+  --color-tertiary: #7a6a6f;
+  --color-on-tertiary: #ffffff;
 
-  --color-outline: #38383a;
-  --color-outline-variant: #2c2c2e;
+  --color-outline: #e2d6d0;              /* warm light border */
+  --color-outline-variant: #ede3dd;
 
-  --color-inverse-surface: #ffffff;
-  --color-inverse-on-surface: #000000;
+  --color-inverse-surface: #2a1a1f;
+  --color-inverse-on-surface: #fbf8f4;
   --color-inverse-primary: #ffb4a9;
 
-  --color-error: #ff453a;
+  --color-error: #d61f2b;                /* slightly deeper red for light bg */
   --color-on-error: #ffffff;
-  --color-error-container: #5c0006;
-  --color-on-error-container: #ffdad6;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #5c0006;
 
   --color-primary-fixed: #ffb4a9;
   --color-primary-fixed-dim: #ff897d;
   --color-on-primary-fixed: #3b0003;
   --color-on-primary-fixed-variant: #68000b;
 
-  --color-secondary-fixed: #1c1c1e;
-  --color-secondary-fixed-dim: #2c2c2e;
-  --color-on-secondary-fixed: #ffffff;
-  --color-on-secondary-fixed-variant: #a1a1a6;
+  --color-secondary-fixed: #f0e7e0;
+  --color-secondary-fixed-dim: #eadfd8;
+  --color-on-secondary-fixed: #2a1a1f;
+  --color-on-secondary-fixed-variant: #7a6a6f;
 
-  --color-tertiary-fixed: #2c2c2e;
-  --color-tertiary-fixed-dim: #38383a;
-  --color-on-tertiary-fixed: #ffffff;
-  --color-on-tertiary-fixed-variant: #a1a1a6;
+  --color-tertiary-fixed: #eadfd8;
+  --color-tertiary-fixed-dim: #e2d6d0;
+  --color-on-tertiary-fixed: #2a1a1f;
+  --color-on-tertiary-fixed-variant: #7a6a6f;
 
   --spacing-base: 8px;
   --spacing-xs: 4px;
@@ -100,17 +103,17 @@ html, body {
     scrollbar-width: none;
   }
 
-  /* Brand gradient — red to pink */
+  /* Brand gradient — red to pink (kept identical for both themes) */
   .btn-brand {
     background: linear-gradient(135deg, #e60023 0%, #ff2060 100%);
-    box-shadow: 0 8px 32px rgba(230, 0, 35, 0.45), 0 2px 8px rgba(255, 32, 96, 0.3);
+    box-shadow: 0 8px 28px rgba(230, 0, 35, 0.28), 0 2px 8px rgba(255, 32, 96, 0.20);
     color: #fff;
   }
   .btn-brand:hover {
-    box-shadow: 0 12px 40px rgba(230, 0, 35, 0.55), 0 4px 12px rgba(255, 32, 96, 0.4);
+    box-shadow: 0 12px 36px rgba(230, 0, 35, 0.38), 0 4px 12px rgba(255, 32, 96, 0.28);
   }
   .glow-brand {
-    box-shadow: 0 0 24px rgba(230, 0, 35, 0.5), 0 0 48px rgba(255, 32, 96, 0.2);
+    box-shadow: 0 0 24px rgba(230, 0, 35, 0.28), 0 0 48px rgba(255, 32, 96, 0.14);
   }
 }
 
@@ -170,10 +173,10 @@ html, body {
     transform: translateY(-2px);
   }
 
-  /* Soft inner glow on glass panels */
+  /* Frosted-white glass panel on warm cream */
   .glass-panel {
-    background: rgba(255,255,255,0.02);
-    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.6);
+    border: 1px solid rgba(42,26,31,0.07);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
   }

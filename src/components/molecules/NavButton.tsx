@@ -17,7 +17,7 @@ export function NavButton({ icon, label, isActive, onClick }: NavButtonProps) {
       className={`relative flex flex-col items-center justify-center w-16 h-14 rounded-[18px] transition-all duration-300 ${
         isActive
           ? ''
-          : 'text-white/35 hover:text-white/70 hover:bg-white/[0.04]'
+          : 'text-on-surface-variant hover:text-on-background/75 hover:bg-on-background/[0.05]'
       }`}
     >
       {/* Active background pill */}

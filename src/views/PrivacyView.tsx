@@ -4,18 +4,18 @@ import { OwlMascot } from '../components/atoms/OwlMascot';
 
 export default function PrivacyView() {
   return (
-    <div className="min-h-screen bg-black text-white">
-      <header className="sticky top-0 z-10 bg-black/90 backdrop-blur-xl border-b border-white/[0.05] px-5 py-4 flex items-center gap-3">
+    <div className="min-h-screen bg-background text-on-background">
+      <header className="sticky top-0 z-10 bg-background/80 backdrop-blur-xl border-b border-on-background/[0.07] px-5 py-4 flex items-center gap-3">
         <button
           onClick={() => history.back()}
-          className="w-9 h-9 rounded-full bg-white/[0.05] border border-white/[0.08] flex items-center justify-center hover:bg-white/10 transition-colors"
+          className="w-9 h-9 rounded-full bg-on-background/[0.05] border border-on-background/[0.09] flex items-center justify-center hover:bg-on-background/[0.07] transition-colors"
           aria-label="Go back"
         >
-          <ArrowLeft size={16} className="text-white/70" />
+          <ArrowLeft size={16} className="text-on-background/75" />
         </button>
         <div className="flex items-center gap-2">
           <ShieldCheck size={16} className="text-[#e60023]" />
-          <span className="text-sm font-black uppercase tracking-widest text-white/70">Privacy Policy</span>
+          <span className="text-sm font-black uppercase tracking-widest text-on-background/75">Privacy Policy</span>
         </div>
       </header>
 
@@ -27,14 +27,14 @@ export default function PrivacyView() {
       >
         <div className="flex flex-col items-center mb-10 text-center">
           <OwlMascot size={56} className="mb-4" />
-          <h1 className="text-3xl font-black uppercase tracking-tighter text-white mb-1">Privacy Policy</h1>
-          <p className="text-[11px] text-white/35 font-medium uppercase tracking-widest">
+          <h1 className="text-3xl font-black uppercase tracking-tighter text-on-background mb-1">Privacy Policy</h1>
+          <p className="text-[11px] text-on-surface-variant font-medium uppercase tracking-widest">
             Sweet News LLC · Denver, Colorado
           </p>
-          <p className="text-[11px] text-white/25 mt-2">Effective: May 30, 2026 · Last Updated: May 30, 2026</p>
+          <p className="text-[11px] text-on-surface-variant mt-2">Effective: May 30, 2026 · Last Updated: May 30, 2026</p>
         </div>
 
-        <div className="space-y-8 text-[14px] leading-relaxed text-white/70">
+        <div className="space-y-8 text-[14px] leading-relaxed text-on-background/75">
 
           <Section title="1. Introduction">
             <p>
@@ -51,11 +51,11 @@ export default function PrivacyView() {
           <Section title="2. Information We Collect">
             <SubSection title="2.1 Account Information">
               <p>
-                <strong className="text-white">Customers</strong> sign in using Google Sign-In (OAuth 2.0). We receive and
+                <strong className="text-on-background">Customers</strong> sign in using Google Sign-In (OAuth 2.0). We receive and
                 store your email address, display name, and profile photo URL.
               </p>
               <p className="mt-2">
-                <strong className="text-white">Driver applicants</strong> create accounts using email and password. We assign
+                <strong className="text-on-background">Driver applicants</strong> create accounts using email and password. We assign
                 each account an internal role (<code className="text-[#ff8090] text-[12px]">customer</code>,{' '}
                 <code className="text-[#ff8090] text-[12px]">driver_pending</code>,{' '}
                 <code className="text-[#ff8090] text-[12px]">driver_active</code>) that controls service access.
@@ -79,7 +79,7 @@ export default function PrivacyView() {
 
             <SubSection title="2.5 Approximate Location">
               <p>On first open, our server reads the approximate city and region from your IP address (via Vercel
-                infrastructure) to pre-fill your delivery address. <strong className="text-white">We do not collect
+                infrastructure) to pre-fill your delivery address. <strong className="text-on-background">We do not collect
                 or store your precise GPS location.</strong></p>
             </SubSection>
 
@@ -88,13 +88,13 @@ export default function PrivacyView() {
               <div className="overflow-x-auto">
                 <table className="w-full text-[12px] border-collapse">
                   <thead>
-                    <tr className="border-b border-white/[0.08]">
-                      <th className="text-left py-2 pr-4 text-white/50 font-black uppercase tracking-wider">Key</th>
-                      <th className="text-left py-2 pr-4 text-white/50 font-black uppercase tracking-wider">Contents</th>
-                      <th className="text-left py-2 text-white/50 font-black uppercase tracking-wider">Purpose</th>
+                    <tr className="border-b border-on-background/[0.09]">
+                      <th className="text-left py-2 pr-4 text-on-surface-variant font-black uppercase tracking-wider">Key</th>
+                      <th className="text-left py-2 pr-4 text-on-surface-variant font-black uppercase tracking-wider">Contents</th>
+                      <th className="text-left py-2 text-on-surface-variant font-black uppercase tracking-wider">Purpose</th>
                     </tr>
                   </thead>
-                  <tbody className="text-white/50">
+                  <tbody className="text-on-surface-variant">
                     {[
                       ['sweetnews-cart-storage', 'Cart items', 'Preserve cart between sessions'],
                       ['sweetnews-profile-storage', 'Delivery name, address, city/region', 'Pre-fill delivery form'],
@@ -102,7 +102,7 @@ export default function PrivacyView() {
                       ['sn-install-dismissed', 'Install prompt flag', 'Prevent repeated prompts'],
                       ['sn-driver-waitlist-submitted', 'Submission timestamp', 'Prevent duplicate submissions (30 days)'],
                     ].map(([key, contents, purpose]) => (
-                      <tr key={key} className="border-b border-white/[0.04]">
+                      <tr key={key} className="border-b border-on-background/[0.07]">
                         <td className="py-2 pr-4 font-mono text-[11px] text-[#ff8090]">{key}</td>
                         <td className="py-2 pr-4">{contents}</td>
                         <td className="py-2">{purpose}</td>
@@ -130,7 +130,7 @@ export default function PrivacyView() {
               ].map(([label, desc]) => (
                 <li key={label} className="flex gap-3">
                   <span className="text-[#e60023] font-black mt-0.5">✕</span>
-                  <span><strong className="text-white">{label}</strong> — {desc}</span>
+                  <span><strong className="text-on-background">{label}</strong> — {desc}</span>
                 </li>
               ))}
             </ul>
@@ -140,12 +140,12 @@ export default function PrivacyView() {
             <div className="overflow-x-auto">
               <table className="w-full text-[12px] border-collapse">
                 <thead>
-                  <tr className="border-b border-white/[0.08]">
-                    <th className="text-left py-2 pr-6 text-white/50 font-black uppercase tracking-wider">Purpose</th>
-                    <th className="text-left py-2 text-white/50 font-black uppercase tracking-wider">Data Used</th>
+                  <tr className="border-b border-on-background/[0.09]">
+                    <th className="text-left py-2 pr-6 text-on-surface-variant font-black uppercase tracking-wider">Purpose</th>
+                    <th className="text-left py-2 text-on-surface-variant font-black uppercase tracking-wider">Data Used</th>
                   </tr>
                 </thead>
-                <tbody className="text-white/50">
+                <tbody className="text-on-surface-variant">
                   {[
                     ['Authenticate and maintain session', 'Email, Firebase Auth credentials'],
                     ['Process and fulfill deliveries', 'Name, address, items, payment reference'],
@@ -156,7 +156,7 @@ export default function PrivacyView() {
                     ['Review driver applications', 'Name, email, phone, city, vehicle type'],
                     ['Prevent duplicate waitlist submissions', 'Email, user agent, localStorage flag'],
                   ].map(([purpose, data]) => (
-                    <tr key={purpose} className="border-b border-white/[0.04]">
+                    <tr key={purpose} className="border-b border-on-background/[0.07]">
                       <td className="py-2.5 pr-6">{purpose}</td>
                       <td className="py-2.5">{data}</td>
                     </tr>
@@ -207,12 +207,12 @@ export default function PrivacyView() {
             <div className="overflow-x-auto">
               <table className="w-full text-[12px] border-collapse">
                 <thead>
-                  <tr className="border-b border-white/[0.08]">
-                    <th className="text-left py-2 pr-6 text-white/50 font-black uppercase tracking-wider">Data Type</th>
-                    <th className="text-left py-2 text-white/50 font-black uppercase tracking-wider">Retention Period</th>
+                  <tr className="border-b border-on-background/[0.09]">
+                    <th className="text-left py-2 pr-6 text-on-surface-variant font-black uppercase tracking-wider">Data Type</th>
+                    <th className="text-left py-2 text-on-surface-variant font-black uppercase tracking-wider">Retention Period</th>
                   </tr>
                 </thead>
-                <tbody className="text-white/50">
+                <tbody className="text-on-surface-variant">
                   {[
                     ['Customer account', 'Retained while active. Deleted upon written request.'],
                     ['Order history', 'Retained for 2 years from order date, then deleted.'],
@@ -221,15 +221,15 @@ export default function PrivacyView() {
                     ['Push notification tokens', 'Deleted when you revoke permission or delete your account.'],
                     ['Browser localStorage', 'Persists until you clear browser site data. Not controlled by Sweet News.'],
                   ].map(([type, period]) => (
-                    <tr key={type} className="border-b border-white/[0.04]">
-                      <td className="py-2.5 pr-6 text-white/70">{type}</td>
+                    <tr key={type} className="border-b border-on-background/[0.07]">
+                      <td className="py-2.5 pr-6 text-on-background/75">{type}</td>
                       <td className="py-2.5">{period}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            <p className="mt-4">To request deletion, email <strong className="text-white">sweetnewsowl@gmail.com</strong> with
+            <p className="mt-4">To request deletion, email <strong className="text-on-background">sweetnewsowl@gmail.com</strong> with
               subject "Data Deletion Request."</p>
           </Section>
 
@@ -244,16 +244,16 @@ export default function PrivacyView() {
               ].map(([right, desc]) => (
                 <li key={right} className="flex gap-3">
                   <span className="text-emerald-400 font-black mt-0.5">✓</span>
-                  <span><strong className="text-white">{right}</strong> — {desc}</span>
+                  <span><strong className="text-on-background">{right}</strong> — {desc}</span>
                 </li>
               ))}
             </ul>
-            <p className="mt-4">Contact us at <strong className="text-white">sweetnewsowl@gmail.com</strong> to exercise any right. We aim to respond within 30 days.</p>
+            <p className="mt-4">Contact us at <strong className="text-on-background">sweetnewsowl@gmail.com</strong> to exercise any right. We aim to respond within 30 days.</p>
           </Section>
 
           <Section title="10. Children's Privacy">
             <p>Sweet News is not directed to children under 13 and we do not knowingly collect information from anyone under
-              13. Contact <strong className="text-white">sweetnewsowl@gmail.com</strong> if you believe a child under 13 has
+              13. Contact <strong className="text-on-background">sweetnewsowl@gmail.com</strong> if you believe a child under 13 has
               provided us information and we will promptly delete it.</p>
           </Section>
 
@@ -265,7 +265,7 @@ export default function PrivacyView() {
 
           <Section title="12. Contact Us">
             <address className="not-italic">
-              <strong className="text-white">Sweet News LLC</strong><br />
+              <strong className="text-on-background">Sweet News LLC</strong><br />
               Denver, Colorado<br />
               <a href="mailto:sweetnewsowl@gmail.com" className="text-[#e60023] hover:text-[#ff2060] transition-colors">
                 sweetnewsowl@gmail.com
@@ -273,7 +273,7 @@ export default function PrivacyView() {
             </address>
           </Section>
 
-          <div className="pt-6 border-t border-white/[0.05] text-center text-[10px] text-white/20 uppercase tracking-widest font-black">
+          <div className="pt-6 border-t border-on-background/[0.07] text-center text-[10px] text-on-background/30 uppercase tracking-widest font-black">
             Sweet News LLC · Denver, CO · Est. 2023
           </div>
         </div>
@@ -285,7 +285,7 @@ export default function PrivacyView() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section>
-      <h2 className="text-[11px] font-black uppercase tracking-[0.2em] text-white/40 mb-4 pb-2 border-b border-white/[0.06]">
+      <h2 className="text-[11px] font-black uppercase tracking-[0.2em] text-on-surface-variant mb-4 pb-2 border-b border-on-background/[0.07]">
         {title}
       </h2>
       <div className="space-y-3">{children}</div>
@@ -296,7 +296,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 function SubSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="mt-4">
-      <h3 className="text-[12px] font-black text-white/60 mb-2">{title}</h3>
+      <h3 className="text-[12px] font-black text-on-surface-variant mb-2">{title}</h3>
       {children}
     </div>
   );

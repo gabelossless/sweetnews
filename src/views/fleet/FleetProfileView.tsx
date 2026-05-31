@@ -62,7 +62,7 @@ export default function FleetProfileView() {
       <h1 className="text-3xl font-black tracking-tight mb-6">Profile</h1>
 
       {/* Avatar row */}
-      <div className="flex items-center gap-4 mb-8 p-5 rounded-[24px] bg-white/[0.03] border border-white/[0.06]">
+      <div className="flex items-center gap-4 mb-8 p-5 rounded-[24px] bg-on-background/[0.03] border border-on-background/[0.07]">
         {profile.photoURL ? (
           <img
             src={profile.photoURL}
@@ -71,12 +71,12 @@ export default function FleetProfileView() {
           />
         ) : (
           <div className="w-16 h-16 rounded-full bg-amber-400/10 border border-amber-400/20 flex items-center justify-center flex-shrink-0">
-            <User className="w-8 h-8 text-amber-400/60" />
+            <User className="w-8 h-8 text-amber-600/60" />
           </div>
         )}
         <div className="flex-1 min-w-0">
           <p className="font-black text-lg truncate">{profile.displayName || 'Driver'}</p>
-          <p className="text-[10px] text-white/30 font-black uppercase tracking-widest truncate">
+          <p className="text-[10px] text-on-surface-variant font-black uppercase tracking-widest truncate">
             {user?.email}
           </p>
         </div>
@@ -84,19 +84,19 @@ export default function FleetProfileView() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 gap-4 mb-8">
-        <div className="p-4 rounded-[20px] bg-white/[0.02] border border-white/[0.05] text-center">
-          <Star className="w-5 h-5 text-amber-400 mx-auto mb-2" fill="#f59e0b" />
+        <div className="p-4 rounded-[20px] bg-on-background/[0.03] border border-on-background/[0.07] text-center">
+          <Star className="w-5 h-5 text-amber-500 mx-auto mb-2" fill="#f59e0b" />
           <p className="text-xl font-black">
             {profile.averageRating > 0 ? profile.averageRating.toFixed(1) : '—'}
           </p>
-          <p className="text-[8px] uppercase tracking-widest text-white/30 font-black mt-0.5">
+          <p className="text-[8px] uppercase tracking-widest text-on-surface-variant font-black mt-0.5">
             Rating
           </p>
         </div>
-        <div className="p-4 rounded-[20px] bg-white/[0.02] border border-white/[0.05] text-center">
-          <Package className="w-5 h-5 text-white/40 mx-auto mb-2" />
+        <div className="p-4 rounded-[20px] bg-on-background/[0.03] border border-on-background/[0.07] text-center">
+          <Package className="w-5 h-5 text-on-surface-variant mx-auto mb-2" />
           <p className="text-xl font-black">{profile.totalDeliveries}</p>
-          <p className="text-[8px] uppercase tracking-widest text-white/30 font-black mt-0.5">
+          <p className="text-[8px] uppercase tracking-widest text-on-surface-variant font-black mt-0.5">
             Deliveries
           </p>
         </div>
@@ -104,7 +104,7 @@ export default function FleetProfileView() {
 
       {/* Edit form */}
       <div className="space-y-4 mb-8">
-        <p className="text-[9px] uppercase tracking-[0.3em] text-white/30 font-black px-1">
+        <p className="text-[9px] uppercase tracking-[0.3em] text-on-surface-variant font-black px-1">
           Edit Profile
         </p>
         <Input
@@ -123,7 +123,7 @@ export default function FleetProfileView() {
           onClick={handleSave}
           loading={saving}
           fullWidth
-          className="h-12 rounded-2xl font-black text-[11px] uppercase tracking-widest border border-amber-400/30 text-amber-400 bg-amber-400/[0.07] hover:bg-amber-400/[0.15] transition-colors"
+          className="h-12 rounded-2xl font-black text-[11px] uppercase tracking-widest border border-amber-400/30 text-amber-600 bg-amber-400/[0.07] hover:bg-amber-400/[0.15] transition-colors"
         >
           {saved ? '✓ Saved' : <><Save className="w-4 h-4 mr-2 inline" /> Save Changes</>}
         </Button>
@@ -132,7 +132,7 @@ export default function FleetProfileView() {
       {/* Sign out */}
       <button
         onClick={() => signOut(auth)}
-        className="flex items-center gap-2 mx-auto text-white/30 hover:text-white/70 transition-colors text-[11px] font-black uppercase tracking-widest py-3"
+        className="flex items-center gap-2 mx-auto text-on-surface-variant hover:text-on-background transition-colors text-[11px] font-black uppercase tracking-widest py-3"
       >
         <LogOut size={14} /> Sign Out
       </button>

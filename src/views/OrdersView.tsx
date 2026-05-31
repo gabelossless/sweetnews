@@ -33,9 +33,9 @@ export function OrdersView({ orders, onStartShopping }: OrdersViewProps) {
     >
       {/* Header */}
       <header className="mb-6 flex items-baseline justify-between">
-        <h1 className="text-3xl font-black text-white tracking-tight">Orders</h1>
+        <h1 className="text-3xl font-black text-on-background tracking-tight">Orders</h1>
         {activeOrders.length > 0 && (
-          <span className="text-[11px] text-white/50 font-medium">
+          <span className="text-[11px] text-on-surface-variant font-medium">
             {activeOrders.length} active
           </span>
         )}
@@ -44,19 +44,19 @@ export function OrdersView({ orders, onStartShopping }: OrdersViewProps) {
       {/* Empty state */}
       {orders.length === 0 && (
         <div className="flex flex-col items-center justify-center text-center min-h-[50vh] px-6">
-          <div className="w-14 h-14 rounded-full bg-white/[0.04] flex items-center justify-center mb-5">
-            <Package className="w-6 h-6 text-white/40" strokeWidth={1.5} />
+          <div className="w-14 h-14 rounded-full bg-on-background/[0.05] flex items-center justify-center mb-5">
+            <Package className="w-6 h-6 text-on-surface-variant" strokeWidth={1.5} />
           </div>
-          <h3 className="text-xl font-black text-white tracking-tight mb-2">
+          <h3 className="text-xl font-black text-on-background tracking-tight mb-2">
             No orders yet
           </h3>
-          <p className="text-sm text-white/45 leading-relaxed max-w-[260px] mb-6">
+          <p className="text-sm text-on-surface-variant leading-relaxed max-w-[260px] mb-6">
             Place your first order to start tracking it here.
           </p>
           <motion.button
             whileTap={{ scale: 0.97 }}
             onClick={onStartShopping}
-            className="px-5 py-2.5 bg-white text-black hover:bg-white/90 transition-colors text-[13px] font-bold rounded-full"
+            className="px-5 py-2.5 bg-on-background text-background hover:bg-on-background/90 transition-colors text-[13px] font-bold rounded-full"
           >
             Browse shop
           </motion.button>
@@ -85,7 +85,7 @@ export function OrdersView({ orders, onStartShopping }: OrdersViewProps) {
       {/* Past orders — compact list */}
       {pastOrders.length > 0 && (
         <section className={activeOrders.length > 0 ? 'mt-8' : ''}>
-          <p className="text-[10px] uppercase tracking-[0.25em] text-white/30 font-bold px-1 mb-2">
+          <p className="text-[10px] uppercase tracking-[0.25em] text-on-surface-variant font-bold px-1 mb-2">
             Past orders
           </p>
           <div className="space-y-2">
@@ -106,23 +106,23 @@ function PastOrderRow({ order }: { order: ActiveOrder }) {
   const thumbs = order.items.slice(0, 2);
 
   return (
-    <div className="rounded-[20px] bg-white/[0.015] border border-white/[0.05] overflow-hidden">
+    <div className="rounded-[20px] bg-on-background/[0.03] border border-on-background/[0.07] overflow-hidden">
       <button
         onClick={() => setExpanded((v) => !v)}
-        className="w-full flex items-center gap-3 p-3 hover:bg-white/[0.02] transition-colors text-left"
+        className="w-full flex items-center gap-3 p-3 hover:bg-on-background/[0.03] transition-colors text-left"
       >
         {/* Thumbnails stack */}
         <div className="relative flex-shrink-0 flex">
           {thumbs.map((item, i) => (
             <div
               key={item.id}
-              className="w-9 h-9 rounded-lg border border-black bg-white/[0.04] flex items-center justify-center overflow-hidden flex-shrink-0"
+              className="w-9 h-9 rounded-lg border border-background bg-on-background/[0.05] flex items-center justify-center overflow-hidden flex-shrink-0"
               style={{ marginLeft: i === 0 ? 0 : -10, zIndex: thumbs.length - i }}
             >
               {item.image ? (
                 <img src={item.image} alt="" className="w-full h-full object-cover" />
               ) : (
-                <span className="text-[7px] font-black text-white/20 uppercase text-center leading-tight px-0.5">
+                <span className="text-[7px] font-black text-on-background/30 uppercase text-center leading-tight px-0.5">
                   {item.name.split(' ').slice(0, 2).join('\n')}
                 </span>
               )}
@@ -132,13 +132,13 @@ function PastOrderRow({ order }: { order: ActiveOrder }) {
 
         {/* Middle */}
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-bold text-white truncate">
+          <p className="text-sm font-bold text-on-background truncate">
             ${order.total.toFixed(2)}
-            <span className="text-white/30 font-normal ml-1.5">
+            <span className="text-on-surface-variant font-normal ml-1.5">
               · {itemCount} {itemCount === 1 ? 'item' : 'items'}
             </span>
           </p>
-          <p className="text-[11px] text-white/40 truncate mt-0.5">
+          <p className="text-[11px] text-on-surface-variant truncate mt-0.5">
             #{shortId} · {order.date}
           </p>
         </div>
@@ -148,15 +148,15 @@ function PastOrderRow({ order }: { order: ActiveOrder }) {
           <span
             className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
               order.status === 'delivered'
-                ? 'text-emerald-400 bg-emerald-500/[0.08]'
-                : 'text-white/35 bg-white/[0.04]'
+                ? 'text-emerald-600 bg-emerald-500/[0.08]'
+                : 'text-on-surface-variant bg-on-background/[0.05]'
             }`}
           >
             {STATUS_LABELS[order.status] ?? order.status}
           </span>
           <ChevronDown
             size={14}
-            className={`text-white/30 transition-transform ${expanded ? 'rotate-180' : ''}`}
+            className={`text-on-surface-variant transition-transform ${expanded ? 'rotate-180' : ''}`}
           />
         </div>
       </button>

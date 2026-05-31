@@ -50,20 +50,20 @@ export default function FleetDashboardView({
   onStatusUpdate,
 }: FleetDashboardViewProps) {
   return (
-    <div className="min-h-screen bg-[#050505] text-white pb-32">
+    <div className="min-h-screen bg-surface text-on-background pb-32">
       {/* ── Dashboard tab ──────────────────────────────── */}
       {activeTab === 'dashboard' && (
         <div className="p-6 pt-10">
           <header className="flex items-center justify-between mb-8">
             <div>
               <h1 className="text-[32px] font-black tracking-tight leading-none">Deliveries</h1>
-              <p className="text-[10px] text-white/35 flex items-center gap-1.5 mt-1.5 uppercase tracking-[0.2em] font-black">
+              <p className="text-[10px] text-on-surface-variant flex items-center gap-1.5 mt-1.5 uppercase tracking-[0.2em] font-black">
                 <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
                 Active & Ready
               </p>
             </div>
             <div className="text-right">
-              <p className="text-[9px] uppercase tracking-widest text-white/25 font-black">Assigned</p>
+              <p className="text-[9px] uppercase tracking-widest text-on-surface-variant font-black">Assigned</p>
               <p
                 className="text-3xl font-black"
                 style={{ background: 'linear-gradient(135deg,#f59e0b,#f97316)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
@@ -74,7 +74,7 @@ export default function FleetDashboardView({
           </header>
 
           <div className="space-y-5">
-            <p className="text-[9px] uppercase tracking-[0.3em] text-white/25 font-black px-1">
+            <p className="text-[9px] uppercase tracking-[0.3em] text-on-surface-variant font-black px-1">
               Active
             </p>
 
@@ -105,7 +105,7 @@ export default function FleetDashboardView({
                         </h3>
                       </div>
                       <div className="text-right">
-                        <p className="text-[9px] text-white/25 font-black uppercase tracking-widest">Total</p>
+                        <p className="text-[9px] text-on-surface-variant font-black uppercase tracking-widest">Total</p>
                         <p className="text-[18px] font-black">${order.total.toFixed(2)}</p>
                       </div>
                     </div>
@@ -115,11 +115,11 @@ export default function FleetDashboardView({
                       href={getMapUrl(order.address)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-[11px] font-medium mb-4 rounded-[16px] py-2.5 px-3.5 border border-white/[0.07] bg-white/[0.03] hover:bg-white/[0.07] active:bg-white/[0.1] transition-colors"
+                      className="flex items-center gap-2 text-[11px] font-medium mb-4 rounded-[16px] py-2.5 px-3.5 border border-on-background/[0.07] bg-on-background/[0.03] hover:bg-on-background/[0.05] active:bg-on-background/[0.07] transition-colors"
                     >
                       <MapPin className="w-3.5 h-3.5 flex-shrink-0" style={{ color: s.text }} />
-                      <span className="truncate text-white/65 flex-1">{order.address}</span>
-                      <Navigation className="w-3 h-3 flex-shrink-0 text-white/25" />
+                      <span className="truncate text-on-background/75 flex-1">{order.address}</span>
+                      <Navigation className="w-3 h-3 flex-shrink-0 text-on-surface-variant" />
                     </a>
 
                     {/* Items */}
@@ -127,10 +127,10 @@ export default function FleetDashboardView({
                       {order.items.map((item, idx) => (
                         <div
                           key={idx}
-                          className="flex justify-between text-[10px] py-1.5 border-b border-white/[0.04] last:border-0"
+                          className="flex justify-between text-[10px] py-1.5 border-b border-on-background/[0.07] last:border-0"
                         >
-                          <span className="text-white/45">{item.quantity}× {item.name}</span>
-                          <span className="text-white/25">${(item.price * item.quantity).toFixed(2)}</span>
+                          <span className="text-on-surface-variant">{item.quantity}× {item.name}</span>
+                          <span className="text-on-surface-variant">${(item.price * item.quantity).toFixed(2)}</span>
                         </div>
                       ))}
                     </div>
@@ -150,9 +150,9 @@ export default function FleetDashboardView({
               })}
 
               {activeOrders.length === 0 && (
-                <div className="py-16 text-center bg-white/[0.01] border border-dashed border-white/[0.07] rounded-[28px]">
-                  <Package className="w-10 h-10 text-white/10 mx-auto mb-3" />
-                  <p className="text-white/25 text-[11px] font-black uppercase tracking-widest">
+                <div className="py-16 text-center bg-on-background/[0.03] border border-dashed border-on-background/[0.07] rounded-[28px]">
+                  <Package className="w-10 h-10 text-on-background/30 mx-auto mb-3" />
+                  <p className="text-on-surface-variant text-[11px] font-black uppercase tracking-widest">
                     Waiting for assignments...
                   </p>
                 </div>
@@ -169,11 +169,11 @@ export default function FleetDashboardView({
       {activeTab === 'profile' && <FleetProfileView />}
 
       {/* ── Bottom nav ─────────────────────────────────── */}
-      <div className="fixed bottom-6 left-4 right-4 h-[62px] bg-black/90 backdrop-blur-xl border border-white/[0.08] rounded-[22px] flex items-center justify-around px-8 z-50">
+      <div className="fixed bottom-6 left-4 right-4 h-[62px] bg-background/80 backdrop-blur-xl border border-on-background/[0.09] rounded-[22px] flex items-center justify-around px-8 z-50">
         <button
           onClick={() => onTabChange('dashboard')}
           className={`flex flex-col items-center gap-1 transition-colors ${
-            activeTab === 'dashboard' ? 'text-amber-400' : 'text-white/25 hover:text-white/50'
+            activeTab === 'dashboard' ? 'text-amber-600' : 'text-on-surface-variant hover:text-on-background'
           }`}
         >
           <Box className="w-5 h-5" />
@@ -182,7 +182,7 @@ export default function FleetDashboardView({
         <button
           onClick={() => onTabChange('history')}
           className={`flex flex-col items-center gap-1 transition-colors ${
-            activeTab === 'history' ? 'text-amber-400' : 'text-white/25 hover:text-white/50'
+            activeTab === 'history' ? 'text-amber-600' : 'text-on-surface-variant hover:text-on-background'
           }`}
         >
           <Clock className="w-5 h-5" />
@@ -191,7 +191,7 @@ export default function FleetDashboardView({
         <button
           onClick={() => onTabChange('profile')}
           className={`flex flex-col items-center gap-1 transition-colors ${
-            activeTab === 'profile' ? 'text-amber-400' : 'text-white/25 hover:text-white/50'
+            activeTab === 'profile' ? 'text-amber-600' : 'text-on-surface-variant hover:text-on-background'
           }`}
         >
           <User className="w-5 h-5" />

@@ -16,8 +16,8 @@ export function CategoryChip({ name, icon, isActive, onClick }: CategoryChipProp
         h-11 px-5 rounded-full flex items-center gap-2 whitespace-nowrap select-none
         text-[13px] font-bold tracking-wide transition-colors duration-150
         ${isActive
-          ? 'bg-white text-black shadow-[0_4px_20px_rgba(255,255,255,0.12)]'
-          : 'bg-white/[0.05] text-white/55 border border-white/[0.07] active:bg-white/[0.10]'
+          ? 'bg-secondary text-on-secondary shadow-[0_4px_20px_rgba(42,26,31,0.12)]'
+          : 'bg-on-background/[0.05] text-on-surface-variant border border-on-background/[0.07] active:bg-on-background/[0.07]'
         }
       `}
     >
