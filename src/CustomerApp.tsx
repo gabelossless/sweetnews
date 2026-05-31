@@ -21,7 +21,7 @@ import { NavButton } from './components/molecules/NavButton';
 import { CartSheet } from './components/organisms/CartSheet';
 import { CheckoutForm } from './components/organisms/CheckoutForm';
 import { InstallPrompt } from './components/pwa/InstallPrompt';
-import { Logo } from './components/atoms/Logo';
+import { OwlMascot } from './components/atoms/OwlMascot';
 
 // Views
 import { ShopView } from './views/ShopView';
@@ -137,6 +137,12 @@ export default function CustomerApp() {
   };
 
   const handleCheckoutTrigger = () => {
+    if (!user) {
+      showToast('Sign in to place an order');
+      setIsCartOpen(false);
+      setActiveTab('profile');
+      return;
+    }
     setIsCartOpen(false);
     setIsCheckoutOpen(true);
   };
@@ -149,117 +155,79 @@ export default function CustomerApp() {
   };
 
   const handleAddToCart = (product: Product) => {
+    const isNew = !cartItems.some((i) => i.id === product.id);
     addItem({
       id: product.id,
       name: product.name,
       price: product.price,
       image: product.image
     });
-    
-    showToast(`Added ${product.name} to cart`);
+    if (isNew) showToast(`Added to cart`);
   };
 
   return (
-    <div className={`bg-background text-on-background min-h-screen pb-[120px] pt-[110px] sm:pt-[130px] font-body-md selection:bg-white selection:text-black overflow-x-hidden ${isStandalone ? 'standalone-layout' : ''}`}>
-      
+    <div className={`bg-background text-on-background min-h-screen pb-[120px] pt-[128px] font-body-md selection:bg-white selection:text-black overflow-x-hidden ${isStandalone ? 'standalone-layout' : ''}`}>
+
       {/* TopAppBar */}
-      <header className="fixed top-0 w-full flex justify-between items-center px-6 pt-[max(env(safe-area-inset-top,54px),24px)] pb-6 bg-gradient-to-b from-[#000000] via-[#000000]/80 to-transparent z-50 md:max-w-md md:mx-auto md:left-1/2 md:-translate-x-1/2">
-        <div className="flex items-center gap-3">
-          {(() => {
-            const initial =
-              user?.displayName?.[0]?.toUpperCase() ??
-              user?.email?.[0]?.toUpperCase() ??
-              null;
-            return (
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setActiveTab('profile')}
-                aria-label={user ? 'View member profile' : 'Sign in to your account'}
-                className="w-12 h-12 rounded-full overflow-hidden border border-white/[0.08] shadow-sm cursor-pointer relative group bg-white/[0.04]"
-              >
-                {user?.photoURL ? (
-                  <img
-                    alt=""
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-                    src={user.photoURL}
-                  />
-                ) : initial ? (
-                  <div className="w-full h-full flex items-center justify-center text-white text-base font-black tracking-wide">
-                    {initial}
-                  </div>
-                ) : (
-                  <Logo size={48} className="w-full h-full" />
-                )}
-                {/* Connection status dot — green online, dim red offline */}
-                <div
-                  className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-black ${
-                    isOnline
-                      ? 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.7)]'
-                      : 'bg-white/15'
-                  }`}
-                />
-              </motion.button>
-            );
-          })()}
-        </div>
-        <button
-          type="button"
-          onClick={() => setActiveTab('shop')}
-          aria-label="Sweet News — go to shop"
-          className="text-[20px] font-headline-lg font-black tracking-[0.25em] text-white uppercase drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] cursor-pointer select-none bg-transparent border-0 p-0"
-        >
-          SWEETNEWS
-        </button>
-        <div className="flex items-center gap-3">
-          <motion.button 
-            whileTap={{ scale: 0.9 }}
-            whileHover={{ scale: 1.05 }}
-            onClick={() => setActiveTab('search')}
-            aria-label="Search delicacies"
-            className={`w-12 h-12 flex items-center justify-center rounded-full transition-all duration-200 shadow-sm border ${activeTab === 'search' ? 'btn-brand border-transparent shadow-[0_4px_20px_rgba(230,0,35,0.4)]' : 'bg-white/5 text-white hover:bg-white/10 border-white/[0.06]'}`}
-          >
-            <Search className="w-[22px] h-[22px]" strokeWidth={2.5} />
-          </motion.button>
-          
-          <motion.button 
-            whileTap={{ scale: 0.9 }}
-            whileHover={{ scale: 1.05 }}
-            onClick={() => setIsCartOpen(true)}
-            aria-label="Open shopping cart"
-            className="w-12 h-12 relative flex items-center justify-center rounded-full text-white hover:bg-white/10 transition-colors duration-200 shadow-sm border border-white/[0.06] bg-white/5"
-          >
-            <motion.div
-              key={cartItemsCount}
-              initial={{ scale: 1.2, rotate: -10 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-black/85 backdrop-blur-xl border-b border-white/[0.05] md:w-[430px] md:left-1/2 md:right-auto md:-translate-x-1/2">
+        <div className="px-5 pt-[max(env(safe-area-inset-top),12px)]">
+          {/* Row 1: Brand + Cart */}
+          <div className="flex items-center justify-between py-2.5">
+            <button
+              type="button"
+              onClick={() => setActiveTab('shop')}
+              aria-label="Sweet News — go to shop"
+              className="flex items-center gap-2 cursor-pointer select-none bg-transparent border-0 p-0"
             >
-              <ShoppingBag className="w-[22px] h-[22px]" strokeWidth={2.5} />
-            </motion.div>
-            <AnimatePresence>
-              {cartItemsCount > 0 && (
-                <motion.div 
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  exit={{ scale: 0 }}
-                  className="absolute -top-1 -right-1 w-5 h-5 bg-white text-black rounded-full flex items-center justify-center font-label-bold text-[11px] shadow-[0_2px_8px_rgba(255,255,255,0.4)]"
-                >
-                  <motion.span
-                    key={cartItemsCount}
-                    initial={{ scale: 1.5 }}
+              <OwlMascot size={34} />
+              <span className="text-[17px] font-black tracking-tight text-white">Sweet News</span>
+            </button>
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              onClick={() => setIsCartOpen(true)}
+              aria-label="Open shopping cart"
+              className="w-10 h-10 relative flex items-center justify-center rounded-full text-white hover:bg-white/10 transition-colors duration-200"
+            >
+              <motion.div
+                key={cartItemsCount}
+                initial={{ scale: 1.2, rotate: -10 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+              >
+                <ShoppingBag className="w-[22px] h-[22px]" strokeWidth={2.5} />
+              </motion.div>
+              <AnimatePresence>
+                {cartItemsCount > 0 && (
+                  <motion.div
+                    initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
+                    exit={{ scale: 0 }}
+                    className="absolute -top-0.5 -right-0.5 w-4.5 h-4.5 bg-[#ff2d55] text-white rounded-full flex items-center justify-center text-[10px] font-black shadow-[0_2px_6px_rgba(255,45,85,0.5)]"
                   >
-                    {cartItemsCount}
-                  </motion.span>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.button>
+                    <motion.span key={cartItemsCount} initial={{ scale: 1.5 }} animate={{ scale: 1 }}>
+                      {cartItemsCount}
+                    </motion.span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.button>
+          </div>
+          {/* Row 2: Search bar */}
+          <div className="pb-3" onClick={() => setActiveTab('search')}>
+            <div
+              role="button"
+              aria-label="Search products"
+              className="w-full h-10 pl-4 pr-4 glass-panel rounded-full flex items-center gap-2.5 text-white/35 text-[11px] tracking-widest uppercase font-black cursor-pointer hover:bg-white/[0.05] transition-colors"
+            >
+              <Search className="w-3.5 h-3.5 flex-shrink-0" strokeWidth={2.5} />
+              <span>Search products...</span>
+            </div>
+          </div>
         </div>
       </header>
 
       {/* Main Pages Container */}
-      <main className="px-6 md:max-w-4xl md:mx-auto">
+      <main className="px-6 max-w-[430px] mx-auto">
         <AnimatePresence mode="wait">
           
           {/* 1. SHOP VIEW */}
@@ -268,7 +236,6 @@ export default function CustomerApp() {
               selectedCategory={selectedCategory}
               setSelectedCategory={setSelectedCategory}
               onAddToCart={handleAddToCart}
-              onNavigateToSearch={() => setActiveTab('search')}
               onNavigateToNews={() => setActiveTab('news')}
             />
           )}
@@ -306,7 +273,7 @@ export default function CustomerApp() {
       </main>
 
       {/* BottomNavBar Pill */}
-      <nav className="fixed bottom-[calc(env(safe-area-inset-bottom,34px)+16px)] left-1/2 -translate-x-1/2 w-[90%] md:max-w-sm z-50 flex justify-around items-center px-4 py-3.5 bg-[#050505]/70 backdrop-blur-3xl rounded-[32px] border border-white/[0.08] shadow-[0_20px_40px_rgba(0,0,0,0.8),_inset_0_1px_0_rgba(255,255,255,0.1)] transition-all duration-300">
+      <nav className="fixed bottom-[calc(env(safe-area-inset-bottom,0px)+16px)] left-1/2 -translate-x-1/2 w-[92%] max-w-[400px] z-50 flex justify-around items-center px-4 py-3.5 bg-[#050505]/70 backdrop-blur-3xl rounded-[32px] border border-white/[0.08] shadow-[0_20px_40px_rgba(0,0,0,0.8),_inset_0_1px_0_rgba(255,255,255,0.1)] transition-all duration-300">
         <NavButton 
           icon={<Store />} 
           label="Shop" 

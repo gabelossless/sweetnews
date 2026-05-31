@@ -45,6 +45,7 @@ export function CheckoutForm({
 
   const [deliveryName, setLocalName] = useState(savedName);
   const [deliveryAddress, setLocalAddress] = useState(savedAddress);
+  const [deliveryApt, setLocalApt] = useState('');
   const [cardError, setCardError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -101,9 +102,14 @@ export function CheckoutForm({
         return;
       }
 
+      const sanitizedApt = sanitizeString(deliveryApt).trim();
+      const fullAddress = sanitizedApt
+        ? `${sanitizeString(deliveryAddress)}, ${sanitizedApt}`
+        : sanitizeString(deliveryAddress);
+
       onPlaceOrder({
         name: sanitizeString(deliveryName),
-        address: sanitizeString(deliveryAddress),
+        address: fullAddress,
         paymentIntentId: paymentIntent.id,
       });
     } catch {
@@ -118,20 +124,23 @@ export function CheckoutForm({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[80] flex items-end md:items-center justify-center">
+        <>
+          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-[80] bg-black/60 backdrop-blur-sm"
           />
+          {/* Positioning wrapper */}
+          <div className="fixed inset-0 z-[81] flex items-end md:items-center justify-center pointer-events-none">
           <motion.div
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed bottom-0 left-0 w-full h-[95vh] bg-[#000]/90 backdrop-blur-[50px] rounded-t-[48px] z-[70] flex flex-col shadow-[0_-20px_60px_rgba(0,0,0,0.9),_inset_0_1px_0_rgba(255,255,255,0.1)] border-t border-white/[0.08] md:max-w-md md:mx-auto md:left-1/2 md:-translate-x-1/2"
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="pointer-events-auto w-full max-w-[430px] h-[95vh] md:h-auto md:max-h-[90vh] bg-[#000]/90 backdrop-blur-[50px] rounded-t-[48px] md:rounded-[32px] flex flex-col shadow-[0_-20px_60px_rgba(0,0,0,0.9),_inset_0_1px_0_rgba(255,255,255,0.1)] border-t border-white/[0.08] md:border md:border-white/[0.08]"
           >
             <div className="flex justify-center pt-3 pb-2">
               <div className="w-12 h-1.5 bg-white/10 rounded-full" />
@@ -188,10 +197,13 @@ export function CheckoutForm({
                           onChange={(e) => setLocalAddress(e.target.value)}
                           className="bg-[#0a0a0a]"
                         />
-                        <div className="flex gap-3">
-                          <Input type="text" placeholder="Apt/Suite" className="w-1/3 bg-[#0a0a0a]" />
-                          <Input type="text" placeholder="Instructions" className="w-2/3 bg-[#0a0a0a]" />
-                        </div>
+                        <Input
+                          type="text"
+                          placeholder="Apt / Suite (optional)"
+                          value={deliveryApt}
+                          onChange={(e) => setLocalApt(e.target.value)}
+                          className="bg-[#0a0a0a]"
+                        />
                       </div>
                     </section>
  
@@ -257,7 +269,8 @@ export function CheckoutForm({
               </>
             )}
           </motion.div>
-        </div>
+          </div>
+        </>
       )}
     </AnimatePresence>
   );

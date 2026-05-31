@@ -112,19 +112,21 @@ function PastOrderRow({ order }: { order: ActiveOrder }) {
         className="w-full flex items-center gap-3 p-3 hover:bg-white/[0.02] transition-colors text-left"
       >
         {/* Thumbnails stack */}
-        <div className="relative flex-shrink-0">
+        <div className="relative flex-shrink-0 flex">
           {thumbs.map((item, i) => (
-            <img
+            <div
               key={item.id}
-              src={item.image}
-              alt=""
-              className="w-9 h-9 rounded-lg object-cover border border-black"
-              style={{
-                marginLeft: i === 0 ? 0 : -14,
-                zIndex: thumbs.length - i,
-                position: i === 0 ? 'static' : 'relative',
-              }}
-            />
+              className="w-9 h-9 rounded-lg border border-black bg-white/[0.04] flex items-center justify-center overflow-hidden flex-shrink-0"
+              style={{ marginLeft: i === 0 ? 0 : -10, zIndex: thumbs.length - i }}
+            >
+              {item.image ? (
+                <img src={item.image} alt="" className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-[7px] font-black text-white/20 uppercase text-center leading-tight px-0.5">
+                  {item.name.split(' ').slice(0, 2).join('\n')}
+                </span>
+              )}
+            </div>
           ))}
         </div>
 

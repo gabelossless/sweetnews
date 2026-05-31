@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { Moon, Zap, PackageOpen } from 'lucide-react';
+import { Moon, PackageOpen } from 'lucide-react';
 import { Product } from '../types';
 import { categories, products } from '../data/products';
 import { CategoryChip } from '../components/molecules/CategoryChip';
@@ -10,7 +10,6 @@ interface ShopViewProps {
   selectedCategory: string;
   setSelectedCategory: (category: string) => void;
   onAddToCart: (product: Product) => void;
-  onNavigateToSearch: () => void;
   onNavigateToNews: () => void;
 }
 
@@ -18,7 +17,6 @@ export function ShopView({
   selectedCategory,
   setSelectedCategory,
   onAddToCart,
-  onNavigateToSearch,
   onNavigateToNews,
 }: ShopViewProps) {
   const filteredHorizontal = products.filter(
@@ -36,44 +34,6 @@ export function ShopView({
       exit={{ opacity: 0, y: -18 }}
       transition={{ duration: 0.28, ease: [0.25, 0.1, 0.25, 1] }}
     >
-      {/* Hero Header */}
-      <section className="mt-2 mb-4 px-2">
-        <motion.h1
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
-          className="font-display-xl text-[36px] uppercase font-black leading-[0.85] tracking-tighter mb-3 text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.12)]"
-        >
-          <span
-            style={{
-              background: 'linear-gradient(135deg,#e60023,#ff2060)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}
-          >
-            CRAVE
-          </span>
-          <br />
-          <span className="text-white/30">THE NIGHT.</span>
-        </motion.h1>
-
-        {/* Fake search bar — navigates to search */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.15 }}
-          onClick={onNavigateToSearch}
-          className="relative group cursor-pointer"
-        >
-          <div role="button" aria-label="Search products" className="w-full h-14 pl-6 pr-4 glass-panel rounded-full flex items-center text-white/35 text-[13px] tracking-widest uppercase font-black shadow-[0_15px_40px_rgba(0,0,0,0.7)] transition-all duration-300 group-hover:border-white/[0.12] group-hover:bg-white/[0.05]">
-            <span>Discover Premium...</span>
-          </div>
-          <div className="absolute right-4 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full btn-brand flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-[0_4px_12px_rgba(230,0,35,0.5)]">
-            <Zap className="w-4 h-4" fill="white" strokeWidth={0} />
-          </div>
-        </motion.div>
-      </section>
-
       {/* Category Chips */}
       <section className="mb-6">
         <div
@@ -109,9 +69,8 @@ export function ShopView({
       <section className="mb-8">
         <div className="flex justify-between items-end mb-6 px-2">
           <div>
-            <p className="text-[9px] tracking-[0.3em] text-white/30 uppercase font-black mb-1">Tonight's</p>
-            <h2 className="font-headline-md text-[16px] tracking-[0.2em] uppercase font-black text-white/80">
-              Stage Zero
+            <h2 className="text-[12px] font-bold text-white/55 uppercase tracking-[0.1em]">
+              Tonight's Featured Drops
             </h2>
           </div>
           <button
