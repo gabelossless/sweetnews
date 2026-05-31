@@ -130,7 +130,7 @@ export function SearchView({
         </div>
 
         {filteredProducts.length > 0 ? (
-          <motion.div layout className="grid grid-cols-2 gap-4">
+          <motion.div layout className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <AnimatePresence mode="popLayout">
               {filteredProducts.map((product, idx) => (
                 <ProductCard

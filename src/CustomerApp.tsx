@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, Store, ReceiptText, User, ShoppingBag, CheckCircle2 } from 'lucide-react';
 import { loadStripe } from '@stripe/stripe-js';
@@ -195,13 +195,13 @@ export default function CustomerApp() {
   };
 
   return (
-    <div className={`bg-background text-on-background min-h-screen pb-[120px] pt-[128px] font-body-md selection:bg-white selection:text-black overflow-x-hidden ${isStandalone ? 'standalone-layout' : ''}`}>
+    <div className={`bg-background text-on-background min-h-screen pb-[120px] md:pb-12 pt-[128px] md:pt-[82px] font-body-md selection:bg-white selection:text-black overflow-x-hidden ${isStandalone ? 'standalone-layout' : ''}`}>
 
       {/* TopAppBar */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-black/85 backdrop-blur-xl border-b border-white/[0.05] md:w-[430px] md:left-1/2 md:right-auto md:-translate-x-1/2">
-        <div className="px-5 pt-[max(env(safe-area-inset-top),12px)]">
-          {/* Row 1: Brand + Cart */}
-          <div className="flex items-center justify-between py-2.5">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-black/85 backdrop-blur-xl border-b border-white/[0.05]">
+        <div className="px-5 md:px-8 pt-[max(env(safe-area-inset-top),12px)] md:max-w-[1280px] md:mx-auto">
+          {/* Row 1: Brand + [Desktop Nav] + Cart */}
+          <div className="flex items-center justify-between py-2.5 md:py-3.5">
             <button
               type="button"
               onClick={() => setActiveTab('shop')}
@@ -223,6 +223,33 @@ export default function CustomerApp() {
                 )}
               </div>
             </button>
+
+            {/* Desktop navigation (hidden on mobile) */}
+            <nav className="hidden md:flex items-center gap-1">
+              {(
+                [
+                  { id: 'shop',    label: 'Shop',    icon: <Store size={14} strokeWidth={2.5} /> },
+                  { id: 'search',  label: 'Search',  icon: <Search size={14} strokeWidth={2.5} /> },
+                  { id: 'orders',  label: 'Orders',  icon: <ReceiptText size={14} strokeWidth={2.5} /> },
+                  { id: 'profile', label: 'Profile', icon: <User size={14} strokeWidth={2.5} /> },
+                ] as { id: typeof activeTab; label: string; icon: React.ReactNode }[]
+              ).map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => setActiveTab(item.id)}
+                  className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-wider transition-all duration-200 ${
+                    activeTab === item.id
+                      ? 'bg-white/10 text-white border border-white/[0.12]'
+                      : 'text-white/45 hover:text-white/75 hover:bg-white/[0.05]'
+                  }`}
+                >
+                  {item.icon}
+                  {item.label}
+                </button>
+              ))}
+            </nav>
+
             <motion.button
               whileTap={{ scale: 0.9 }}
               onClick={() => setIsCartOpen(true)}
@@ -253,8 +280,8 @@ export default function CustomerApp() {
               </AnimatePresence>
             </motion.button>
           </div>
-          {/* Row 2: Search bar */}
-          <div className="pb-3" onClick={() => setActiveTab('search')}>
+          {/* Row 2: Search bar (mobile only) */}
+          <div className="pb-3 md:hidden" onClick={() => setActiveTab('search')}>
             <div
               role="button"
               aria-label="Search products"
@@ -268,7 +295,7 @@ export default function CustomerApp() {
       </header>
 
       {/* Main Pages Container */}
-      <main className="px-6 max-w-[430px] mx-auto">
+      <main className="px-6 md:px-8 max-w-[430px] md:max-w-[1280px] mx-auto">
         <AnimatePresence mode="wait">
           
           {/* 1. SHOP VIEW */}
@@ -315,8 +342,8 @@ export default function CustomerApp() {
         </AnimatePresence>
       </main>
 
-      {/* BottomNavBar Pill */}
-      <nav className="fixed bottom-[calc(env(safe-area-inset-bottom,0px)+16px)] left-1/2 -translate-x-1/2 w-[92%] max-w-[400px] z-50 flex justify-around items-center px-4 py-3.5 bg-[#050505]/70 backdrop-blur-3xl rounded-[32px] border border-white/[0.08] shadow-[0_20px_40px_rgba(0,0,0,0.8),_inset_0_1px_0_rgba(255,255,255,0.1)] transition-all duration-300">
+      {/* BottomNavBar Pill (mobile only) */}
+      <nav className="md:hidden fixed bottom-[calc(env(safe-area-inset-bottom,0px)+16px)] left-1/2 -translate-x-1/2 w-[92%] max-w-[400px] z-50 flex justify-around items-center px-4 py-3.5 bg-[#050505]/70 backdrop-blur-3xl rounded-[32px] border border-white/[0.08] shadow-[0_20px_40px_rgba(0,0,0,0.8),_inset_0_1px_0_rgba(255,255,255,0.1)] transition-all duration-300">
         <NavButton 
           icon={<Store />} 
           label="Shop" 

@@ -93,7 +93,7 @@ export function ShopView({
                 onAdd={() => onAddToCart(product)}
                 onView={() => onViewProduct(product)}
                 animationDelay={idx * 0.06}
-                className="w-[162px] md:w-[182px] flex-shrink-0"
+                className="w-[162px] md:w-[200px] flex-shrink-0"
               />
             ))}
           </AnimatePresence>
@@ -158,7 +158,7 @@ export function ShopView({
         </div>
 
         {filteredGrid.length > 0 ? (
-          <motion.div layout className="grid grid-cols-2 gap-4">
+          <motion.div layout className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <AnimatePresence mode="popLayout">
               {filteredGrid.map((product, idx) => (
                 <ProductCard
