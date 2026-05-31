@@ -157,6 +157,11 @@ export function CartSheet({ isOpen, onClose, onCheckout }: CartSheetProps) {
                             <h4 className="text-[13px] font-black uppercase tracking-wide text-white truncate">
                               {item.name}
                             </h4>
+                            {item.customizations && (
+                              <p className="text-[10px] text-white/30 font-medium mt-0.5 truncate">
+                                {item.customizations.label}
+                              </p>
+                            )}
                             <p className="text-[11px] text-white/40 font-medium mt-0.5">
                               ${item.price.toFixed(2)} each
                             </p>

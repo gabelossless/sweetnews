@@ -20,6 +20,7 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY ?? 
 import { NavButton } from './components/molecules/NavButton';
 import { CartSheet } from './components/organisms/CartSheet';
 import { CheckoutForm } from './components/organisms/CheckoutForm';
+import { CustomizationSheet } from './components/organisms/CustomizationSheet';
 import { InstallPrompt } from './components/pwa/InstallPrompt';
 import { OwlMascot } from './components/atoms/OwlMascot';
 
@@ -41,6 +42,7 @@ export default function CustomerApp() {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isOrderPlaced, setIsOrderPlaced] = useState(false);
+  const [customizingProduct, setCustomizingProduct] = useState<Product | null>(null);
 
   // Standalone mode layout adjustment helper
   const isStandalone = useIsStandalone();
@@ -155,14 +157,26 @@ export default function CustomerApp() {
   };
 
   const handleAddToCart = (product: Product) => {
+    if (product.customizationMatrix?.length) {
+      setCustomizingProduct(product);
+      return;
+    }
     const isNew = !cartItems.some((i) => i.id === product.id);
-    addItem({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: product.image
-    });
+    addItem({ id: product.id, name: product.name, price: product.price, image: product.image });
     if (isNew) showToast(`Added to cart`);
+  };
+
+  const handleCustomizationConfirm = (result: { label: string; upcharge: number }) => {
+    if (!customizingProduct) return;
+    addItem({
+      id: customizingProduct.id,
+      name: customizingProduct.name,
+      price: customizingProduct.price + result.upcharge,
+      image: customizingProduct.image,
+      customizations: result,
+    });
+    showToast(`Added to cart`);
+    setCustomizingProduct(null);
   };
 
   return (
@@ -317,6 +331,13 @@ export default function CustomerApp() {
           isOrderPlaced={isOrderPlaced}
         />
       </Elements>
+
+      {/* Customization Sheet */}
+      <CustomizationSheet
+        product={customizingProduct}
+        onClose={() => setCustomizingProduct(null)}
+        onConfirm={handleCustomizationConfirm}
+      />
 
       {/* Toast Notification */}
       <AnimatePresence>
