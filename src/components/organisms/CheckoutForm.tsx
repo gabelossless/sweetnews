@@ -11,9 +11,11 @@ import { sanitizeString } from '../../lib/utils';
 interface CheckoutFormProps {
   isOpen: boolean;
   onClose: () => void;
-  onPlaceOrder: (details: { name: string; address: string; paymentIntentId: string }) => void;
+  onPlaceOrder: (details: { name: string; address: string; phone: string; paymentIntentId: string }) => void;
   isProcessing: boolean;
   isOrderPlaced: boolean;
+  customerUid?: string;
+  customerEmail?: string;
 }
 
 const CARD_ELEMENT_OPTIONS = {
@@ -35,6 +37,8 @@ export function CheckoutForm({
   onPlaceOrder,
   isProcessing,
   isOrderPlaced,
+  customerUid,
+  customerEmail,
 }: CheckoutFormProps) {
   const stripe = useStripe();
   const elements = useElements();
@@ -42,10 +46,12 @@ export function CheckoutForm({
 
   const savedName = useProfileStore((state) => state.deliveryName);
   const savedAddress = useProfileStore((state) => state.deliveryAddress);
+  const savedPhone = useProfileStore((state) => state.deliveryPhone);
 
   const [deliveryName, setLocalName] = useState(savedName);
   const [deliveryAddress, setLocalAddress] = useState(savedAddress);
   const [deliveryApt, setLocalApt] = useState('');
+  const [deliveryPhone, setLocalPhone] = useState(savedPhone);
   const [cardError, setCardError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -71,7 +77,7 @@ export function CheckoutForm({
       const chargeRes = await fetch('/api/charge', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: totalCents }),
+        body: JSON.stringify({ amount: totalCents, customerUid, customerEmail }),
       });
 
       const chargeData = await chargeRes.json() as { clientSecret?: string; error?: string };
@@ -110,6 +116,7 @@ export function CheckoutForm({
       onPlaceOrder({
         name: sanitizeString(deliveryName),
         address: fullAddress,
+        phone: sanitizeString(deliveryPhone),
         paymentIntentId: paymentIntent.id,
       });
     } catch {
@@ -204,6 +211,14 @@ export function CheckoutForm({
                           onChange={(e) => setLocalApt(e.target.value)}
                           className="bg-surface-dim"
                         />
+                        <Input
+                          required
+                          type="tel"
+                          placeholder="Phone Number"
+                          value={deliveryPhone}
+                          onChange={(e) => setLocalPhone(e.target.value)}
+                          className="bg-surface-dim"
+                        />
                       </div>
                     </section>
 
@@ -240,7 +255,7 @@ export function CheckoutForm({
                       
                       <Button
                         type="submit"
-                        disabled={isProcessing || isSubmitting || !stripe || !elements || cartItems.length === 0}
+                        disabled={isProcessing || isSubmitting || !stripe || !elements || cartItems.length === 0 || !deliveryPhone.trim()}
                         whileTapScale={0.95}
                         className="w-full py-5 btn-brand font-headline-md uppercase tracking-[0.2em] text-[12px] rounded-full transition-all disabled:opacity-30 disabled:shadow-none disabled:cursor-not-allowed font-black"
                       >

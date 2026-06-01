@@ -42,6 +42,7 @@ export interface ActiveOrder {
   status: OrderStatus;
   progress: number; // 0 to 100
   address: string;
+  phone?: string;
   createdAt: string;
   etaMins?: number;
   rating?: number;

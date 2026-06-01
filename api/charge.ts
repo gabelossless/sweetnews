@@ -19,11 +19,15 @@ export default async function handler(request: Request) {
   }
 
   let amount: number;
+  let customerUid = '';
+  let customerEmail = '';
   try {
-    const body = await request.json() as { amount: unknown };
+    const body = await request.json() as { amount: unknown; customerUid?: unknown; customerEmail?: unknown };
     if (typeof body.amount !== 'number') throw new Error('amount must be a number');
     amount = Math.round(body.amount);
     if (!Number.isInteger(amount) || amount < 50) throw new Error('invalid amount');
+    if (typeof body.customerUid === 'string') customerUid = body.customerUid;
+    if (typeof body.customerEmail === 'string') customerEmail = body.customerEmail;
   } catch {
     return new Response(JSON.stringify({ error: 'Invalid request body' }), {
       status: 400,
@@ -35,6 +39,8 @@ export default async function handler(request: Request) {
   params.set('amount', String(amount));
   params.set('currency', 'usd');
   params.append('payment_method_types[]', 'card');
+  if (customerUid) params.set('metadata[customerUid]', customerUid);
+  if (customerEmail) params.set('metadata[customerEmail]', customerEmail);
 
   const stripeRes = await fetch('https://api.stripe.com/v1/payment_intents', {
     method: 'POST',

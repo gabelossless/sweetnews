@@ -89,7 +89,7 @@ export default function CustomerApp() {
     };
   }, []);
 
-  const handlePlaceOrder = async (details: { name: string; address: string; paymentIntentId: string }) => {
+  const handlePlaceOrder = async (details: { name: string; address: string; phone: string; paymentIntentId: string }) => {
     if (!user) {
       showToast('Please sign in to place an order');
       return;
@@ -99,6 +99,7 @@ export default function CustomerApp() {
 
     useProfileStore.getState().setDeliveryName(details.name);
     useProfileStore.getState().setDeliveryAddress(details.address);
+    useProfileStore.getState().setDeliveryPhone(details.phone);
 
     const orderItems = [...cartItems];
     const total = orderItems.reduce((acc, item) => acc + item.price * item.quantity, 0) + 3.99;
@@ -111,9 +112,10 @@ export default function CustomerApp() {
         total,
         date: new Date().toLocaleDateString(),
         address: details.address,
+        phone: details.phone,
       });
 
-      // Fire-and-forget owner notification (does not block checkout success)
+      // Fire-and-forget notifications (does not block checkout success)
       fetch('/api/notify-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -121,8 +123,10 @@ export default function CustomerApp() {
           orderId,
           customerName: details.name,
           address: details.address,
+          phone: details.phone,
           items: orderItems.map((i) => ({ name: i.name, quantity: i.quantity, price: i.price })),
           total,
+          customerEmail: user.email ?? undefined,
         }),
       }).catch(() => {});
 
@@ -385,6 +389,8 @@ export default function CustomerApp() {
           onPlaceOrder={handlePlaceOrder}
           isProcessing={isProcessing}
           isOrderPlaced={isOrderPlaced}
+          customerUid={user?.uid}
+          customerEmail={user?.email ?? undefined}
         />
       </Elements>
 
