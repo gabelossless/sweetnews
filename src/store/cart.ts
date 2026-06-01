@@ -7,6 +7,7 @@ export interface CartItem {
   price: number;
   quantity: number;
   image: string;
+  customizations?: { label: string; upcharge: number };
 }
 
 interface CartState {

@@ -141,22 +141,22 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-[#2a1a1f]/40 backdrop-blur-sm"
           />
 
           <motion.div
             initial={{ y: '100%', opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: '100%', opacity: 0 }}
-            className="relative w-full max-w-md bg-[#0a0a0a] border border-white/10 rounded-[28px] overflow-hidden shadow-2xl"
+            className="relative w-full max-w-md bg-surface border border-on-background/[0.09] rounded-[28px] overflow-hidden shadow-2xl"
           >
             {/* Header */}
             <div className="px-6 pt-5 pb-4 flex justify-between items-center">
-              <h3 className="text-lg font-black text-white tracking-tight">Join the Fleet</h3>
+              <h3 className="text-lg font-black text-on-background tracking-tight">Join the Fleet</h3>
               <button
                 onClick={onClose}
                 aria-label="Close"
-                className="p-2 -mr-2 rounded-full text-white/50 hover:text-white hover:bg-white/5 transition-colors"
+                className="p-2 -mr-2 rounded-full text-on-surface-variant hover:text-on-background hover:bg-on-background/[0.05] transition-colors"
               >
                 <X size={18} />
               </button>
@@ -218,19 +218,19 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                   {errors.city && <FieldError text={errors.city} />}
 
                   <div className="space-y-1.5">
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-white/40 ml-1">
+                    <label className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant ml-1">
                       Vehicle (optional)
                     </label>
                     <select
                       value={formData.vehicleType}
                       onChange={(e) => setField('vehicleType', e.target.value)}
-                      className="w-full h-12 bg-[#141414] border border-white/[0.08] rounded-2xl px-4 text-sm text-white focus:outline-none focus:border-white/25 appearance-none font-medium"
+                      className="w-full h-12 bg-surface-dim border border-on-background/[0.09] rounded-2xl px-4 text-sm text-on-background focus:outline-none focus:border-on-background/[0.12] appearance-none font-medium"
                     >
-                      <option value="" className="bg-black text-white">—</option>
-                      <option value="Car" className="bg-black text-white">Car</option>
-                      <option value="Scooter" className="bg-black text-white">Scooter</option>
-                      <option value="Bicycle" className="bg-black text-white">Bicycle</option>
-                      <option value="Motorcycle" className="bg-black text-white">Motorcycle</option>
+                      <option value="" className="bg-surface text-on-background">—</option>
+                      <option value="Car" className="bg-surface text-on-background">Car</option>
+                      <option value="Scooter" className="bg-surface text-on-background">Scooter</option>
+                      <option value="Bicycle" className="bg-surface text-on-background">Bicycle</option>
+                      <option value="Motorcycle" className="bg-surface text-on-background">Motorcycle</option>
                     </select>
                   </div>
 
@@ -250,7 +250,7 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                   </div>
 
                   {errors._form && (
-                    <p className="text-[11px] text-red-400 leading-snug" role="alert">
+                    <p className="text-[11px] text-red-600 leading-snug" role="alert">
                       {errors._form}
                     </p>
                   )}
@@ -260,12 +260,12 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                     fullWidth
                     loading={loading}
                     disabled={!requiredFilled || loading}
-                    className="h-12 mt-2 bg-white text-black hover:bg-white/90 disabled:bg-white/20 disabled:text-white/40 rounded-2xl font-bold transition-colors"
+                    className="h-12 mt-2 bg-on-background text-white hover:bg-on-background/90 disabled:bg-on-background/[0.12] disabled:text-on-surface-variant rounded-2xl font-bold transition-colors"
                   >
                     Join waitlist <Send className="ml-2" size={15} />
                   </Button>
 
-                  <p className="text-[10px] text-white/30 text-center leading-relaxed pt-1">
+                  <p className="text-[10px] text-on-surface-variant text-center leading-relaxed pt-1">
                     We use your info only to reach out about delivery partnerships.
                   </p>
                 </form>
@@ -275,16 +275,16 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                   animate={{ scale: 1, opacity: 1 }}
                   className="py-10 text-center space-y-4"
                 >
-                  <div className="w-16 h-16 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <CheckCircle2 size={32} className="text-white" />
+                  <div className="w-16 h-16 bg-on-background/[0.05] border border-on-background/[0.09] rounded-full flex items-center justify-center mx-auto mb-4">
+                    <CheckCircle2 size={32} className="text-primary" />
                   </div>
-                  <h3 className="text-xl font-black text-white tracking-tight">You're on the list</h3>
-                  <p className="text-sm text-white/55 leading-relaxed max-w-[260px] mx-auto">
+                  <h3 className="text-xl font-black text-on-background tracking-tight">You're on the list</h3>
+                  <p className="text-sm text-on-surface-variant leading-relaxed max-w-[260px] mx-auto">
                     We'll email you when a slot opens in your city.
                   </p>
                   <button
                     onClick={onClose}
-                    className="text-[11px] text-white/40 hover:text-white/70 transition-colors pt-2 uppercase tracking-widest font-bold"
+                    className="text-[11px] text-on-surface-variant hover:text-on-background transition-colors pt-2 uppercase tracking-widest font-bold"
                   >
                     Close
                   </button>
@@ -300,7 +300,7 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
 
 function FieldError({ text }: { text: string }) {
   return (
-    <p className="text-[11px] text-red-400 leading-snug -mt-2 ml-1" role="alert">
+    <p className="text-[11px] text-red-600 leading-snug -mt-2 ml-1" role="alert">
       {text}
     </p>
   );

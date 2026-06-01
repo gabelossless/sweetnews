@@ -43,7 +43,7 @@ export default function FleetLoginView() {
 
   return (
     // fixed inset-0 + overflow-y-auto is the most reliable full-screen pattern on iOS Safari
-    <div className="fixed inset-0 bg-black text-white overflow-y-auto">
+    <div className="fixed inset-0 bg-background text-on-background overflow-y-auto">
       <div className="flex min-h-full flex-col items-center justify-center px-6 py-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -57,13 +57,13 @@ export default function FleetLoginView() {
             <h1 className="text-4xl font-black tracking-tighter">
               FLEET<span style={{ background: 'linear-gradient(135deg,#f59e0b,#f97316)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>LOGIN</span>
             </h1>
-            <p className="text-white/40 text-xs uppercase tracking-widest">
+            <p className="text-on-surface-variant text-xs uppercase tracking-widest">
               Sweet News Delivery Partners
             </p>
           </div>
 
           {/* Form card */}
-          <div className="w-full bg-white/5 border border-white/10 rounded-3xl p-6 space-y-6">
+          <div className="w-full bg-on-background/[0.05] border border-on-background/[0.09] rounded-3xl p-6 space-y-6">
             <form onSubmit={handleSubmit} className="w-full space-y-4">
               {!isLogin && (
                 <Input
@@ -109,7 +109,7 @@ export default function FleetLoginView() {
             <div className="text-center">
               <button
                 onClick={() => setIsLogin(!isLogin)}
-                className="text-xs text-white/40 hover:text-amber-400 transition-colors flex items-center gap-2 mx-auto"
+                className="text-xs text-on-surface-variant hover:text-amber-600 transition-colors flex items-center gap-2 mx-auto"
               >
                 {isLogin ? (
                   <><UserPlus size={14} /> New here? Apply to deliver</>
@@ -120,7 +120,7 @@ export default function FleetLoginView() {
             </div>
           </div>
 
-          <p className="text-[10px] text-center text-white/20 px-4">
+          <p className="text-[10px] text-center text-on-background/30 px-4">
             By signing in, you agree to the Sweet News Delivery Partner Terms of Service and Privacy Policy.
           </p>
         </motion.div>

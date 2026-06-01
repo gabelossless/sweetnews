@@ -68,7 +68,7 @@ export function InstallPrompt() {
           transition={{ type: 'spring', damping: 26, stiffness: 220 }}
           className="fixed bottom-[110px] left-4 right-4 z-[90] md:max-w-sm md:mx-auto md:left-1/2 md:-translate-x-1/2"
         >
-          <div className="bg-[#0c0c0c] border border-white/[0.09] rounded-2xl shadow-[0_16px_48px_rgba(0,0,0,0.85)] overflow-hidden">
+          <div className="bg-surface border border-on-background/[0.09] rounded-2xl shadow-[0_16px_48px_rgba(42,26,31,0.12)] overflow-hidden">
             {/* Main row */}
             <div className="flex gap-3 items-center p-4">
               <div className="w-11 h-11 rounded-xl overflow-hidden flex-shrink-0">
@@ -76,10 +76,10 @@ export function InstallPrompt() {
               </div>
 
               <div className="flex-1 min-w-0">
-                <p className="text-[12px] font-black text-white uppercase tracking-wider leading-none">
+                <p className="text-[12px] font-black text-on-background uppercase tracking-wider leading-none">
                   Install Sweet News
                 </p>
-                <p className="text-[10px] text-white/40 mt-0.5 font-medium">
+                <p className="text-[10px] text-on-surface-variant mt-0.5 font-medium">
                   {isIOS ? 'Add to Home Screen for the best experience' : 'Get instant delivery notifications'}
                 </p>
               </div>
@@ -103,7 +103,7 @@ export function InstallPrompt() {
                 <button
                   onClick={dismiss}
                   aria-label="Dismiss"
-                  className="w-8 h-8 rounded-full bg-white/[0.05] flex items-center justify-center text-white/40 hover:text-white transition-colors"
+                  className="w-8 h-8 rounded-full bg-on-background/[0.05] flex items-center justify-center text-on-surface-variant hover:text-on-background transition-colors"
                 >
                   <X size={13} />
                 </button>
@@ -120,17 +120,17 @@ export function InstallPrompt() {
                   transition={{ duration: 0.22, ease: 'easeInOut' }}
                   className="overflow-hidden"
                 >
-                  <div className="border-t border-white/[0.06] px-4 py-3 space-y-2.5">
+                  <div className="border-t border-on-background/[0.07] px-4 py-3 space-y-2.5">
                     {[
                       { icon: <Share size={13} />, text: 'Tap the Share button in Safari' },
                       { icon: <span className="text-[11px] font-black">+</span>, text: 'Scroll down and tap "Add to Home Screen"' },
                       { icon: <span className="text-[11px] font-black">✓</span>, text: 'Tap "Add" to confirm' },
                     ].map((step, i) => (
                       <div key={i} className="flex items-center gap-3">
-                        <div className="w-6 h-6 rounded-full bg-white/[0.07] border border-white/[0.08] flex items-center justify-center text-white/60 flex-shrink-0">
+                        <div className="w-6 h-6 rounded-full bg-on-background/[0.05] border border-on-background/[0.09] flex items-center justify-center text-on-surface-variant flex-shrink-0">
                           {step.icon}
                         </div>
-                        <p className="text-[11px] text-white/60 font-medium">{step.text}</p>
+                        <p className="text-[11px] text-on-surface-variant font-medium">{step.text}</p>
                       </div>
                     ))}
                   </div>

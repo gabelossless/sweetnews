@@ -14,7 +14,7 @@ interface ProfileViewProps {
 }
 
 export function ProfileView({ isOnline }: ProfileViewProps) {
-  const { user, role, login, logout } = useAuth();
+  const { user, role, login, logout, loginError } = useAuth();
   const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
   const [nameSaved, setNameSaved] = useState(false);
   const [addressSaved, setAddressSaved] = useState(false);
@@ -85,7 +85,7 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
           <OwlMascot size={90} />
         </motion.div>
 
-        <h2 className="text-[28px] font-black uppercase tracking-tighter text-white leading-tight mb-2">
+        <h2 className="text-[28px] font-black uppercase tracking-tighter text-on-background leading-tight mb-2">
           Sign in to
           <br />
           <span
@@ -98,7 +98,7 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
             Sweet News
           </span>
         </h2>
-        <p className="text-[12px] text-white/35 font-medium mb-10 leading-relaxed max-w-[240px]">
+        <p className="text-[12px] text-on-surface-variant font-medium mb-10 leading-relaxed max-w-[240px]">
           Save your address, track orders in real time, and unlock member rewards.
         </p>
 
@@ -106,7 +106,7 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
           whileTap={{ scale: 0.96 }}
           whileHover={{ scale: 1.02 }}
           onClick={login}
-          className="flex items-center gap-3 bg-white text-black font-black text-[13px] px-6 py-4 rounded-full shadow-[0_8px_32px_rgba(255,255,255,0.15)] hover:bg-white/90 transition-colors w-full max-w-[280px] justify-center"
+          className="flex items-center gap-3 bg-surface text-on-background font-black text-[13px] px-6 py-4 rounded-full border border-on-background/[0.09] shadow-[0_8px_32px_rgba(42,26,31,0.10)] hover:bg-surface-container transition-colors w-full max-w-[280px] justify-center"
         >
           {/* Google G logo */}
           <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden>
@@ -118,9 +118,15 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
           Continue with Google
         </motion.button>
 
-        <p className="text-[10px] text-white/20 mt-6 leading-relaxed max-w-[260px]">
+        {loginError && (
+          <p className="text-[11px] text-red-600 mt-4 max-w-[280px] text-center leading-relaxed px-2">
+            {loginError}
+          </p>
+        )}
+
+        <p className="text-[10px] text-on-background/30 mt-6 leading-relaxed max-w-[260px]">
           By signing in you agree to our{' '}
-          <a href="/privacy" className="text-white/35 underline hover:text-white/60 transition-colors">
+          <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-on-surface-variant underline hover:text-on-background transition-colors">
             Privacy Policy
           </a>
           .
@@ -144,7 +150,7 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.45 }}
-          className="font-display-xl text-[54px] uppercase font-black leading-[0.85] tracking-tighter mb-3 text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.12)]"
+          className="font-display-xl text-[54px] uppercase font-black leading-[0.85] tracking-tighter mb-3 text-on-background"
         >
           <span
             style={{
@@ -156,9 +162,9 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
             MEMBER
           </span>
           <br />
-          <span className="text-white/30">CARD.</span>
+          <span className="text-on-surface-variant">CARD.</span>
         </motion.h1>
-        <p className="text-[11px] uppercase tracking-[0.25em] text-white/30 font-black">
+        <p className="text-[11px] uppercase tracking-[0.25em] text-on-surface-variant font-black">
           Identity · Tier · Sync Telemetry
         </p>
       </section>
@@ -235,15 +241,15 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
         </motion.div>
 
         {/* ── Delivery Protocol ───────────────────────────────── */}
-        <div className="glass-panel rounded-[28px] p-6 space-y-4 shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
-          <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-white/35 border-b border-white/[0.04] pb-3">
+        <div className="glass-panel rounded-[28px] p-6 space-y-4 shadow-[0_8px_32px_rgba(42,26,31,0.10)]">
+          <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-on-surface-variant border-b border-on-background/[0.07] pb-3">
             Delivery Protocol
           </h3>
 
           {/* Name field */}
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
-              <p className="text-[10px] text-white/30 uppercase tracking-widest font-black">
+              <p className="text-[10px] text-on-surface-variant uppercase tracking-widest font-black">
                 Recipient Name
               </p>
               <AnimatePresence>
@@ -252,7 +258,7 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
                     initial={{ opacity: 0, scale: 0.7, x: 8 }}
                     animate={{ opacity: 1, scale: 1, x: 0 }}
                     exit={{ opacity: 0, scale: 0.7 }}
-                    className="flex items-center gap-1 text-emerald-400"
+                    className="flex items-center gap-1 text-emerald-600"
                   >
                     <Check className="w-3 h-3" strokeWidth={3} />
                     <span className="text-[9px] font-black uppercase tracking-wider">Saved</span>
@@ -265,14 +271,14 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
               value={deliveryName}
               onChange={(e) => handleNameChange(e.target.value)}
               placeholder="Your name"
-              className="w-full text-sm font-bold text-white bg-white/[0.04] border border-white/[0.07] hover:border-white/[0.12] focus:border-[#e60023]/40 focus:bg-white/[0.06] outline-none px-4 py-3 rounded-2xl mt-0.5 transition-all duration-200 placeholder:text-white/20 tracking-wide"
+              className="w-full text-sm font-bold text-on-background bg-on-background/[0.05] border border-on-background/[0.07] hover:border-on-background/[0.12] focus:border-[#e60023]/40 focus:bg-on-background/[0.05] outline-none px-4 py-3 rounded-2xl mt-0.5 transition-all duration-200 placeholder:text-on-surface-variant tracking-wide"
             />
           </div>
 
           {/* Address field */}
-          <div className="space-y-1.5 pt-2 border-t border-white/[0.04]">
+          <div className="space-y-1.5 pt-2 border-t border-on-background/[0.07]">
             <div className="flex items-center justify-between">
-              <p className="text-[10px] text-white/30 uppercase tracking-widest font-black">
+              <p className="text-[10px] text-on-surface-variant uppercase tracking-widest font-black">
                 Primary Address
               </p>
               <AnimatePresence>
@@ -281,7 +287,7 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
                     initial={{ opacity: 0, scale: 0.7, x: 8 }}
                     animate={{ opacity: 1, scale: 1, x: 0 }}
                     exit={{ opacity: 0, scale: 0.7 }}
-                    className="flex items-center gap-1 text-emerald-400"
+                    className="flex items-center gap-1 text-emerald-600"
                   >
                     <Check className="w-3 h-3" strokeWidth={3} />
                     <span className="text-[9px] font-black uppercase tracking-wider">Saved</span>
@@ -294,21 +300,21 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
               value={deliveryAddress}
               onChange={(e) => handleAddressChange(e.target.value)}
               placeholder="123 Midnight Ave"
-              className="w-full text-sm font-bold text-white bg-white/[0.04] border border-white/[0.07] hover:border-white/[0.12] focus:border-[#e60023]/40 focus:bg-white/[0.06] outline-none px-4 py-3 rounded-2xl mt-0.5 transition-all duration-200 placeholder:text-white/20 tracking-wide"
+              className="w-full text-sm font-bold text-on-background bg-on-background/[0.05] border border-on-background/[0.07] hover:border-on-background/[0.12] focus:border-[#e60023]/40 focus:bg-on-background/[0.05] outline-none px-4 py-3 rounded-2xl mt-0.5 transition-all duration-200 placeholder:text-on-surface-variant tracking-wide"
             />
           </div>
         </div>
 
         {/* ── Fleet Partner Card ──────────────────────────────── */}
-        <div className="glass-panel rounded-[28px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
-          <h3 className="text-lg font-black text-white tracking-tight mb-1.5">
+        <div className="glass-panel rounded-[28px] p-6 shadow-[0_8px_32px_rgba(42,26,31,0.10)]">
+          <h3 className="text-lg font-black text-on-background tracking-tight mb-1.5">
             {role === 'driver_active'
               ? 'Fleet Terminal'
               : role === 'driver_pending'
               ? 'Application Pending'
               : 'Drive for Sweet News'}
           </h3>
-          <p className="text-sm text-white/55 leading-relaxed mb-5">
+          <p className="text-sm text-on-surface-variant leading-relaxed mb-5">
             {role === 'driver_active'
               ? 'Your fleet terminal is active. Open it to view active deliveries.'
               : role === 'driver_pending'
@@ -326,7 +332,7 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
                   setIsWaitlistOpen(true);
                 }
               }}
-              className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-white text-black hover:bg-white/90 transition-colors text-[13px] font-bold rounded-full"
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-on-background text-background hover:bg-on-background/90 transition-colors text-[13px] font-bold rounded-full"
             >
               {role === 'driver_active' ? 'Open terminal' : 'Join waitlist'}
               <ChevronRight size={14} strokeWidth={2.5} />
@@ -334,8 +340,8 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
           )}
 
           {role === 'driver_pending' && (
-            <div className="inline-flex items-center gap-2 text-[11px] text-white/50 font-medium">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+            <div className="inline-flex items-center gap-2 text-[11px] text-on-surface-variant font-medium">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
               Application under review
             </div>
           )}
@@ -347,8 +353,8 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
         />
 
         {/* ── PWA Telemetry ───────────────────────────────────── */}
-        <div className="glass-panel rounded-[28px] p-6 space-y-4 shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
-          <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-white/35 border-b border-white/[0.04] pb-3">
+        <div className="glass-panel rounded-[28px] p-6 space-y-4 shadow-[0_8px_32px_rgba(42,26,31,0.10)]">
+          <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-on-surface-variant border-b border-on-background/[0.07] pb-3">
             PWA Sync Telemetry
           </h3>
 
@@ -356,14 +362,14 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
           <div className="space-y-2">
             <div className="flex justify-between items-center py-1">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-white">
+                <div className="w-9 h-9 rounded-full bg-on-background/[0.05] border border-on-background/[0.09] flex items-center justify-center text-on-background">
                   <Bell size={15} strokeWidth={1.5} />
                 </div>
                 <div>
-                  <p className="text-[12px] text-white font-black uppercase tracking-wider">
+                  <p className="text-[12px] text-on-background font-black uppercase tracking-wider">
                     Push Notifications
                   </p>
-                  <p className="text-[10px] text-white/30 font-medium">Real-time dispatch alerts.</p>
+                  <p className="text-[10px] text-on-surface-variant font-medium">Real-time dispatch alerts.</p>
                 </div>
               </div>
 
@@ -375,31 +381,31 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
                 className={`relative w-12 h-6 rounded-full p-0.5 transition-colors duration-300 focus:outline-none disabled:opacity-50 ${
                   pushNotifications
                     ? 'bg-gradient-to-r from-[#e60023] to-[#ff2060] shadow-[0_2px_12px_rgba(230,0,35,0.5)]'
-                    : 'bg-white/10'
+                    : 'bg-on-background/[0.12]'
                 }`}
               >
                 <motion.div
                   layout
                   transition={{ type: 'spring', stiffness: 700, damping: 35 }}
                   className={`w-5 h-5 rounded-full shadow-md ${
-                    pushNotifications ? 'bg-white translate-x-6' : 'bg-white/70 translate-x-0'
+                    pushNotifications ? 'bg-white translate-x-6' : 'bg-surface translate-x-0'
                   } transition-transform duration-300`}
                 />
               </motion.button>
             </div>
             {pushError && (
-              <p className="text-[10px] text-red-400 pl-12 leading-relaxed">{pushError}</p>
+              <p className="text-[10px] text-red-600 pl-12 leading-relaxed">{pushError}</p>
             )}
           </div>
 
           {/* Online / Offline status */}
-          <div className="flex justify-between items-center py-1 border-t border-white/[0.04] pt-4">
+          <div className="flex justify-between items-center py-1 border-t border-on-background/[0.07] pt-4">
             <div className="flex items-center gap-3">
               <div
                 className={`w-9 h-9 rounded-full flex items-center justify-center border transition-colors ${
                   isOnline
-                    ? 'bg-white/[0.04] border-white/[0.08] text-white'
-                    : 'bg-white/[0.02] border-white/[0.04] text-white/30'
+                    ? 'bg-on-background/[0.05] border-on-background/[0.09] text-on-background'
+                    : 'bg-on-background/[0.03] border-on-background/[0.07] text-on-surface-variant'
                 }`}
               >
                 {isOnline
@@ -407,10 +413,10 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
                   : <WifiOff size={15} strokeWidth={1.5} />}
               </div>
               <div>
-                <p className="text-[12px] text-white font-black uppercase tracking-wider">
+                <p className="text-[12px] text-on-background font-black uppercase tracking-wider">
                   Asset Cache State
                 </p>
-                <p className="text-[10px] text-white/30 font-medium">
+                <p className="text-[10px] text-on-surface-variant font-medium">
                   {isOnline
                     ? 'Fully synchronized — SW cache active.'
                     : 'Offline sandbox vault engaged.'}
@@ -420,43 +426,43 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
             <div
               className={`w-2 h-2 rounded-full ${
                 isOnline
-                  ? 'bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.8)]'
-                  : 'bg-white/20'
+                  ? 'bg-emerald-500 shadow-[0_0_10px_rgba(52,211,153,0.8)]'
+                  : 'bg-on-background/[0.12]'
               }`}
             />
           </div>
         </div>
 
         {/* ── Account ─────────────────────────────────────────── */}
-        <div className="glass-panel rounded-[28px] px-6 py-5 flex items-center justify-between shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+        <div className="glass-panel rounded-[28px] px-6 py-5 flex items-center justify-between shadow-[0_8px_32px_rgba(42,26,31,0.10)]">
           <div className="flex items-center gap-3">
             {user.photoURL ? (
-              <img src={user.photoURL} alt="" className="w-9 h-9 rounded-full object-cover border border-white/10" />
+              <img src={user.photoURL} alt="" className="w-9 h-9 rounded-full object-cover border border-on-background/[0.07]" />
             ) : (
-              <div className="w-9 h-9 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center text-white text-sm font-black">
+              <div className="w-9 h-9 rounded-full bg-on-background/[0.05] border border-on-background/[0.07] flex items-center justify-center text-on-background text-sm font-black">
                 {(user.displayName?.[0] ?? user.email?.[0] ?? '?').toUpperCase()}
               </div>
             )}
             <div>
-              <p className="text-[12px] font-black text-white leading-tight truncate max-w-[180px]">
+              <p className="text-[12px] font-black text-on-background leading-tight truncate max-w-[180px]">
                 {user.displayName ?? 'Member'}
               </p>
-              <p className="text-[10px] text-white/35 truncate max-w-[180px]">{user.email}</p>
+              <p className="text-[10px] text-on-surface-variant truncate max-w-[180px]">{user.email}</p>
             </div>
           </div>
           <motion.button
             whileTap={{ scale: 0.92 }}
             onClick={logout}
             aria-label="Sign out"
-            className="w-9 h-9 rounded-full bg-white/[0.04] border border-white/[0.07] flex items-center justify-center hover:bg-white/10 transition-colors"
+            className="w-9 h-9 rounded-full bg-on-background/[0.05] border border-on-background/[0.07] flex items-center justify-center hover:bg-on-background/[0.07] transition-colors"
           >
-            <LogOut size={14} className="text-white/40" strokeWidth={2} />
+            <LogOut size={14} className="text-on-surface-variant" strokeWidth={2} />
           </motion.button>
         </div>
 
         {/* Footer trust line */}
-        <div className="flex items-center justify-center gap-2 text-[9px] uppercase font-black tracking-[0.25em] text-white/20 py-4">
-          <ShieldCheck size={11} className="text-white/25" />
+        <div className="flex items-center justify-center gap-2 text-[9px] uppercase font-black tracking-[0.25em] text-on-background/30 py-4">
+          <ShieldCheck size={11} className="text-on-surface-variant" />
           Secure 256-Bit SSL Protocol Guard
         </div>
 

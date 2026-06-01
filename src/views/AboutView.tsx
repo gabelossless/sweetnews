@@ -20,7 +20,7 @@ export function AboutView({ onBack }: AboutViewProps) {
       <button
         type="button"
         onClick={onBack}
-        className="flex items-center gap-2 text-white/40 hover:text-white text-[11px] uppercase tracking-widest font-black mb-8 transition-colors"
+        className="flex items-center gap-2 text-on-surface-variant hover:text-on-background text-[11px] uppercase tracking-widest font-black mb-8 transition-colors"
       >
         <ArrowLeft size={14} /> Back to Shop
       </button>
@@ -40,16 +40,16 @@ export function AboutView({ onBack }: AboutViewProps) {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.12, duration: 0.45 }}
-          className="text-[48px] uppercase font-black leading-[0.88] tracking-tighter mb-3 text-white"
+          className="text-[48px] uppercase font-black leading-[0.88] tracking-tighter mb-3 text-on-background"
         >
           <span style={{ background: 'linear-gradient(135deg,#e60023,#ff2060)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
             SWEET
           </span>
           <br />
-          <span className="text-white/30">NEWS.</span>
+          <span className="text-on-surface-variant">NEWS.</span>
         </motion.h1>
 
-        <p className="text-[11px] uppercase tracking-[0.25em] text-white/30 font-black">
+        <p className="text-[11px] uppercase tracking-[0.25em] text-on-surface-variant font-black">
           Denver, CO · Est. 2023
         </p>
       </section>
@@ -57,22 +57,22 @@ export function AboutView({ onBack }: AboutViewProps) {
       {/* Story */}
       <section className="mb-6">
         <div className="glass-panel rounded-[28px] p-6 space-y-4">
-          <h2 className="text-[9px] font-black uppercase tracking-[0.3em] text-white/35 border-b border-white/[0.05] pb-3">
+          <h2 className="text-[9px] font-black uppercase tracking-[0.3em] text-on-surface-variant border-b border-on-background/[0.07] pb-3">
             Our Story
           </h2>
-          <p className="text-[13px] text-white/70 leading-relaxed font-medium">
+          <p className="text-[13px] text-on-background/75 leading-relaxed font-medium">
             Sweet News started as a late-night idea between friends in{' '}
-            <span className="text-white font-black">Denver, Colorado</span> in 2023.
+            <span className="text-on-background font-black">Denver, Colorado</span> in 2023.
             We noticed something: the best food is usually found after midnight — but
             delivery options were always an afterthought.
           </p>
-          <p className="text-[13px] text-white/70 leading-relaxed font-medium">
+          <p className="text-[13px] text-on-background/75 leading-relaxed font-medium">
             We built Sweet News to change that. Premium snacks, exotic finds, and
             curated flavors — delivered with{' '}
-            <span className="text-white font-black">zero compromise</span>. Our owl
+            <span className="text-on-background font-black">zero compromise</span>. Our owl
             stays up so you don't have to.
           </p>
-          <p className="text-[13px] text-white/70 leading-relaxed font-medium">
+          <p className="text-[13px] text-on-background/75 leading-relaxed font-medium">
             We're powered by passionate local drivers and obsessed with quality.
             Every drop in our vault is hand-selected. Every delivery is tracked in
             real time. This is midnight, done right.
@@ -93,13 +93,13 @@ export function AboutView({ onBack }: AboutViewProps) {
               key={item.label}
               className="glass-panel rounded-[20px] p-4 text-center"
             >
-              <p className="text-[8px] uppercase tracking-[0.25em] text-white/30 font-black mb-1">
+              <p className="text-[8px] uppercase tracking-[0.25em] text-on-surface-variant font-black mb-1">
                 {item.label}
               </p>
-              <p className="text-[18px] font-black text-white leading-none mb-0.5">
+              <p className="text-[18px] font-black text-on-background leading-none mb-0.5">
                 {item.value}
               </p>
-              <p className="text-[9px] text-white/40 font-medium">{item.sub}</p>
+              <p className="text-[9px] text-on-surface-variant font-medium">{item.sub}</p>
             </div>
           ))}
         </div>
@@ -108,7 +108,7 @@ export function AboutView({ onBack }: AboutViewProps) {
       {/* Contact */}
       <section className="mb-6">
         <div className="glass-panel rounded-[28px] p-6 space-y-4">
-          <h2 className="text-[9px] font-black uppercase tracking-[0.3em] text-white/35 border-b border-white/[0.05] pb-3">
+          <h2 className="text-[9px] font-black uppercase tracking-[0.3em] text-on-surface-variant border-b border-on-background/[0.07] pb-3">
             Get in Touch
           </h2>
 
@@ -120,24 +120,24 @@ export function AboutView({ onBack }: AboutViewProps) {
               <Mail size={16} className="text-white" />
             </div>
             <div>
-              <p className="text-[10px] text-white/30 uppercase tracking-widest font-black mb-0.5">
+              <p className="text-[10px] text-on-surface-variant uppercase tracking-widest font-black mb-0.5">
                 Email Us
               </p>
-              <p className="text-[13px] text-white font-black group-hover:text-[#ff2060] transition-colors">
+              <p className="text-[13px] text-on-background font-black group-hover:text-[#ff2060] transition-colors">
                 sweetnewsowl@gmail.com
               </p>
             </div>
           </a>
 
           <div className="flex items-center gap-4 py-2">
-            <div className="w-10 h-10 rounded-2xl bg-white/[0.06] border border-white/[0.08] flex items-center justify-center flex-shrink-0">
-              <MapPin size={16} className="text-white/50" />
+            <div className="w-10 h-10 rounded-2xl bg-on-background/[0.05] border border-on-background/[0.09] flex items-center justify-center flex-shrink-0">
+              <MapPin size={16} className="text-on-surface-variant" />
             </div>
             <div>
-              <p className="text-[10px] text-white/30 uppercase tracking-widest font-black mb-0.5">
+              <p className="text-[10px] text-on-surface-variant uppercase tracking-widest font-black mb-0.5">
                 Headquarters
               </p>
-              <p className="text-[13px] text-white/80 font-black">
+              <p className="text-[13px] text-on-background font-black">
                 Denver, Colorado
               </p>
             </div>
@@ -147,14 +147,14 @@ export function AboutView({ onBack }: AboutViewProps) {
 
       {/* Legal */}
       <section className="mb-4">
-        <div className="rounded-[24px] border border-white/[0.05] bg-white/[0.01] p-5 space-y-3">
+        <div className="rounded-[24px] border border-on-background/[0.07] bg-on-background/[0.03] p-5 space-y-3">
           <div className="flex items-center gap-2 mb-1">
-            <Shield size={12} className="text-white/20" />
-            <h2 className="text-[9px] font-black uppercase tracking-[0.3em] text-white/25">
+            <Shield size={12} className="text-on-background/30" />
+            <h2 className="text-[9px] font-black uppercase tracking-[0.3em] text-on-surface-variant">
               Legal Disclaimer
             </h2>
           </div>
-          <p className="text-[10px] text-white/25 leading-relaxed font-medium">
+          <p className="text-[10px] text-on-surface-variant leading-relaxed font-medium">
             Sweet News is a food delivery platform connecting customers with local
             vendors and independent delivery partners. All products are subject to
             availability. Delivery times may vary based on location and demand.
@@ -162,12 +162,12 @@ export function AboutView({ onBack }: AboutViewProps) {
             prices are subject to change without notice. Sweet News LLC is not
             responsible for allergic reactions or dietary concerns — please review
             all product descriptions carefully. For support or inquiries, contact{' '}
-            <a href="mailto:sweetnewsowl@gmail.com" className="text-white/40 underline">
+            <a href="mailto:sweetnewsowl@gmail.com" className="text-on-surface-variant underline">
               sweetnewsowl@gmail.com
             </a>
             .
           </p>
-          <p className="text-[10px] text-white/20 font-medium">
+          <p className="text-[10px] text-on-background/30 font-medium">
             © 2023–{new Date().getFullYear()} Sweet News LLC. All rights reserved.
           </p>
         </div>
@@ -176,7 +176,7 @@ export function AboutView({ onBack }: AboutViewProps) {
       {/* Mascot sign-off */}
       <div className="flex flex-col items-center py-6 gap-2">
         <OwlMascot size={48} />
-        <p className="text-[10px] text-white/20 uppercase tracking-[0.25em] font-black">
+        <p className="text-[10px] text-on-background/30 uppercase tracking-[0.25em] font-black">
           The Owl Stays Up
         </p>
       </div>

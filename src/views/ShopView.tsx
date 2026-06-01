@@ -1,15 +1,18 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { Moon, PackageOpen } from 'lucide-react';
+import { Moon, PackageOpen, Sparkles } from 'lucide-react';
 import { Product } from '../types';
 import { categories, products } from '../data/products';
 import { CategoryChip } from '../components/molecules/CategoryChip';
 import { ProductCard } from '../components/molecules/ProductCard';
 import { Button } from '../components/atoms/Button';
+import { useCartStore } from '../store/cart';
+import { getCartRecommendations } from '../utils/recommendations';
 
 interface ShopViewProps {
   selectedCategory: string;
   setSelectedCategory: (category: string) => void;
   onAddToCart: (product: Product) => void;
+  onViewProduct: (product: Product) => void;
   onNavigateToNews: () => void;
 }
 
@@ -17,8 +20,12 @@ export function ShopView({
   selectedCategory,
   setSelectedCategory,
   onAddToCart,
+  onViewProduct,
   onNavigateToNews,
 }: ShopViewProps) {
+  const cartItems = useCartStore((state) => state.items);
+  const recommendations = getCartRecommendations(cartItems, products);
+
   const filteredHorizontal = products.filter(
     (p) => selectedCategory === 'all' || p.categoryId === selectedCategory
   );
@@ -69,13 +76,13 @@ export function ShopView({
       <section className="mb-8">
         <div className="flex justify-between items-end mb-6 px-2">
           <div>
-            <h2 className="text-[12px] font-bold text-white/55 uppercase tracking-[0.1em]">
+            <h2 className="text-[12px] font-bold text-on-surface-variant uppercase tracking-[0.1em]">
               Tonight's Featured Drops
             </h2>
           </div>
           <button
             onClick={() => setSelectedCategory('all')}
-            className="font-headline-md text-[11px] tracking-[0.2em] text-white/50 uppercase hover:text-white/90 active:scale-95 transition-all font-black border border-white/[0.08] px-4 py-2 rounded-full hover:border-white/20"
+            className="font-headline-md text-[11px] tracking-[0.2em] text-on-surface-variant uppercase hover:text-on-background active:scale-95 transition-all font-black border border-on-background/[0.09] px-4 py-2 rounded-full hover:border-on-background/[0.12]"
           >
             All Drops
           </button>
@@ -89,8 +96,9 @@ export function ShopView({
                 product={product}
                 isFeatured={idx === 0}
                 onAdd={() => onAddToCart(product)}
+                onView={() => onViewProduct(product)}
                 animationDelay={idx * 0.06}
-                className="w-[162px] md:w-[182px] flex-shrink-0"
+                className="w-[162px] md:w-[200px] flex-shrink-0"
               />
             ))}
           </AnimatePresence>
@@ -138,24 +146,63 @@ export function ShopView({
         </motion.div>
       </section>
 
+      {/* Cart-Based Recommendations */}
+      <AnimatePresence>
+        {recommendations.length > 0 && (
+          <motion.section
+            key="recommendations"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.3 }}
+            className="mb-8 px-2"
+          >
+            <div className="flex justify-between items-end mb-4">
+              <div>
+                <p className="text-[9px] tracking-[0.3em] text-on-surface-variant uppercase font-black mb-1 flex items-center gap-1.5">
+                  <Sparkles className="w-3 h-3 text-primary" />
+                  Based on your cart
+                </p>
+                <h2 className="font-headline-md text-[16px] tracking-[0.2em] uppercase font-black text-on-background">
+                  You Might Like
+                </h2>
+              </div>
+            </div>
+            <div className="flex overflow-x-auto hide-scrollbar gap-4 pb-4 -mx-6 px-6 md:mx-0 md:px-1 pt-1">
+              {recommendations.map((product, idx) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  isFeatured={false}
+                  onAdd={() => onAddToCart(product)}
+                  onView={() => onViewProduct(product)}
+                  animationDelay={idx * 0.06}
+                  className="w-[162px] md:w-[200px] flex-shrink-0"
+                />
+              ))}
+            </div>
+          </motion.section>
+        )}
+      </AnimatePresence>
+
       {/* The Vault — 2-col Grid */}
       <section className="mb-8 px-2">
         <div className="flex justify-between items-end mb-6">
           <div>
-            <p className="text-[9px] tracking-[0.3em] text-white/30 uppercase font-black mb-1">Full</p>
-            <h2 className="font-headline-md text-[16px] tracking-[0.2em] uppercase font-black text-white/80">
+            <p className="text-[9px] tracking-[0.3em] text-on-surface-variant uppercase font-black mb-1">Full</p>
+            <h2 className="font-headline-md text-[16px] tracking-[0.2em] uppercase font-black text-on-background">
               {selectedCategory === 'all'
                 ? 'The Vault'
                 : categories.find((c) => c.id === selectedCategory)?.name}
             </h2>
           </div>
-          <span className="text-[10px] text-white/25 font-black uppercase tracking-widest">
+          <span className="text-[10px] text-on-surface-variant font-black uppercase tracking-widest">
             {filteredGrid.length} drops
           </span>
         </div>
 
         {filteredGrid.length > 0 ? (
-          <motion.div layout className="grid grid-cols-2 gap-4">
+          <motion.div layout className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <AnimatePresence mode="popLayout">
               {filteredGrid.map((product, idx) => (
                 <ProductCard
@@ -163,6 +210,7 @@ export function ShopView({
                   product={product}
                   isFeatured={false}
                   onAdd={() => onAddToCart(product)}
+                  onView={() => onViewProduct(product)}
                   animationDelay={idx * 0.05}
                   className="w-full"
                 />
@@ -173,13 +221,13 @@ export function ShopView({
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center py-16 px-6 rounded-[32px] border border-dashed border-white/[0.08] bg-white/[0.01]"
+            className="text-center py-16 px-6 rounded-[32px] border border-dashed border-on-background/[0.09] bg-on-background/[0.03]"
           >
-            <PackageOpen className="w-10 h-10 text-white/15 mx-auto mb-4" strokeWidth={1.5} />
-            <h3 className="font-headline-md text-[13px] uppercase tracking-widest font-black text-white/80 mb-1">
+            <PackageOpen className="w-10 h-10 text-on-background/30 mx-auto mb-4" strokeWidth={1.5} />
+            <h3 className="font-headline-md text-[13px] uppercase tracking-widest font-black text-on-background mb-1">
               Vault Empty
             </h3>
-            <p className="text-[11px] text-white/35 leading-relaxed">
+            <p className="text-[11px] text-on-surface-variant leading-relaxed">
               No drops in this category tonight. Try another.
             </p>
             <button

@@ -50,7 +50,7 @@ export default function FleetApplyView() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-6 pt-12 flex flex-col">
+    <div className="min-h-screen bg-background text-on-background p-6 pt-12 flex flex-col">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -92,17 +92,17 @@ export default function FleetApplyView() {
             />
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
-            <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-3">Partner Benefits</h4>
+          <div className="bg-on-background/[0.05] border border-on-background/[0.09] rounded-2xl p-4">
+            <h4 className="text-xs font-bold text-on-background uppercase tracking-wider mb-3">Partner Benefits</h4>
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-[10px] text-on-surface-variant">
-                <CheckCircle2 size={12} className="text-amber-400" /> Instant payouts after every shift
+                <CheckCircle2 size={12} className="text-amber-600" /> Instant payouts after every shift
               </div>
               <div className="flex items-center gap-2 text-[10px] text-on-surface-variant">
-                <CheckCircle2 size={12} className="text-amber-400" /> Premium route optimization
+                <CheckCircle2 size={12} className="text-amber-600" /> Premium route optimization
               </div>
               <div className="flex items-center gap-2 text-[10px] text-on-surface-variant">
-                <CheckCircle2 size={12} className="text-amber-400" /> Exclusive "Sweet News" driver perks
+                <CheckCircle2 size={12} className="text-amber-600" /> Exclusive "Sweet News" driver perks
               </div>
             </div>
           </div>

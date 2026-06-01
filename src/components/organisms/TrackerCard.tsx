@@ -62,31 +62,31 @@ export function TrackerCard({ order }: TrackerCardProps) {
     <div
       className={`rounded-[24px] border p-5 relative ${
         isCancelled
-          ? 'border-white/[0.04] opacity-60 bg-white/[0.01]'
+          ? 'border-on-background/[0.07] opacity-60 bg-on-background/[0.03]'
           : isActive
-          ? 'border-white/[0.10] bg-white/[0.02]'
-          : 'border-white/[0.05] bg-white/[0.01]'
+          ? 'border-on-background/[0.09] bg-surface'
+          : 'border-on-background/[0.07] bg-on-background/[0.03]'
       }`}
     >
       {/* ── ETA hero (active orders only) ────────────────── */}
       {isActive && eta && (
         <div className="mb-5">
-          <p className="text-[10px] uppercase tracking-[0.25em] text-white/35 font-bold mb-1">
+          <p className="text-[10px] uppercase tracking-[0.25em] text-on-surface-variant font-bold mb-1">
             Arriving by
           </p>
-          <p className="text-2xl font-black text-white tracking-tight leading-none">
+          <p className="text-2xl font-black text-on-background tracking-tight leading-none">
             {eta.absolute}
           </p>
-          <p className="text-xs text-white/45 mt-1">{eta.relative}</p>
+          <p className="text-xs text-on-surface-variant mt-1">{eta.relative}</p>
         </div>
       )}
 
       {isActive && !eta && (
         <div className="mb-5">
-          <p className="text-[10px] uppercase tracking-[0.25em] text-white/35 font-bold mb-1">
+          <p className="text-[10px] uppercase tracking-[0.25em] text-on-surface-variant font-bold mb-1">
             Status
           </p>
-          <p className="text-xl font-black text-white tracking-tight leading-none">
+          <p className="text-xl font-black text-on-background tracking-tight leading-none">
             Calculating ETA…
           </p>
         </div>
@@ -98,23 +98,23 @@ export function TrackerCard({ order }: TrackerCardProps) {
           <span
             className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full border ${
               isCancelled
-                ? 'bg-white/[0.03] text-white/35 border-white/[0.05]'
+                ? 'bg-on-background/[0.03] text-on-surface-variant border-on-background/[0.07]'
                 : isDelivered
-                ? 'bg-emerald-500/[0.08] text-emerald-400 border-emerald-500/[0.15]'
-                : 'bg-white/[0.06] text-white border-white/[0.08]'
+                ? 'bg-emerald-500/[0.08] text-emerald-600 border-emerald-500/[0.15]'
+                : 'bg-on-background/[0.05] text-on-background border-on-background/[0.09]'
             }`}
           >
             {STATUS_LABELS[order.status] ?? order.status}
           </span>
-          <p className="text-[10px] text-white/30 font-medium mt-2 tracking-wide">
+          <p className="text-[10px] text-on-surface-variant font-medium mt-2 tracking-wide">
             #{shortId} · {order.date}
           </p>
         </div>
         <div className="text-right">
-          <p className="text-lg font-black text-white tracking-tight">
+          <p className="text-lg font-black text-on-background tracking-tight">
             ${order.total.toFixed(2)}
           </p>
-          <p className="text-[10px] text-white/30 mt-0.5">
+          <p className="text-[10px] text-on-surface-variant mt-0.5">
             {itemCount} {itemCount === 1 ? 'item' : 'items'}
           </p>
         </div>
@@ -129,19 +129,19 @@ export function TrackerCard({ order }: TrackerCardProps) {
                 key={step}
                 className={`text-[9px] font-bold transition-colors ${
                   i === currentStepIndex
-                    ? 'text-white'
+                    ? 'text-on-background'
                     : i < currentStepIndex
-                    ? 'text-white/50'
-                    : 'text-white/20'
+                    ? 'text-on-surface-variant'
+                    : 'text-on-background/30'
                 }`}
               >
                 {step}
               </span>
             ))}
           </div>
-          <div className="relative h-[3px] bg-white/[0.06] rounded-full overflow-hidden">
+          <div className="relative h-[3px] bg-on-background/[0.07] rounded-full overflow-hidden">
             <motion.div
-              className="absolute inset-y-0 left-0 rounded-full bg-white/90"
+              className="absolute inset-y-0 left-0 rounded-full bg-primary"
               initial={{ width: 0 }}
               animate={{ width: `${order.progress}%` }}
               transition={{ duration: 1.0, ease: 'easeOut' }}
@@ -152,7 +152,7 @@ export function TrackerCard({ order }: TrackerCardProps) {
 
       {/* ── Driver row ──────────────────────────────────── */}
       {(order.driverId || order.driverSnapshot) && (
-        <div className="flex items-center gap-3 mb-5 pb-5 border-b border-white/[0.05]">
+        <div className="flex items-center gap-3 mb-5 pb-5 border-b border-on-background/[0.07]">
           {order.driverSnapshot?.photo ? (
             <img
               src={order.driverSnapshot.photo}
@@ -160,19 +160,19 @@ export function TrackerCard({ order }: TrackerCardProps) {
               className="w-9 h-9 rounded-full object-cover flex-shrink-0"
             />
           ) : (
-            <div className="w-9 h-9 rounded-full bg-white/[0.06] flex items-center justify-center flex-shrink-0">
-              <User className="text-white/40" size={15} />
+            <div className="w-9 h-9 rounded-full bg-on-background/[0.05] flex items-center justify-center flex-shrink-0">
+              <User className="text-on-surface-variant" size={15} />
             </div>
           )}
           <div className="flex-1 min-w-0">
-            <p className="text-[10px] text-white/40 font-medium mb-0.5">Your driver</p>
-            <p className="text-sm font-bold text-white truncate">
+            <p className="text-[10px] text-on-surface-variant font-medium mb-0.5">Your driver</p>
+            <p className="text-sm font-bold text-on-background truncate">
               {order.driverSnapshot?.name ?? 'Sweet News Driver'}
             </p>
           </div>
           <a
             href={supportMailUrl}
-            className="p-2 rounded-full text-white/40 hover:text-white hover:bg-white/[0.05] transition-colors flex-shrink-0"
+            className="p-2 rounded-full text-on-surface-variant hover:text-on-background hover:bg-on-background/[0.05] transition-colors flex-shrink-0"
             aria-label="Contact support"
           >
             <Mail size={14} />
@@ -182,8 +182,8 @@ export function TrackerCard({ order }: TrackerCardProps) {
 
       {/* ── Dispatching notice (active, no driver yet) ── */}
       {!order.driverId && isActive && (
-        <div className="flex items-center gap-2 mb-5 text-[11px] text-white/55">
-          <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+        <div className="flex items-center gap-2 mb-5 text-[11px] text-on-surface-variant">
+          <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
           Finding you a driver…
         </div>
       )}
@@ -193,11 +193,11 @@ export function TrackerCard({ order }: TrackerCardProps) {
         href={getMapUrl(order.address)}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center gap-2.5 mb-4 py-2.5 px-3 -mx-1 rounded-xl hover:bg-white/[0.03] transition-colors"
+        className="flex items-center gap-2.5 mb-4 py-2.5 px-3 -mx-1 rounded-xl hover:bg-on-background/[0.03] transition-colors"
       >
-        <MapPin size={13} className="text-white/40 flex-shrink-0" />
-        <span className="text-xs text-white/65 truncate flex-1">{order.address}</span>
-        <Navigation size={11} className="text-white/25 flex-shrink-0" />
+        <MapPin size={13} className="text-on-surface-variant flex-shrink-0" />
+        <span className="text-xs text-on-background/75 truncate flex-1">{order.address}</span>
+        <Navigation size={11} className="text-on-surface-variant flex-shrink-0" />
       </a>
 
       {/* ── Items (collapsible for past orders) ─────────── */}
@@ -213,12 +213,12 @@ export function TrackerCard({ order }: TrackerCardProps) {
               className="w-8 h-8 object-cover rounded-lg flex-shrink-0"
             />
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-bold text-white truncate">{item.name}</p>
-              <p className="text-[10px] text-white/35">
+              <p className="text-xs font-bold text-on-background truncate">{item.name}</p>
+              <p className="text-[10px] text-on-surface-variant">
                 {item.quantity}× · ${item.price.toFixed(2)}
               </p>
             </div>
-            <p className="text-xs text-white/50 flex-shrink-0">
+            <p className="text-xs text-on-surface-variant flex-shrink-0">
               ${(item.price * item.quantity).toFixed(2)}
             </p>
           </div>
@@ -227,7 +227,7 @@ export function TrackerCard({ order }: TrackerCardProps) {
         {!isActive && hiddenCount > 0 && (
           <button
             onClick={() => setItemsExpanded((v) => !v)}
-            className="flex items-center gap-1 text-[11px] text-white/40 hover:text-white/70 transition-colors pt-1"
+            className="flex items-center gap-1 text-[11px] text-on-surface-variant hover:text-on-background transition-colors pt-1"
           >
             {itemsExpanded ? 'Show less' : `Show ${hiddenCount} more`}
             <ChevronDown
@@ -240,8 +240,8 @@ export function TrackerCard({ order }: TrackerCardProps) {
 
       {/* ── Rating (delivered only) ─────────────────────── */}
       {isDelivered && (
-        <div className="mt-5 pt-5 border-t border-white/[0.05]">
-          <p className="text-[10px] font-medium text-white/45 mb-2.5">
+        <div className="mt-5 pt-5 border-t border-on-background/[0.07]">
+          <p className="text-[10px] font-medium text-on-surface-variant mb-2.5">
             {rating > 0 ? 'Thanks for your feedback' : 'Rate your delivery'}
           </p>
           <div className="flex gap-1.5">
@@ -258,9 +258,9 @@ export function TrackerCard({ order }: TrackerCardProps) {
               >
                 <Star
                   size={20}
-                  fill={(hoverRating || rating) >= star ? '#FFFFFF' : 'transparent'}
+                  fill={(hoverRating || rating) >= star ? '#e60023' : 'transparent'}
                   className={
-                    (hoverRating || rating) >= star ? 'text-white' : 'text-white/20'
+                    (hoverRating || rating) >= star ? 'text-primary' : 'text-on-background/30'
                   }
                 />
               </motion.button>
@@ -271,9 +271,9 @@ export function TrackerCard({ order }: TrackerCardProps) {
 
       {/* ── Cancelled notice ────────────────────────────── */}
       {isCancelled && (
-        <div className="mt-4 pt-4 border-t border-white/[0.04] flex items-center gap-2">
-          <AlertCircle size={13} className="text-white/35 flex-shrink-0" />
-          <p className="text-xs text-white/45">
+        <div className="mt-4 pt-4 border-t border-on-background/[0.07] flex items-center gap-2">
+          <AlertCircle size={13} className="text-on-surface-variant flex-shrink-0" />
+          <p className="text-xs text-on-surface-variant">
             {(order as ActiveOrder & { cancellationReason?: string }).cancellationReason
               ? `Cancelled: ${(order as ActiveOrder & { cancellationReason?: string }).cancellationReason}`
               : 'This order was cancelled.'}

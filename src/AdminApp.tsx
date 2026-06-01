@@ -135,9 +135,9 @@ export default function AdminApp() {
 
   if (role !== 'admin') {
     return (
-      <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-6 text-center">
+      <div className="min-h-screen bg-background text-on-background flex flex-col items-center justify-center p-6 text-center">
         <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mb-6 border border-red-500/20">
-          <ShieldCheck className="w-8 h-8 text-red-500" />
+          <ShieldCheck className="w-8 h-8 text-red-600" />
         </div>
         <h1 className="text-2xl font-black mb-2">Access Restricted</h1>
         <p className="text-on-surface-variant max-w-sm">This terminal is reserved for Sweet News Administration.</p>
@@ -147,7 +147,7 @@ export default function AdminApp() {
   }
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white p-6 md:p-12">
+    <div className="min-h-screen bg-surface text-on-background p-6 md:p-12">
       <div className="max-w-7xl mx-auto">
         <header className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-6">
           <div>
@@ -157,19 +157,19 @@ export default function AdminApp() {
             <div className="flex gap-4 mt-6">
               <button 
                 onClick={() => setActiveTab('dispatcher')}
-                className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${activeTab === 'dispatcher' ? 'btn-brand' : 'bg-white/5 text-on-surface-variant hover:bg-white/10'}`}
+                className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${activeTab === 'dispatcher' ? 'btn-brand' : 'bg-on-background/[0.05] text-on-surface-variant hover:bg-on-background/[0.07]'}`}
               >
                 Dispatcher Terminal
               </button>
               <button 
                 onClick={() => setActiveTab('drivers')}
-                className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${activeTab === 'drivers' ? 'btn-brand' : 'bg-white/5 text-on-surface-variant hover:bg-white/10'}`}
+                className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${activeTab === 'drivers' ? 'btn-brand' : 'bg-on-background/[0.05] text-on-surface-variant hover:bg-on-background/[0.07]'}`}
               >
                 Fleet Recruitment
               </button>
               <button 
                 onClick={() => setActiveTab('waitlist')}
-                className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${activeTab === 'waitlist' ? 'btn-brand' : 'bg-white/5 text-on-surface-variant hover:bg-white/10'}`}
+                className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${activeTab === 'waitlist' ? 'btn-brand' : 'bg-on-background/[0.05] text-on-surface-variant hover:bg-on-background/[0.07]'}`}
               >
                 Waitlist Manager
               </button>
@@ -177,11 +177,11 @@ export default function AdminApp() {
           </div>
           
           <div className="flex gap-4">
-            <div className="bg-white/5 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/10">
+            <div className="bg-on-background/[0.05] backdrop-blur-md px-6 py-3 rounded-2xl border border-on-background/[0.09]">
               <span className="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold block mb-1">Live Orders</span>
               <span className="text-2xl font-black">{orders.filter(o => o.status !== 'delivered').length}</span>
             </div>
-            <div className="bg-white/5 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/10">
+            <div className="bg-on-background/[0.05] backdrop-blur-md px-6 py-3 rounded-2xl border border-on-background/[0.09]">
               <span className="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold block mb-1">Waitlist</span>
               <span className="text-2xl font-black">{waitlist.filter(w => w.status === 'waiting').length}</span>
             </div>
@@ -199,7 +199,7 @@ export default function AdminApp() {
             >
               {waitlist.length > 0 ? (
                 waitlist.map((entry) => (
-                  <div key={entry.id} className="bg-white/[0.02] border border-white/[0.06] rounded-[24px] p-6 flex flex-col md:flex-row md:items-center justify-between gap-6 hover:bg-white/[0.04] transition-all">
+                  <div key={entry.id} className="bg-on-background/[0.03] border border-on-background/[0.07] rounded-[24px] p-6 flex flex-col md:flex-row md:items-center justify-between gap-6 hover:bg-on-background/[0.05] transition-all">
                     <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-6">
                       <div>
                         <span className="text-[10px] uppercase tracking-widest text-primary font-black block mb-1">Prospective Partner</span>
@@ -207,21 +207,21 @@ export default function AdminApp() {
                         <p className="text-xs text-on-surface-variant">{entry.email}</p>
                       </div>
                       <div className="flex items-center gap-3">
-                        <MapPin className="w-5 h-5 text-blue-400" />
+                        <MapPin className="w-5 h-5 text-blue-600" />
                         <div>
                           <p className="text-xs text-on-surface-variant">Location</p>
                           <p className="font-medium text-sm">{entry.city}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
-                        <Car className="w-5 h-5 text-amber-400" />
+                        <Car className="w-5 h-5 text-amber-600" />
                         <div>
                           <p className="text-xs text-on-surface-variant">Vehicle</p>
                           <p className="font-medium text-sm">{entry.vehicleType}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
-                        <Phone className="w-5 h-5 text-emerald-400" />
+                        <Phone className="w-5 h-5 text-emerald-600" />
                         <div>
                           <p className="text-xs text-on-surface-variant">Contact</p>
                           <p className="font-medium text-sm">{entry.phone}</p>
@@ -238,8 +238,8 @@ export default function AdminApp() {
                           Send Invite
                         </Button>
                       ) : (
-                        <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full border border-white/10">
-                          <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                        <div className="flex items-center gap-2 px-4 py-2 bg-on-background/[0.05] rounded-full border border-on-background/[0.09]">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                           <span className="text-[10px] uppercase font-black tracking-widest opacity-60 italic">Invited</span>
                         </div>
                       )}
@@ -247,7 +247,7 @@ export default function AdminApp() {
                   </div>
                 ))
               ) : (
-                <div className="py-32 text-center border-2 border-dashed border-white/5 rounded-[40px]">
+                <div className="py-32 text-center border-2 border-dashed border-on-background/[0.07] rounded-[40px]">
                   <p className="text-on-surface-variant font-medium">Waitlist is currently empty.</p>
                 </div>
               )}
@@ -261,7 +261,7 @@ export default function AdminApp() {
               className="grid grid-cols-1 gap-4"
             >
               {applications.map((app) => (
-                <div key={app.id} className="bg-white/[0.02] border border-white/[0.06] rounded-[24px] p-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div key={app.id} className="bg-on-background/[0.03] border border-on-background/[0.07] rounded-[24px] p-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
                   {/* ... same driver application card content as before ... */}
                   <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-6">
                     <div>
@@ -274,11 +274,11 @@ export default function AdminApp() {
                       <div><p className="text-xs text-on-surface-variant">Vehicle</p><p className="font-medium">{app.vehicleType}</p></div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Hash className="w-5 h-5 text-blue-500" />
+                      <Hash className="w-5 h-5 text-blue-600" />
                       <div><p className="text-xs text-on-surface-variant">Plate</p><p className="font-medium">{app.licensePlate}</p></div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Phone className="w-5 h-5 text-green-500" />
+                      <Phone className="w-5 h-5 text-green-600" />
                       <div><p className="text-xs text-on-surface-variant">Phone</p><p className="font-medium">{app.phone}</p></div>
                     </div>
                   </div>
@@ -304,7 +304,7 @@ export default function AdminApp() {
               className="grid grid-cols-1 gap-6"
             >
               {orders.filter(o => o.status !== 'delivered').map((order) => (
-                <div key={order.id} className="bg-white/[0.02] border border-white/[0.06] rounded-[32px] p-8 flex flex-col lg:flex-row gap-8">
+                <div key={order.id} className="bg-on-background/[0.03] border border-on-background/[0.07] rounded-[32px] p-8 flex flex-col lg:flex-row gap-8">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-4">
                       <div className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
@@ -323,8 +323,14 @@ export default function AdminApp() {
 
                     <div className="flex gap-2 overflow-x-auto pb-4">
                       {order.items.map((item, idx) => (
-                        <div key={idx} className="bg-white/5 rounded-2xl p-3 flex items-center gap-3 min-w-[200px] border border-white/5">
-                          <img src={item.image} className="w-10 h-10 rounded-xl object-cover" alt="" />
+                        <div key={idx} className="bg-on-background/[0.05] rounded-2xl p-3 flex items-center gap-3 min-w-[200px] border border-on-background/[0.07]">
+                          {item.image ? (
+                            <img src={item.image} className="w-10 h-10 rounded-xl object-cover" alt="" />
+                          ) : (
+                            <div className="w-10 h-10 rounded-xl bg-on-background/[0.05] flex items-center justify-center text-[8px] font-black text-on-surface-variant uppercase text-center leading-tight px-0.5">
+                              {item.name.split(' ').slice(0, 2).join('\n')}
+                            </div>
+                          )}
                           <div>
                             <p className="text-xs font-bold truncate w-24">{item.name}</p>
                             <p className="text-[10px] opacity-50">Qty: {item.quantity}</p>
@@ -334,7 +340,7 @@ export default function AdminApp() {
                     </div>
                   </div>
 
-                  <div className="w-full lg:w-80 shrink-0 border-l border-white/5 lg:pl-8 flex flex-col">
+                  <div className="w-full lg:w-80 shrink-0 border-l border-on-background/[0.07] lg:pl-8 flex flex-col">
                     <span className="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold block mb-4">Assign Logistics</span>
                     
                     {(() => {
@@ -350,13 +356,17 @@ export default function AdminApp() {
                     })()}
                     {order.driverId ? (
                       <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-4">
-                        <p className="text-xs text-emerald-500 font-bold mb-1 flex items-center gap-2">
+                        <p className="text-xs text-emerald-600 font-bold mb-1 flex items-center gap-2">
                           <Navigation className="w-3 h-3" /> Assigned
                         </p>
                         <p className="text-sm font-medium">Driver UID: {order.driverId.slice(0, 12)}...</p>
-                        <select 
-                          className="w-full mt-4 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-xs"
-                          onChange={(e) => updateOrderStatus(order.id, e.target.value as any, 50)}
+                        <select
+                          className="w-full mt-4 bg-on-background/[0.05] border border-on-background/[0.09] rounded-xl px-4 py-2 text-xs"
+                          onChange={(e) => {
+                            const s = e.target.value as 'cooking' | 'delivering' | 'delivered';
+                            const progress = s === 'delivered' ? 100 : s === 'delivering' ? 75 : 50;
+                            updateOrderStatus(order.id, s, progress);
+                          }}
                         >
                           <option value="">Update Status</option>
                           <option value="cooking">Move to Cooking</option>
@@ -366,13 +376,13 @@ export default function AdminApp() {
                         <div className="flex gap-2 mt-4">
                           <button 
                             onClick={() => handleUnassign(order.id)}
-                            className="flex-1 py-2 rounded-xl bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-on-surface-variant hover:bg-red-500/10 hover:text-red-500 hover:border-red-500/20 transition-all"
+                            className="flex-1 py-2 rounded-xl bg-on-background/[0.05] border border-on-background/[0.09] text-[10px] font-black uppercase tracking-widest text-on-surface-variant hover:bg-red-500/10 hover:text-red-600 hover:border-red-500/20 transition-all"
                           >
                             Unassign Driver
                           </button>
                           <button 
                             onClick={() => handleCancelOrder(order.id)}
-                            className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-on-surface-variant hover:bg-red-500/10 hover:text-red-500 hover:border-red-500/20 transition-all"
+                            className="px-4 py-2 rounded-xl bg-on-background/[0.05] border border-on-background/[0.09] text-[10px] font-black uppercase tracking-widest text-on-surface-variant hover:bg-red-500/10 hover:text-red-600 hover:border-red-500/20 transition-all"
                           >
                             Cancel
                           </button>
@@ -386,7 +396,7 @@ export default function AdminApp() {
                             <button
                               key={driver.uid}
                               onClick={() => handleAssign(order.id, driver.uid, order.customerId)}
-                              className="w-full bg-white/5 hover:btn-brand border border-white/10 rounded-2xl p-4 text-left transition-all group"
+                              className="w-full bg-on-background/[0.05] hover:btn-brand border border-on-background/[0.09] rounded-2xl p-4 text-left transition-all group"
                             >
                               <p className="text-sm font-bold group-hover:text-white">{driver.email}</p>
                               <p className="text-[10px] opacity-50 group-hover:opacity-80">Ready for Dispatch</p>
@@ -397,21 +407,21 @@ export default function AdminApp() {
                         )}
                         <button 
                           onClick={() => handleCancelOrder(order.id)}
-                          className="w-full mt-4 py-2 rounded-xl bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-on-surface-variant hover:bg-red-500/10 hover:text-red-500 hover:border-red-500/20 transition-all"
+                          className="w-full mt-4 py-2 rounded-xl bg-on-background/[0.05] border border-on-background/[0.09] text-[10px] font-black uppercase tracking-widest text-on-surface-variant hover:bg-red-500/10 hover:text-red-600 hover:border-red-500/20 transition-all"
                         >
                           Cancel Order
                         </button>
                       </div>
                     )}
                     
-                    <div className="mt-4 pt-4 border-t border-white/5 flex items-center gap-3">
+                    <div className="mt-4 pt-4 border-t border-on-background/[0.07] flex items-center gap-3">
                       <div className="flex-1">
                         <input 
                           type="number" 
                           placeholder="ETA (mins)"
                           defaultValue={order.etaMins}
                           onBlur={(e) => handleUpdateETA(order.id, e.target.value)}
-                          className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs focus:border-[#e60023] outline-none transition-all"
+                          className="w-full bg-on-background/[0.05] border border-on-background/[0.09] rounded-lg px-3 py-2 text-xs focus:border-[#e60023] outline-none transition-all"
                         />
                       </div>
                       <div className="text-[10px] text-on-surface-variant uppercase font-bold">
