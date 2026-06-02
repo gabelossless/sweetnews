@@ -416,7 +416,7 @@ export default function CustomerApp() {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className="fixed bottom-[100px] left-1/2 -translate-x-1/2 z-[100] flex items-center gap-3 bg-[#2a1a1f] text-white px-5 py-3.5 rounded-full shadow-[0_12px_40px_rgba(42,26,31,0.25)] md:bottom-28 border border-white/10"
+            className="fixed bottom-[100px] left-1/2 -translate-x-1/2 z-[100] flex items-center gap-3 bg-[#f5ede5] text-[#0f0a08] px-5 py-3.5 rounded-full shadow-[0_12px_40px_rgba(0,0,0,0.40)] md:bottom-28 border border-[#0f0a08]/10"
           >
             <CheckCircle2 className="w-5 h-5 text-emerald-400 fill-emerald-400/20" />
             <span className="font-label-bold text-[13px] font-bold">{toastMessage}</span>

@@ -2,64 +2,64 @@
 @import "tailwindcss";
 
 @theme {
-  /* ─── Rose Blush & Cherry (light theme) ────────────────────────────
-     Background: soft rose-blush (not stark white). Text: deep plum-espresso.
-     Surfaces: blush-tinted cards. Deep Crumbl-style rose replaces neon pink. */
-  --color-background: #f7edf2;            /* soft rose-blush */
-  --color-surface: #fdf4f7;              /* cards, sheets, modals — blush white */
-  --color-surface-bright: #fdf4f7;
-  --color-surface-dim: #efd5e2;          /* wells, image placeholders — rose */
-  --color-surface-container-lowest: #fdf4f7;
-  --color-surface-container-low: #f9eaf2;
-  --color-surface-container: #f3dde9;
-  --color-surface-container-high: #ebd0de;
-  --color-surface-container-highest: #e2c4d4;
+  /* ─── Sweet Dark — Warm Espresso ────────────────────────────────────
+     Background: warm near-black espresso. Text: warm cream (never pure white).
+     Surfaces: layered dark espresso. Pink/red only on CTAs and gradients. */
+  --color-background: #0f0a08;            /* warm near-black espresso */
+  --color-surface: #1c1510;              /* cards, sheets, modals */
+  --color-surface-bright: #231a14;
+  --color-surface-dim: #251c16;          /* wells, image placeholders */
+  --color-surface-container-lowest: #1c1510;
+  --color-surface-container-low: #221812;
+  --color-surface-container: #2a1f18;
+  --color-surface-container-high: #322520;
+  --color-surface-container-highest: #3c2c25;
 
-  --color-on-background: #2a1520;        /* deep plum-espresso */
-  --color-on-surface: #2a1520;
-  --color-surface-variant: #efd5e2;
-  --color-on-surface-variant: #8a5572;   /* warm rose-mauve secondary text */
+  --color-on-background: #f5ede5;        /* warm cream */
+  --color-on-surface: #f5ede5;
+  --color-surface-variant: #2a1f18;
+  --color-on-surface-variant: #9a8878;   /* warm taupe secondary text */
 
   --color-primary: #e60023;              /* cherry red — kept */
-  --color-pink: #d4245a;                 /* deep Crumbl-style rose (was neon #ff2060) */
+  --color-pink: #d4245a;                 /* deep Crumbl-style rose — kept */
   --color-on-primary: #ffffff;
-  --color-primary-container: #ffd9e4;    /* blush pink container */
-  --color-on-primary-container: #55001c;
+  --color-primary-container: #5c000e;    /* dark red container */
+  --color-on-primary-container: #ffb4c6;
 
-  --color-secondary: #2a1520;
-  --color-on-secondary: #ffffff;
-  --color-secondary-container: #ebd0de;
-  --color-on-secondary-container: #2a1520;
+  --color-secondary: #f5ede5;            /* cream — active chip bg */
+  --color-on-secondary: #0f0a08;         /* dark espresso text on cream chip */
+  --color-secondary-container: #2a1f18;
+  --color-on-secondary-container: #f5ede5;
 
-  --color-tertiary: #8a5572;
+  --color-tertiary: #9a8878;
   --color-on-tertiary: #ffffff;
 
-  --color-outline: #dcc8d4;              /* rose-tinted border */
-  --color-outline-variant: #e8d4de;
+  --color-outline: #2e241c;              /* dark warm border */
+  --color-outline-variant: #261d16;
 
-  --color-inverse-surface: #2a1520;
-  --color-inverse-on-surface: #f7edf2;
+  --color-inverse-surface: #f5ede5;
+  --color-inverse-on-surface: #0f0a08;
   --color-inverse-primary: #ffb4c6;
 
-  --color-error: #d61f2b;                /* slightly deeper red for light bg */
+  --color-error: #d61f2b;
   --color-on-error: #ffffff;
-  --color-error-container: #ffd9dc;
-  --color-on-error-container: #5c0006;
+  --color-error-container: #5c0006;
+  --color-on-error-container: #ffd9e4;
 
   --color-primary-fixed: #ffb4c6;
   --color-primary-fixed-dim: #f07898;
   --color-on-primary-fixed: #3b0012;
   --color-on-primary-fixed-variant: #6e0025;
 
-  --color-secondary-fixed: #ebd0de;
-  --color-secondary-fixed-dim: #e2c4d4;
-  --color-on-secondary-fixed: #2a1520;
-  --color-on-secondary-fixed-variant: #8a5572;
+  --color-secondary-fixed: #3c2c25;
+  --color-secondary-fixed-dim: #322520;
+  --color-on-secondary-fixed: #f5ede5;
+  --color-on-secondary-fixed-variant: #9a8878;
 
-  --color-tertiary-fixed: #e2c4d4;
-  --color-tertiary-fixed-dim: #dcc8d4;
-  --color-on-tertiary-fixed: #2a1520;
-  --color-on-tertiary-fixed-variant: #8a5572;
+  --color-tertiary-fixed: #322520;
+  --color-tertiary-fixed-dim: #2e241c;
+  --color-on-tertiary-fixed: #f5ede5;
+  --color-on-tertiary-fixed-variant: #9a8878;
 
   --spacing-base: 8px;
   --spacing-xs: 4px;
@@ -173,10 +173,10 @@ html, body {
     transform: translateY(-2px);
   }
 
-  /* Frosted blush-white glass panel */
+  /* Frosted dark espresso glass panel */
   .glass-panel {
-    background: rgba(253, 244, 247, 0.7);
-    border: 1px solid rgba(42,21,32,0.08);
+    background: rgba(28, 21, 16, 0.85);
+    border: 1px solid rgba(245, 237, 229, 0.08);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
   }

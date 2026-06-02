@@ -21,13 +21,13 @@ interface CheckoutFormProps {
 const CARD_ELEMENT_OPTIONS = {
   style: {
     base: {
-      color: '#2a1a1f',
+      color: '#f5ede5',
       fontFamily: 'Inter, sans-serif',
       fontSize: '14px',
       fontSmoothing: 'antialiased',
-      '::placeholder': { color: '#7a6a6f' },
+      '::placeholder': { color: '#9a8878' },
     },
-    invalid: { color: '#d61f2b' },
+    invalid: { color: '#ff6b7a' },
   },
 };
 

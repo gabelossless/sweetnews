@@ -7,8 +7,8 @@ const customerManifest = {
   start_url: '/',
   display: 'standalone',
   orientation: 'portrait-primary',
-  background_color: '#f7edf2',
-  theme_color: '#f7edf2',
+  background_color: '#0f0a08',
+  theme_color: '#0f0a08',
   icons: [
     { src: '/icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
     { src: '/icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'maskable' },
@@ -28,8 +28,8 @@ const fleetManifest = {
   scope: '/',
   display: 'standalone',
   orientation: 'portrait-primary',
-  background_color: '#f7edf2',
-  theme_color: '#f7edf2',
+  background_color: '#0f0a08',
+  theme_color: '#0f0a08',
   icons: [
     { src: '/fleet-icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
     { src: '/fleet-icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'maskable' },
