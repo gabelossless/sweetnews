@@ -84,23 +84,59 @@ export default function AdminApp() {
   const handleAssign = async (orderId: string, driverId: string, customerId: string) => {
     try {
       await assignDriver(orderId, driverId);
-      // Notify customer via push (fire-and-forget)
-      const customerDoc = await getDoc(doc(db, 'users', customerId));
-      const fcmToken = customerDoc.data()?.fcmToken as string | undefined;
-      if (fcmToken) {
+
+      const [customerDoc, driverDoc] = await Promise.all([
+        getDoc(doc(db, 'users', customerId)),
+        getDoc(doc(db, 'users', driverId)),
+      ]);
+
+      const customerToken = customerDoc.data()?.fcmToken as string | undefined;
+      if (customerToken) {
         fetch('/api/push-notify', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            token: fcmToken,
+            token: customerToken,
             title: '🦉 Driver Assigned',
             body: 'Your order is confirmed! Your driver is getting your order ready.',
             url: '/?tab=orders',
           }),
         }).catch(() => {});
       }
+
+      const driverToken = driverDoc.data()?.fcmToken as string | undefined;
+      const assignedOrder = orders.find(o => o.id === orderId);
+      if (driverToken && assignedOrder) {
+        fetch('/api/push-notify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            token: driverToken,
+            title: '🚗 New Order Ready',
+            body: `${assignedOrder.customerName} · $${assignedOrder.total.toFixed(2)} — ${assignedOrder.address.split(',')[0]}`,
+            url: '/fleet',
+          }),
+        }).catch(() => {});
+      }
     } catch (error) {
       console.error('Error assigning driver:', error);
+    }
+  };
+
+  const handleRefund = async (orderId: string, paymentIntentId: string) => {
+    if (!confirm('Issue a full refund for this order? This cannot be undone.')) return;
+    try {
+      const res = await fetch('/api/refund', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paymentIntentId }),
+      });
+      const data = await res.json() as { refundId?: string; error?: string };
+      if (!res.ok) throw new Error(data.error ?? 'Refund failed');
+      await cancelOrder(orderId, 'Refund issued by admin');
+      alert(`Refund issued — ID: ${data.refundId}`);
+    } catch (err) {
+      alert(`Refund failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
     }
   };
 
@@ -374,18 +410,26 @@ export default function AdminApp() {
                           <option value="delivered">Mark Delivered</option>
                         </select>
                         <div className="flex gap-2 mt-4">
-                          <button 
+                          <button
                             onClick={() => handleUnassign(order.id)}
                             className="flex-1 py-2 rounded-xl bg-on-background/[0.05] border border-on-background/[0.09] text-[10px] font-black uppercase tracking-widest text-on-surface-variant hover:bg-red-500/10 hover:text-red-600 hover:border-red-500/20 transition-all"
                           >
                             Unassign Driver
                           </button>
-                          <button 
+                          <button
                             onClick={() => handleCancelOrder(order.id)}
                             className="px-4 py-2 rounded-xl bg-on-background/[0.05] border border-on-background/[0.09] text-[10px] font-black uppercase tracking-widest text-on-surface-variant hover:bg-red-500/10 hover:text-red-600 hover:border-red-500/20 transition-all"
                           >
                             Cancel
                           </button>
+                          {order.paymentIntentId && (
+                            <button
+                              onClick={() => handleRefund(order.id, order.paymentIntentId!)}
+                              className="px-4 py-2 rounded-xl bg-on-background/[0.05] border border-on-background/[0.09] text-[10px] font-black uppercase tracking-widest text-amber-500 hover:bg-amber-500/10 hover:border-amber-500/20 transition-all"
+                            >
+                              Refund
+                            </button>
+                          )}
                         </div>
                       </div>
                     ) : (
@@ -405,12 +449,22 @@ export default function AdminApp() {
                         ) : (
                           <p className="text-xs opacity-30 italic">No active drivers available</p>
                         )}
-                        <button 
-                          onClick={() => handleCancelOrder(order.id)}
-                          className="w-full mt-4 py-2 rounded-xl bg-on-background/[0.05] border border-on-background/[0.09] text-[10px] font-black uppercase tracking-widest text-on-surface-variant hover:bg-red-500/10 hover:text-red-600 hover:border-red-500/20 transition-all"
-                        >
-                          Cancel Order
-                        </button>
+                        <div className="flex gap-2 mt-4">
+                          <button
+                            onClick={() => handleCancelOrder(order.id)}
+                            className="flex-1 py-2 rounded-xl bg-on-background/[0.05] border border-on-background/[0.09] text-[10px] font-black uppercase tracking-widest text-on-surface-variant hover:bg-red-500/10 hover:text-red-600 hover:border-red-500/20 transition-all"
+                          >
+                            Cancel Order
+                          </button>
+                          {order.paymentIntentId && (
+                            <button
+                              onClick={() => handleRefund(order.id, order.paymentIntentId!)}
+                              className="px-4 py-2 rounded-xl bg-on-background/[0.05] border border-on-background/[0.09] text-[10px] font-black uppercase tracking-widest text-amber-500 hover:bg-amber-500/10 hover:border-amber-500/20 transition-all"
+                            >
+                              Refund
+                            </button>
+                          )}
+                        </div>
                       </div>
                     )}
                     

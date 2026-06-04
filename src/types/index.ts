@@ -47,6 +47,8 @@ export interface ActiveOrder {
   createdAt: string;
   etaMins?: number;
   rating?: number;
+  paymentIntentId?: string;
+  cancellationReason?: string;
   driverSnapshot?: {
     name: string;
     photo: string | null;

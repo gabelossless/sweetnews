@@ -113,6 +113,7 @@ export default function CustomerApp() {
         date: new Date().toLocaleDateString(),
         address: details.address,
         phone: details.phone,
+        paymentIntentId: details.paymentIntentId,
       });
 
       // Fire-and-forget notifications (does not block checkout success)

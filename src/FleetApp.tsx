@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { getMessaging, getToken } from 'firebase/messaging';
 import { db } from './lib/firebase';
+import app from './lib/firebase';
 import { useAuth } from './context/AuthContext';
 import { subscribeToDriverOrders, subscribeToDriverHistory, updateOrderStatus } from './lib/orders';
 import { ActiveOrder } from './types';
@@ -14,6 +16,27 @@ export default function FleetApp() {
   const [activeOrders, setActiveOrders] = useState<ActiveOrder[]>([]);
   const [deliveredOrders, setDeliveredOrders] = useState<ActiveOrder[]>([]);
   const [activeTab, setActiveTab] = useState<'dashboard' | 'history' | 'profile'>('dashboard');
+
+  // Register FCM push token so drivers receive "order assigned" notifications
+  useEffect(() => {
+    if (role !== 'driver_active' || !user) return;
+    const vapidKey = import.meta.env.VITE_FIREBASE_VAPID_KEY as string | undefined;
+    if (!vapidKey || !('Notification' in window) || !('serviceWorker' in navigator)) return;
+
+    Notification.requestPermission().then(async (permission) => {
+      if (permission !== 'granted') return;
+      try {
+        const swReg = await navigator.serviceWorker.ready;
+        const messaging = getMessaging(app);
+        const token = await getToken(messaging, { vapidKey, serviceWorkerRegistration: swReg });
+        if (token) {
+          await updateDoc(doc(db, 'users', user.uid), { fcmToken: token });
+        }
+      } catch {
+        // push unavailable — non-critical
+      }
+    });
+  }, [user, role]);
 
   useEffect(() => {
     if (role !== 'driver_active' || !user) return;
