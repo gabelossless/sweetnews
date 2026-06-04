@@ -7,6 +7,8 @@ import { useProfileStore } from '../../store/profile';
 import { Button } from '../atoms/Button';
 import { Input } from '../atoms/Input';
 import { sanitizeString } from '../../lib/utils';
+import { isValidDeliveryZip } from '../../lib/address';
+import { products as allProducts } from '../../data/products';
 
 interface CheckoutFormProps {
   isOpen: boolean;
@@ -51,13 +53,32 @@ export function CheckoutForm({
   const [deliveryName, setLocalName] = useState(savedName);
   const [deliveryAddress, setLocalAddress] = useState(savedAddress);
   const [deliveryApt, setLocalApt] = useState('');
+  const [deliveryZip, setLocalZip] = useState('');
   const [deliveryPhone, setLocalPhone] = useState(savedPhone);
+  const [zoneError, setZoneError] = useState<string | null>(null);
   const [cardError, setCardError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setCardError(null);
+    setZoneError(null);
+
+    // Delivery zone check
+    if (!isValidDeliveryZip(deliveryZip)) {
+      setZoneError("Sorry, we don't deliver to this ZIP code yet. We serve the Denver metro area.");
+      return;
+    }
+
+    // Cart stock check
+    const outOfStock = cartItems.find(item => {
+      const p = allProducts.find(pd => pd.id === item.id);
+      return p?.inStock === false;
+    });
+    if (outOfStock) {
+      setCardError(`${outOfStock.name} is sold out. Please remove it from your cart before checking out.`);
+      return;
+    }
 
     if (!stripe || !elements) {
       setCardError('Payment system not loaded. Please try again.');
@@ -109,9 +130,10 @@ export function CheckoutForm({
       }
 
       const sanitizedApt = sanitizeString(deliveryApt).trim();
-      const fullAddress = sanitizedApt
+      const baseStreet = sanitizedApt
         ? `${sanitizeString(deliveryAddress)}, ${sanitizedApt}`
         : sanitizeString(deliveryAddress);
+      const fullAddress = `${baseStreet}, Denver, CO ${deliveryZip.trim()}`;
 
       onPlaceOrder({
         name: sanitizeString(deliveryName),
@@ -213,6 +235,20 @@ export function CheckoutForm({
                         />
                         <Input
                           required
+                          type="text"
+                          inputMode="numeric"
+                          pattern="[0-9]{5}"
+                          maxLength={5}
+                          placeholder="ZIP Code"
+                          value={deliveryZip}
+                          onChange={(e) => { setLocalZip(e.target.value); setZoneError(null); }}
+                          className="bg-surface-dim"
+                        />
+                        {zoneError && (
+                          <p className="text-[11px] text-[#ff6b7a] pl-1 -mt-1">{zoneError}</p>
+                        )}
+                        <Input
+                          required
                           type="tel"
                           placeholder="Phone Number"
                           value={deliveryPhone}
@@ -255,7 +291,7 @@ export function CheckoutForm({
                       
                       <Button
                         type="submit"
-                        disabled={isProcessing || isSubmitting || !stripe || !elements || cartItems.length === 0 || !deliveryPhone.trim()}
+                        disabled={isProcessing || isSubmitting || !stripe || !elements || cartItems.length === 0 || !deliveryPhone.trim() || deliveryZip.trim().length !== 5}
                         whileTapScale={0.95}
                         className="w-full py-5 btn-brand font-headline-md uppercase tracking-[0.2em] text-[12px] rounded-full transition-all disabled:opacity-30 disabled:shadow-none disabled:cursor-not-allowed font-black"
                       >

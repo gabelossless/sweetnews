@@ -43,23 +43,25 @@ export function ProductCard({
       >
 
         {/* Image or placeholder */}
-        {product.image ? (
-          <motion.img
-            src={product.image}
-            alt={product.name}
-            loading={isFeatured ? 'eager' : 'lazy'}
-            decoding="async"
-            whileHover={{ scale: 1.06 }}
-            transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-            className="w-full h-full object-contain p-3"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center p-4">
-            <span className="text-[10px] font-black uppercase tracking-widest text-on-background/30 text-center leading-snug">
-              {product.name.split(' ').slice(0, 2).join('\n')}
-            </span>
-          </div>
-        )}
+        <div className={product.inStock === false ? 'opacity-40 grayscale' : undefined}>
+          {product.image ? (
+            <motion.img
+              src={product.image}
+              alt={product.name}
+              loading={isFeatured ? 'eager' : 'lazy'}
+              decoding="async"
+              whileHover={product.inStock !== false ? { scale: 1.06 } : undefined}
+              transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+              className="w-full h-full object-contain p-3"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center p-4">
+              <span className="text-[10px] font-black uppercase tracking-widest text-on-background/30 text-center leading-snug">
+                {product.name.split(' ').slice(0, 2).join('\n')}
+              </span>
+            </div>
+          )}
+        </div>
 
         {/* Tag badge */}
         {product.tag && (
@@ -77,9 +79,18 @@ export function ProductCard({
           </div>
         )}
 
+        {/* Sold Out overlay */}
+        {product.inStock === false && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="text-[9px] font-black uppercase tracking-[0.2em] bg-on-background/70 text-surface px-3 py-1.5 rounded-full backdrop-blur-sm">
+              Sold Out
+            </span>
+          </div>
+        )}
+
         {/* Add / quantity overlay — bottom-right of image */}
         <AnimatePresence mode="wait">
-          {quantity === 0 ? (
+          {product.inStock === false ? null : quantity === 0 ? (
             <motion.button
               key="add"
               initial={{ scale: 0.6, opacity: 0 }}
