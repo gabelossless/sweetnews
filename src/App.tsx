@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 // Code-split each sub-app so customers never download admin/fleet code
 const CustomerApp = lazy(() => import('./CustomerApp'));
@@ -20,9 +21,11 @@ export default function App() {
   if (isFleetDomain) {
     return (
       <AuthProvider>
-        <Suspense fallback={<AppShell />}>
-          <FleetApp />
-        </Suspense>
+        <ErrorBoundary>
+          <Suspense fallback={<AppShell />}>
+            <FleetApp />
+          </Suspense>
+        </ErrorBoundary>
       </AuthProvider>
     );
   }
@@ -34,17 +37,21 @@ export default function App() {
           <Route
             path="/admin/*"
             element={
-              <Suspense fallback={<AppShell />}>
-                <AdminApp />
-              </Suspense>
+              <ErrorBoundary>
+                <Suspense fallback={<AppShell />}>
+                  <AdminApp />
+                </Suspense>
+              </ErrorBoundary>
             }
           />
           <Route
             path="/fleet/*"
             element={
-              <Suspense fallback={<AppShell />}>
-                <FleetApp />
-              </Suspense>
+              <ErrorBoundary>
+                <Suspense fallback={<AppShell />}>
+                  <FleetApp />
+                </Suspense>
+              </ErrorBoundary>
             }
           />
           <Route
@@ -58,9 +65,11 @@ export default function App() {
           <Route
             path="/*"
             element={
-              <Suspense fallback={<AppShell />}>
-                <CustomerApp />
-              </Suspense>
+              <ErrorBoundary>
+                <Suspense fallback={<AppShell />}>
+                  <CustomerApp />
+                </Suspense>
+              </ErrorBoundary>
             }
           />
         </Routes>

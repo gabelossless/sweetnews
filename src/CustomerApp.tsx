@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, Store, ReceiptText, User, ShoppingBag, CheckCircle2 } from 'lucide-react';
+import { Search, Store, ReceiptText, User, ShoppingBag, CheckCircle2, WifiOff } from 'lucide-react';
+import { DELIVERY_FEE } from './lib/constants';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 
@@ -102,7 +103,7 @@ export default function CustomerApp() {
     useProfileStore.getState().setDeliveryPhone(details.phone);
 
     const orderItems = [...cartItems];
-    const total = orderItems.reduce((acc, item) => acc + item.price * item.quantity, 0) + 3.99;
+    const total = orderItems.reduce((acc, item) => acc + item.price * item.quantity, 0) + DELIVERY_FEE;
 
     try {
       const orderId = await createOrder({
@@ -142,7 +143,13 @@ export default function CustomerApp() {
       }, 1500);
     } catch (error) {
       console.error('Order placement failed:', error);
-      showToast('Order failed. Please try again.');
+      // Payment already succeeded — auto-refund so customer isn't charged
+      fetch('/api/refund', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paymentIntentId: details.paymentIntentId }),
+      }).catch(() => {});
+      showToast('Order failed — payment returned. Please try again.');
       setIsProcessing(false);
     }
   };
@@ -301,6 +308,12 @@ export default function CustomerApp() {
 
       {/* Main Pages Container */}
       <main className="px-6 md:px-8 max-w-[430px] md:max-w-[1280px] mx-auto">
+        {!isOnline && (
+          <div className="flex items-center gap-2 mb-4 px-4 py-2.5 rounded-full bg-on-background/[0.05] border border-on-background/[0.07] text-[11px] font-bold text-on-surface-variant w-fit">
+            <WifiOff size={12} />
+            Offline — order tracking paused
+          </div>
+        )}
         <AnimatePresence mode="wait">
           
           {/* 1. SHOP VIEW */}
@@ -336,6 +349,8 @@ export default function CustomerApp() {
           {activeTab === 'profile' && (
             <ProfileView
               isOnline={isOnline}
+              orderCount={orders.length}
+              onViewOrders={() => setActiveTab('orders')}
             />
           )}
 

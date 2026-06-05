@@ -11,6 +11,7 @@ import { sanitizeObject } from '../../lib/utils';
 export default function FleetApplyView() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     vehicleType: '',
     licensePlate: '',
@@ -43,7 +44,7 @@ export default function FleetApplyView() {
       // The AuthContext will automatically update and show the Pending view
     } catch (error) {
       console.error('Application failed:', error);
-      alert('Failed to submit application. Please try again.');
+      setSubmitError('Failed to submit application. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -107,10 +108,15 @@ export default function FleetApplyView() {
             </div>
           </div>
 
+          {submitError && (
+            <p className="text-[12px] text-red-500 text-center leading-relaxed">{submitError}</p>
+          )}
+
           <Button
             type="submit"
             fullWidth
             loading={loading}
+            disabled={loading}
             className="h-14 text-base font-bold rounded-2xl"
             style={{ background: 'linear-gradient(135deg,#f59e0b,#f97316)' }}
           >

@@ -11,26 +11,32 @@ import { useState, useRef } from 'react';
 
 interface ProfileViewProps {
   isOnline: boolean;
+  orderCount?: number;
+  onViewOrders?: () => void;
 }
 
-export function ProfileView({ isOnline }: ProfileViewProps) {
+export function ProfileView({ isOnline, orderCount = 0, onViewOrders }: ProfileViewProps) {
   const { user, role, login, logout, loginError } = useAuth();
   const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
   const [nameSaved, setNameSaved] = useState(false);
   const [addressSaved, setAddressSaved] = useState(false);
+  const [phoneSaved, setPhoneSaved] = useState(false);
   const [pushLoading, setPushLoading] = useState(false);
   const [pushError, setPushError] = useState<string | null>(null);
 
   const deliveryName = useProfileStore((state) => state.deliveryName);
   const deliveryAddress = useProfileStore((state) => state.deliveryAddress);
+  const deliveryPhone = useProfileStore((state) => state.deliveryPhone);
   const pushNotifications = useProfileStore((state) => state.pushNotificationsEnabled);
 
   const setDeliveryName = useProfileStore((state) => state.setDeliveryName);
   const setDeliveryAddress = useProfileStore((state) => state.setDeliveryAddress);
+  const setDeliveryPhone = useProfileStore((state) => state.setDeliveryPhone);
   const setPushNotifications = useProfileStore((state) => state.setPushNotificationsEnabled);
 
   const nameTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const addressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const phoneTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleNameChange = (val: string) => {
     setDeliveryName(val);
@@ -44,6 +50,13 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
     setAddressSaved(false);
     if (addressTimer.current) clearTimeout(addressTimer.current);
     addressTimer.current = setTimeout(() => setAddressSaved(true), 1000);
+  };
+
+  const handlePhoneChange = (val: string) => {
+    setDeliveryPhone(val);
+    setPhoneSaved(false);
+    if (phoneTimer.current) clearTimeout(phoneTimer.current);
+    phoneTimer.current = setTimeout(() => setPhoneSaved(true), 1000);
   };
 
   const handlePushToggle = async () => {
@@ -240,6 +253,20 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
           </div>
         </motion.div>
 
+        {/* ── Order count chip ────────────────────────────────── */}
+        {orderCount > 0 && (
+          <motion.button
+            whileTap={{ scale: 0.96 }}
+            onClick={onViewOrders}
+            className="w-full flex items-center justify-between px-5 py-3.5 glass-panel rounded-[20px] hover:bg-on-background/[0.07] transition-colors"
+          >
+            <span className="text-[12px] font-black uppercase tracking-widest text-on-background">
+              {orderCount} {orderCount === 1 ? 'order' : 'orders'} placed
+            </span>
+            <ChevronRight size={15} className="text-on-surface-variant" />
+          </motion.button>
+        )}
+
         {/* ── Delivery Protocol ───────────────────────────────── */}
         <div className="glass-panel rounded-[28px] p-6 space-y-4 shadow-[0_8px_32px_rgba(42,26,31,0.10)]">
           <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-on-surface-variant border-b border-on-background/[0.07] pb-3">
@@ -300,6 +327,35 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
               value={deliveryAddress}
               onChange={(e) => handleAddressChange(e.target.value)}
               placeholder="123 Midnight Ave"
+              className="w-full text-sm font-bold text-on-background bg-on-background/[0.05] border border-on-background/[0.07] hover:border-on-background/[0.12] focus:border-[#e60023]/40 focus:bg-on-background/[0.05] outline-none px-4 py-3 rounded-2xl mt-0.5 transition-all duration-200 placeholder:text-on-surface-variant tracking-wide"
+            />
+          </div>
+
+          {/* Phone field */}
+          <div className="space-y-1.5 pt-2 border-t border-on-background/[0.07]">
+            <div className="flex items-center justify-between">
+              <p className="text-[10px] text-on-surface-variant uppercase tracking-widest font-black">
+                Phone Number
+              </p>
+              <AnimatePresence>
+                {phoneSaved && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.7, x: 8 }}
+                    animate={{ opacity: 1, scale: 1, x: 0 }}
+                    exit={{ opacity: 0, scale: 0.7 }}
+                    className="flex items-center gap-1 text-emerald-600"
+                  >
+                    <Check className="w-3 h-3" strokeWidth={3} />
+                    <span className="text-[9px] font-black uppercase tracking-wider">Saved</span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+            <input
+              type="tel"
+              value={deliveryPhone}
+              onChange={(e) => handlePhoneChange(e.target.value)}
+              placeholder="+1 (555) 000-0000"
               className="w-full text-sm font-bold text-on-background bg-on-background/[0.05] border border-on-background/[0.07] hover:border-on-background/[0.12] focus:border-[#e60023]/40 focus:bg-on-background/[0.05] outline-none px-4 py-3 rounded-2xl mt-0.5 transition-all duration-200 placeholder:text-on-surface-variant tracking-wide"
             />
           </div>

@@ -149,7 +149,7 @@ function PastOrderRow({ order }: { order: ActiveOrder }) {
             className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
               order.status === 'delivered'
                 ? 'text-emerald-600 bg-emerald-500/[0.08]'
-                : 'text-on-surface-variant bg-on-background/[0.05]'
+                : 'text-red-500 bg-red-500/[0.08]'
             }`}
           >
             {STATUS_LABELS[order.status] ?? order.status}
@@ -170,6 +170,12 @@ function PastOrderRow({ order }: { order: ActiveOrder }) {
             transition={{ duration: 0.22 }}
           >
             <div className="px-3 pb-3 pt-1">
+              {order.status === 'cancelled' && order.cancellationReason && (
+                <div className="mb-3 px-3 py-2.5 rounded-2xl bg-red-500/[0.06] border border-red-500/[0.12]">
+                  <p className="text-[10px] uppercase tracking-widest font-black text-red-500 mb-1">Cancellation reason</p>
+                  <p className="text-xs text-on-surface-variant leading-relaxed">{order.cancellationReason}</p>
+                </div>
+              )}
               <TrackerCard order={order} />
             </div>
           </motion.div>

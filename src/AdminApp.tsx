@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   collection,
   query,
@@ -15,16 +15,39 @@ import { useAuth } from './context/AuthContext';
 import { DriverApplication, ActiveOrder, UserProfile } from './types';
 import { Button } from './components/atoms/Button';
 import { assignDriver, updateOrderStatus, updateOrderETA, unassignDriver, cancelOrder } from './lib/orders';
+import { useToastStore } from './store/toast';
 import { motion, AnimatePresence } from 'motion/react';
 import { Car, Hash, Phone, ShieldCheck, Box, MapPin, Navigation, CheckCircle2 } from 'lucide-react';
 
+interface WaitlistEntry {
+  id: string;
+  fullName: string;
+  email: string;
+  city: string;
+  vehicleType: string;
+  phone: string;
+  status: string;
+  createdAt: string;
+}
+
+interface ConfirmDialog {
+  title: string;
+  message: string;
+  hasInput?: boolean;
+  inputPlaceholder?: string;
+  onConfirm: (input?: string) => void;
+}
+
 export default function AdminApp() {
   const { role, user } = useAuth();
+  const showToast = useToastStore((state) => state.showToast);
   const [activeTab, setActiveTab] = useState<'drivers' | 'dispatcher' | 'waitlist'>('dispatcher');
   const [applications, setApplications] = useState<DriverApplication[]>([]);
   const [orders, setOrders] = useState<ActiveOrder[]>([]);
   const [activeDrivers, setActiveDrivers] = useState<UserProfile[]>([]);
-  const [waitlist, setWaitlist] = useState<any[]>([]);
+  const [waitlist, setWaitlist] = useState<WaitlistEntry[]>([]);
+  const [confirmDialog, setConfirmDialog] = useState<ConfirmDialog | null>(null);
+  const dialogInputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (role !== 'admin') return;
@@ -57,7 +80,7 @@ export default function AdminApp() {
     // 4. Listen for Waitlist
     const qWaitlist = query(collection(db, 'waitlist'), orderBy('createdAt', 'desc'));
     const unsubWaitlist = onSnapshot(qWaitlist, (snapshot) => {
-      setWaitlist(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      setWaitlist(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as WaitlistEntry[]);
     });
 
     return () => {
@@ -123,21 +146,27 @@ export default function AdminApp() {
     }
   };
 
-  const handleRefund = async (orderId: string, paymentIntentId: string) => {
-    if (!confirm('Issue a full refund for this order? This cannot be undone.')) return;
-    try {
-      const res = await fetch('/api/refund', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ paymentIntentId }),
-      });
-      const data = await res.json() as { refundId?: string; error?: string };
-      if (!res.ok) throw new Error(data.error ?? 'Refund failed');
-      await cancelOrder(orderId, 'Refund issued by admin');
-      alert(`Refund issued — ID: ${data.refundId}`);
-    } catch (err) {
-      alert(`Refund failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
-    }
+  const handleRefund = (orderId: string, paymentIntentId: string) => {
+    setConfirmDialog({
+      title: 'Issue Full Refund?',
+      message: 'This will refund the entire charge to the customer. This cannot be undone.',
+      onConfirm: async () => {
+        setConfirmDialog(null);
+        try {
+          const res = await fetch('/api/refund', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ paymentIntentId }),
+          });
+          const data = await res.json() as { refundId?: string; error?: string };
+          if (!res.ok) throw new Error(data.error ?? 'Refund failed');
+          await cancelOrder(orderId, 'Refund issued by admin');
+          showToast(`Refund issued — ID: ${data.refundId ?? 'ok'}`);
+        } catch (err) {
+          showToast(`Refund failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
+        }
+      },
+    });
   };
 
   const handleUpdateETA = async (orderId: string, eta: string) => {
@@ -150,23 +179,38 @@ export default function AdminApp() {
     }
   };
 
-  const handleUnassign = async (orderId: string) => {
-    if (!confirm('Are you sure you want to unassign this driver? The order will return to the pool.')) return;
-    try {
-      await unassignDriver(orderId);
-    } catch (error) {
-      console.error('Failed to unassign:', error);
-    }
+  const handleUnassign = (orderId: string) => {
+    setConfirmDialog({
+      title: 'Unassign Driver?',
+      message: 'The order will return to the unassigned pool.',
+      onConfirm: async () => {
+        setConfirmDialog(null);
+        try {
+          await unassignDriver(orderId);
+        } catch (error) {
+          console.error('Failed to unassign:', error);
+          showToast('Failed to unassign driver. Please try again.');
+        }
+      },
+    });
   };
 
-  const handleCancelOrder = async (orderId: string) => {
-    const reason = prompt('Please provide a reason for cancellation:');
-    if (reason === null) return;
-    try {
-      await cancelOrder(orderId, reason);
-    } catch (error) {
-      console.error('Failed to cancel order:', error);
-    }
+  const handleCancelOrder = (orderId: string) => {
+    setConfirmDialog({
+      title: 'Cancel Order?',
+      message: 'Provide a reason for cancellation (shown to the customer).',
+      hasInput: true,
+      inputPlaceholder: 'e.g. Out of stock, delivery issue…',
+      onConfirm: async (reason) => {
+        setConfirmDialog(null);
+        try {
+          await cancelOrder(orderId, reason ?? '');
+        } catch (error) {
+          console.error('Failed to cancel order:', error);
+          showToast('Failed to cancel order. Please try again.');
+        }
+      },
+    });
   };
 
   if (role !== 'admin') {
@@ -496,6 +540,55 @@ export default function AdminApp() {
           )}
         </AnimatePresence>
       </div>
+
+      {/* Custom confirm dialog — replaces native confirm/alert/prompt */}
+      <AnimatePresence>
+        {confirmDialog && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[90] bg-black/60 backdrop-blur-sm"
+              onClick={() => setConfirmDialog(null)}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              className="fixed inset-0 z-[91] flex items-center justify-center p-6 pointer-events-none"
+            >
+              <div className="pointer-events-auto w-full max-w-sm bg-surface border border-on-background/[0.12] rounded-[28px] p-6 shadow-2xl">
+                <h3 className="text-lg font-black tracking-tight mb-2">{confirmDialog.title}</h3>
+                <p className="text-sm text-on-surface-variant mb-4 leading-relaxed">{confirmDialog.message}</p>
+                {confirmDialog.hasInput && (
+                  <textarea
+                    ref={dialogInputRef}
+                    placeholder={confirmDialog.inputPlaceholder}
+                    rows={3}
+                    className="w-full bg-on-background/[0.05] border border-on-background/[0.09] rounded-2xl px-4 py-3 text-sm mb-4 resize-none outline-none focus:border-on-background/20 transition-colors"
+                  />
+                )}
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setConfirmDialog(null)}
+                    className="flex-1 py-3 rounded-2xl bg-on-background/[0.05] border border-on-background/[0.09] text-sm font-bold hover:bg-on-background/[0.08] transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => confirmDialog.onConfirm(dialogInputRef.current?.value)}
+                    className="flex-1 py-3 rounded-2xl btn-brand text-sm font-black uppercase tracking-widest"
+                  >
+                    Confirm
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

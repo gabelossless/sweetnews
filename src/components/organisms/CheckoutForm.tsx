@@ -9,6 +9,7 @@ import { Input } from '../atoms/Input';
 import { sanitizeString } from '../../lib/utils';
 import { isValidDeliveryZip } from '../../lib/address';
 import { products as allProducts } from '../../data/products';
+import { DELIVERY_FEE } from '../../lib/constants';
 
 interface CheckoutFormProps {
   isOpen: boolean;
@@ -93,7 +94,7 @@ export function CheckoutForm({
     try {
       // Step 1: Create PaymentIntent server-side
       const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-      const totalCents = Math.round((subtotal + 3.99) * 100);
+      const totalCents = Math.round((subtotal + DELIVERY_FEE) * 100);
 
       const chargeRes = await fetch('/api/charge', {
         method: 'POST',
@@ -148,7 +149,7 @@ export function CheckoutForm({
   };
 
   const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  const total = subtotal + 3.99;
+  const total = subtotal + DELIVERY_FEE;
 
   return (
     <AnimatePresence>
@@ -279,7 +280,7 @@ export function CheckoutForm({
                       </div>
                       <div className="flex justify-between items-center mb-3 font-body-md text-xs text-on-surface-variant font-medium">
                         <span>Delivery Fee</span>
-                        <span>$3.99</span>
+                        <span>${DELIVERY_FEE.toFixed(2)}</span>
                       </div>
                       <div className="w-full h-px bg-on-background/[0.07] my-3"></div>
                       <div className="flex justify-between items-center mb-6 px-1">

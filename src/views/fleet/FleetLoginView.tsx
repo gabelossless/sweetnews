@@ -14,6 +14,7 @@ import { sanitizeObject } from '../../lib/utils';
 export default function FleetLoginView() {
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -22,6 +23,7 @@ export default function FleetLoginView() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setAuthError(null);
     setLoading(true);
 
     try {
@@ -33,9 +35,8 @@ export default function FleetLoginView() {
         const { user } = await createUserWithEmailAndPassword(auth, sanitizedData.email, sanitizedData.password);
         await updateProfile(user, { displayName: sanitizedData.name });
       }
-    } catch (error: any) {
-      console.error('Auth error:', error);
-      alert(error.message || 'Authentication failed');
+    } catch (error) {
+      setAuthError(error instanceof Error ? error.message : 'Authentication failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -104,6 +105,12 @@ export default function FleetLoginView() {
               >
                 {isLogin ? 'Sign In to Fleet' : 'Create Partner Account'} <ArrowRight className="ml-2" size={18} />
               </Button>
+
+              {authError && (
+                <p className="text-[12px] text-red-500 text-center leading-relaxed pt-1">
+                  {authError}
+                </p>
+              )}
             </form>
 
             <div className="text-center">
