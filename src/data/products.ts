@@ -331,7 +331,7 @@ export const products: Product[] = [
     description: "Hand-rolled dark and milk chocolate truffles from South Broadway's premier boutique.",
     price: 12.49,
     tag: 'Premium',
-    image: '/images/products/tru_fles_truffles.svg',
+    image: '/images/products/tru_fles_truffles.png',
     categoryId: 'local',
   },
   {
@@ -340,7 +340,7 @@ export const products: Product[] = [
     description: 'Buttery English toffee drenched in premium chocolate and crushed almonds, crafted in South Denver.',
     price: 8.99,
     tag: 'Popular',
-    image: '/images/products/centennial_toffee.svg',
+    image: '/images/products/centennial_toffee.png',
     categoryId: 'local',
   },
   {
@@ -349,7 +349,7 @@ export const products: Product[] = [
     description: 'Legendary smooth creamy masterpiece on a graham cracker crust, delivered whole.',
     price: 48.99,
     tag: 'Premium',
-    image: '/images/products/cheesecake_original_6in.svg',
+    image: '/images/products/cheesecake_original_6in.png',
     categoryId: 'local',
   },
   {
@@ -358,7 +358,7 @@ export const products: Product[] = [
     description: 'Build your own box of six massive gourmet cookies in the iconic pink box.',
     price: 38.99,
     tag: 'Premium',
-    image: '/images/products/crumbl_6pack.svg',
+    image: '/images/products/crumbl_6pack.png',
     categoryId: 'local',
     customizationMatrix: [
       {
@@ -383,7 +383,7 @@ export const products: Product[] = [
     description: 'Hand-pick four large legendary specialty cookies crafted to crush cravings.',
     price: 25.99,
     tag: 'Popular',
-    image: '/images/products/crumbl_4pack.svg',
+    image: '/images/products/crumbl_4pack.png',
     categoryId: 'local',
     customizationMatrix: [
       {
@@ -408,7 +408,7 @@ export const products: Product[] = [
     description: 'Build your own dozen of classic and deluxe cookies engineered for midnight execution.',
     price: 59.99,
     tag: 'Premium',
-    image: '/images/products/insomnia_custom_dozen.svg',
+    image: '/images/products/insomnia_custom_dozen.png',
     categoryId: 'latenightfix',
     customizationMatrix: [
       {
@@ -433,7 +433,7 @@ export const products: Product[] = [
     description: 'Pre-packed assortment of the most popular fresh cookies for maximum delivery speed.',
     price: 54.99,
     tag: 'Popular',
-    image: '/images/products/insomnia_fastpick.svg',
+    image: '/images/products/insomnia_fastpick.png',
     categoryId: 'latenightfix',
   },
   {
@@ -442,7 +442,7 @@ export const products: Product[] = [
     description: 'Hand-select 12 fresh melt-in-your-mouth doughnuts to build your ultimate box.',
     price: 27.99,
     tag: 'Premium',
-    image: '/images/products/krispy_kreme_custom.svg',
+    image: '/images/products/krispy_kreme_custom.png',
     categoryId: 'latenightfix',
     customizationMatrix: [
       {
@@ -466,7 +466,7 @@ export const products: Product[] = [
     description: 'A full box of 12 iconic warm Original Glazed doughnuts. Zero wait time.',
     price: 23.99,
     tag: 'Popular',
-    image: '/images/products/krispy_kreme_glazed.svg',
+    image: '/images/products/krispy_kreme_glazed.png',
     categoryId: 'latenightfix',
   },
 
@@ -477,7 +477,7 @@ export const products: Product[] = [
     description: 'Citrus-charged surge in six. Keeps the session alive all night long.',
     price: 6.99,
     tag: 'Popular',
-    image: '/images/products/mountain_dew.svg',
+    image: '/images/products/mountain_dew.png',
     categoryId: 'drinks',
   },
   {
@@ -533,7 +533,7 @@ export const products: Product[] = [
     description: 'The timeless salted crisp, supersized for the whole crew. Pure, simple, perfect.',
     price: 6.49,
     tag: null,
-    image: '/images/products/lays_classic_family.svg',
+    image: '/images/products/lays_classic_family.png',
     categoryId: 'snacks',
   },
   {
@@ -542,7 +542,7 @@ export const products: Product[] = [
     description: 'Zesty ranch seasoning on a triangular chip that was engineered to disappear.',
     price: 6.49,
     tag: 'Popular',
-    image: '/images/products/doritos_cool_ranch.svg',
+    image: '/images/products/doritos_cool_ranch.png',
     categoryId: 'snacks',
   },
   {
@@ -551,7 +551,7 @@ export const products: Product[] = [
     description: 'Savory crunchy medley of pretzels, cereals, and crackers. The ultimate shareable.',
     price: 6.99,
     tag: null,
-    image: '/images/products/chex_mix_bold.svg',
+    image: '/images/products/chex_mix_bold.png',
     categoryId: 'snacks',
   },
   {
@@ -560,7 +560,7 @@ export const products: Product[] = [
     description: 'Sweet, salty, roasted — clean fuel that actually hits. Big bag energy.',
     price: 7.99,
     tag: null,
-    image: '/images/products/planters_honey_peanuts.svg',
+    image: '/images/products/planters_honey_peanuts.png',
     categoryId: 'snacks',
   },
   {
@@ -598,7 +598,7 @@ export const products: Product[] = [
     description: 'Caramel, cookie, chocolate. The holy trinity of candy — supersized and ready.',
     price: 2.49,
     tag: null,
-    image: '/images/products/twix_king.svg',
+    image: '/images/products/twix_king.png',
     categoryId: 'fanfavorite',
   },
   {
@@ -636,7 +636,7 @@ export const products: Product[] = [
     description: 'No B.S. — dates, egg whites, cashews, dark chocolate, sea salt. That is it.',
     price: 3.29,
     tag: null,
-    image: '/images/products/rxbar_chocolate_sea_salt.svg',
+    image: '/images/products/rxbar_chocolate_sea_salt.png',
     categoryId: 'organic',
   },
   {
@@ -645,7 +645,7 @@ export const products: Product[] = [
     description: 'Whole almonds and peanuts bound in dark chocolate with a sea-salt finish.',
     price: 2.79,
     tag: 'Popular',
-    image: '/images/products/kind_dark_chocolate.svg',
+    image: '/images/products/kind_dark_chocolate.png',
     categoryId: 'organic',
   },
   {
@@ -683,7 +683,7 @@ export const products: Product[] = [
     description: 'Cassava-flour tortilla chips with a punchy lime finish. Paleo and Whole30 friendly.',
     price: 5.49,
     tag: null,
-    image: '/images/products/siete_lime_chips.svg',
+    image: '/images/products/siete_lime_chips.png',
     categoryId: 'exotic',
   },
   {
@@ -692,7 +692,7 @@ export const products: Product[] = [
     description: 'Nostalgia-level sugary cereal taste with 13g protein and zero grams of grain.',
     price: 9.99,
     tag: 'New',
-    image: '/images/products/magic_spoon_fruity.svg',
+    image: '/images/products/magic_spoon_fruity.png',
     categoryId: 'exotic',
   },
 
@@ -703,7 +703,7 @@ export const products: Product[] = [
     description: 'Cheese and pepperoni stuffed in a crispy crust. Microwave-to-perfect in 2 minutes.',
     price: 3.99,
     tag: 'Popular',
-    image: '/images/products/hot_pockets_pepperoni.svg',
+    image: '/images/products/hot_pockets_pepperoni.png',
     categoryId: 'latenightfix',
   },
   {
@@ -712,7 +712,7 @@ export const products: Product[] = [
     description: 'The midnight snack benchmark. Sweet, frosted, and ready for the toaster at 2AM.',
     price: 4.29,
     tag: 'Popular',
-    image: '/images/products/poptarts_strawberry.svg',
+    image: '/images/products/poptarts_strawberry.png',
     categoryId: 'latenightfix',
   },
   {
@@ -732,7 +732,7 @@ export const products: Product[] = [
     description: 'Whole-milk Australian-style yoghurt with a sweet-tart strawberry rhubarb swirl.',
     price: 2.99,
     tag: 'Fresh',
-    image: '/images/products/noosa_strawberry.svg',
+    image: '/images/products/noosa_strawberry.png',
     categoryId: 'local',
   },
 ];
