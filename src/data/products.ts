@@ -20,7 +20,7 @@ export const products: Product[] = [
     description: 'The undisputed king of bold, cheesy crunch.',
     price: 1.99,
     tag: 'Popular',
-    image: 'https://images.openfoodfacts.org/images/products/316/893/017/4219/front_fr.3.400.jpg',
+    image: '/images/products/doritos_nacho_cheese.png',
     categoryId: 'snacks',
   },
   {
@@ -29,7 +29,7 @@ export const products: Product[] = [
     description: 'Serious heat paired with that legendary, culture-defining crunch.',
     price: 1.99,
     tag: 'Popular',
-    image: 'https://images.openfoodfacts.org/images/products/002/840/058/9895/front_en.53.400.jpg',
+    image: '/images/products/cheetos_flamin_hot.png',
     categoryId: 'snacks',
   },
   {
@@ -38,7 +38,7 @@ export const products: Product[] = [
     description: 'Crispy, perfectly salted, and timelessly simple.',
     price: 1.49,
     tag: null,
-    image: 'https://images.openfoodfacts.org/images/products/890/149/110/1837/front_en.14.400.jpg',
+    image: '/images/products/lays_classic.png',
     categoryId: 'snacks',
   },
   {
@@ -47,7 +47,7 @@ export const products: Product[] = [
     description: 'Intense chili-lime rolled tortilla chips that pack a heavy punch.',
     price: 1.99,
     tag: 'New',
-    image: 'https://images.openfoodfacts.org/images/products/841/260/001/9672/front_en.9.400.jpg',
+    image: '/images/products/takis_fuego.png',
     categoryId: 'snacks',
   },
   {
@@ -56,7 +56,7 @@ export const products: Product[] = [
     description: 'Double the signature creme filling, zero compromises.',
     price: 2.49,
     tag: 'Popular',
-    image: 'https://images.openfoodfacts.org/images/products/004/400/003/2029/front_en.8.400.jpg',
+    image: '/images/products/oreo_double_stuf.png',
     categoryId: 'fanfavorite',
   },
   {
@@ -65,7 +65,7 @@ export const products: Product[] = [
     description: 'Classic, crunchy cookies packed with real chocolate chips.',
     price: 2.49,
     tag: null,
-    image: 'https://images.openfoodfacts.org/images/products/004/400/003/3385/front_en.10.400.jpg',
+    image: '/images/products/chips_ahoy.png',
     categoryId: 'fanfavorite',
   },
   {
@@ -74,7 +74,7 @@ export const products: Product[] = [
     description: 'Made with real fruit juice to satisfy your clean candy cravings.',
     price: 1.49,
     tag: 'Fresh',
-    image: 'https://images.openfoodfacts.org/images/products/001/600/047/7278/front_en.11.400.jpg',
+    image: '/images/products/motts_fruit_snacks.png',
     categoryId: 'organic',
   },
   {
@@ -83,7 +83,7 @@ export const products: Product[] = [
     description: 'Real cheese baked into every single crispy square.',
     price: 1.49,
     tag: null,
-    image: 'https://images.openfoodfacts.org/images/products/002/410/011/2645/front_en.3.400.jpg',
+    image: '/images/products/cheez_it.png',
     categoryId: 'latenightfix',
   },
   {
@@ -92,7 +92,7 @@ export const products: Product[] = [
     description: 'Gooey, marshmallowy goodness wrapped up in a childhood classic.',
     price: 1.99,
     tag: null,
-    image: 'https://images.openfoodfacts.org/images/products/003/800/031/8267/front_en.3.400.jpg',
+    image: '/images/products/rice_krispies_treats.png',
     categoryId: 'latenightfix',
   },
   {
@@ -101,7 +101,7 @@ export const products: Product[] = [
     description: 'The iconic stackable potato crisp that pops and never stops.',
     price: 2.49,
     tag: null,
-    image: 'https://images.openfoodfacts.org/images/products/505/399/012/7558/front_en.70.400.jpg',
+    image: '/images/products/pringles_original.png',
     categoryId: 'snacks',
   },
   {
@@ -110,7 +110,7 @@ export const products: Product[] = [
     description: 'Premium wholesale-grade salted cashews packed with clean fuel.',
     price: 2.99,
     tag: 'Fresh',
-    image: 'https://images.openfoodfacts.org/images/products/009/661/987/1888/front_en.6.400.jpg',
+    image: '/images/products/kirkland_cashews.png',
     categoryId: 'snacks',
   },
   {
@@ -119,7 +119,7 @@ export const products: Product[] = [
     description: 'Bursting with real fruit flavors for an instant sweet escape.',
     price: 1.49,
     tag: null,
-    image: 'https://images.openfoodfacts.org/images/products/003/485/600/8187/front_en.96.400.jpg',
+    image: '/images/products/welchs_fruit_snacks.png',
     categoryId: 'snacks',
   },
 
@@ -130,7 +130,7 @@ export const products: Product[] = [
     description: 'The newly crowned #2 soda in America — 23 legendary flavors, six pack deep.',
     price: 6.99,
     tag: 'Popular',
-    image: 'https://images.openfoodfacts.org/images/products/000/000/782/8500/front_fr.11.400.jpg',
+    image: '/images/products/dr_pepper_6pack.png',
     categoryId: 'drinks',
   },
   {
@@ -139,7 +139,7 @@ export const products: Product[] = [
     description: 'Six cans of crisp lemon-lime clarity — perfect for mixing or sipping straight.',
     price: 6.99,
     tag: null,
-    image: 'https://images.openfoodfacts.org/images/products/004/900/002/8904/front_en.12.400.jpg',
+    image: '/images/products/sprite_6pack.png',
     categoryId: 'drinks',
   },
   {
@@ -148,7 +148,7 @@ export const products: Product[] = [
     description: 'Six cans of the timeless gold standard. Cold, carbonated, and always right.',
     price: 6.99,
     tag: 'Popular',
-    image: 'https://images.openfoodfacts.org/images/products/004/900/005/0103/front_en.12.400.jpg',
+    image: '/images/products/coca_cola_6pack.png',
     categoryId: 'drinks',
   },
 
@@ -159,7 +159,7 @@ export const products: Product[] = [
     description: 'Never concentrated, never frozen — 100% pure squeezed orange juice.',
     price: 2.99,
     tag: 'Fresh',
-    image: 'https://images.openfoodfacts.org/images/products/002/500/004/3947/front_en.13.400.jpg',
+    image: '/images/products/simply_orange.png',
     categoryId: 'drinks',
   },
   {
@@ -168,7 +168,7 @@ export const products: Product[] = [
     description: 'Bold, deeply refreshing, packed with 100% of your daily Vitamin C.',
     price: 1.99,
     tag: null,
-    image: 'https://images.openfoodfacts.org/images/products/004/180/022/8006/front_en.12.400.jpg',
+    image: '/images/products/welchs_grape_juice.png',
     categoryId: 'drinks',
   },
   {
@@ -177,7 +177,7 @@ export const products: Product[] = [
     description: 'Iconic smooth blend of green tea and natural honey — never goes out of style.',
     price: 1.99,
     tag: 'Popular',
-    image: 'https://images.openfoodfacts.org/images/products/061/300/871/8410/front_en.16.400.jpg',
+    image: '/images/products/arizona_green_tea.png',
     categoryId: 'drinks',
   },
 
@@ -246,7 +246,7 @@ export const products: Product[] = [
     description: "First they're sour, then they're sweet — bursting with intense juicy flavor.",
     price: 1.99,
     tag: null,
-    image: 'https://images.openfoodfacts.org/images/products/007/046/203/6008/front_en.26.400.jpg',
+    image: '/images/products/sour_patch_kids_watermelon.png',
     categoryId: 'snacks',
   },
   {
@@ -255,7 +255,7 @@ export const products: Product[] = [
     description: 'Taste the rainbow with a massive, shareable pouch of iconic fruity chewy candies.',
     price: 2.99,
     tag: 'Popular',
-    image: 'https://images.openfoodfacts.org/images/products/000/000/404/6008/front_en.19.400.jpg',
+    image: '/images/products/skittles_original.png',
     categoryId: 'snacks',
   },
   {
@@ -264,7 +264,7 @@ export const products: Product[] = [
     description: 'Unbelievably juicy fruit chews packed with strawberry, cherry, orange, and lemon.',
     price: 2.99,
     tag: null,
-    image: 'https://images.openfoodfacts.org/images/products/002/200/001/4762/front_en.21.400.jpg',
+    image: '/images/products/starburst_original.png',
     categoryId: 'snacks',
   },
   {
@@ -273,7 +273,7 @@ export const products: Product[] = [
     description: 'Classic chewy, low-fat strawberry candy pull that keeps the night going.',
     price: 3.49,
     tag: null,
-    image: 'https://images.openfoodfacts.org/images/products/003/400/050/2405/front_en.30.400.jpg',
+    image: '/images/products/twizzlers_strawberry.png',
     categoryId: 'snacks',
   },
   {
@@ -282,7 +282,7 @@ export const products: Product[] = [
     description: 'Tangy chewy taffy bar with an intensely secret flavor profile.',
     price: 0.99,
     tag: null,
-    image: 'https://images.openfoodfacts.org/images/products/007/339/000/1054/front_en.4.400.jpg',
+    image: '/images/products/airheads_white_mystery.png',
     categoryId: 'snacks',
   },
   {
@@ -291,7 +291,7 @@ export const products: Product[] = [
     description: 'Crisp wafers covered in classic smooth milk chocolate, ready to break and share.',
     price: 2.99,
     tag: 'Popular',
-    image: 'https://images.openfoodfacts.org/images/products/003/400/024/6002/front_en.9.400.jpg',
+    image: '/images/products/kitkat_king.png',
     categoryId: 'snacks',
   },
   {
@@ -300,7 +300,7 @@ export const products: Product[] = [
     description: 'Plant-based, radically low-sugar gummy buddies with a massive sour punch.',
     price: 3.99,
     tag: 'Fresh',
-    image: 'https://images.openfoodfacts.org/images/products/085/080/700/8061/front_en.10.400.jpg',
+    image: '/images/products/smartsweets_sour_blast.png',
     categoryId: 'organic',
   },
 
@@ -311,7 +311,7 @@ export const products: Product[] = [
     description: 'Crispy tortilla-style chips dusted with sweet nostalgic cinnamon-sugar crunch.',
     price: 6.49,
     tag: 'New',
-    image: 'https://images.openfoodfacts.org/images/products/085/176/900/7997/front_en.31.400.jpg',
+    image: '/images/products/siete_cinnamon_chips.png',
     categoryId: 'exotic',
   },
   {
@@ -486,7 +486,7 @@ export const products: Product[] = [
     description: 'Deep bold fruit punch loaded with electrolytes for post-snack hydration.',
     price: 2.49,
     tag: null,
-    image: 'https://images.openfoodfacts.org/images/products/005/200/032/8660/front_en.34.400.jpg',
+    image: '/images/products/gatorade_fruit_punch.png',
     categoryId: 'drinks',
   },
   {
@@ -495,7 +495,7 @@ export const products: Product[] = [
     description: "Unleash the beast. Caffeine, taurine, B-vitamins — when the night's just beginning.",
     price: 3.99,
     tag: 'Popular',
-    image: 'https://images.openfoodfacts.org/images/products/506/033/563/5808/front_fr.62.400.jpg',
+    image: '/images/products/monster_energy.png',
     categoryId: 'drinks',
   },
   {
@@ -504,7 +504,7 @@ export const products: Product[] = [
     description: 'The OG energy drink with that iconic crisp Austrian flavor. Wings included.',
     price: 3.99,
     tag: null,
-    image: 'https://images.openfoodfacts.org/images/products/900/249/010/0070/front_en.245.400.jpg',
+    image: '/images/products/red_bull.png',
     categoryId: 'drinks',
   },
   {
@@ -513,7 +513,7 @@ export const products: Product[] = [
     description: 'Coconut-water base with electrolytes and zero artificial dyes — athlete approved.',
     price: 3.29,
     tag: 'Fresh',
-    image: 'https://images.openfoodfacts.org/images/products/085/817/600/2171/front_en.30.400.jpg',
+    image: '/images/products/bodyarmor_tropical_punch.png',
     categoryId: 'organic',
   },
   {
@@ -522,7 +522,7 @@ export const products: Product[] = [
     description: 'Murder your thirst. Aggressively pure mountain sparkling water in a tallboy.',
     price: 10.99,
     tag: 'New',
-    image: 'https://images.openfoodfacts.org/images/products/085/003/170/0680/front_fr.3.400.jpg',
+    image: '/images/products/liquid_death_6pack.png',
     categoryId: 'organic',
   },
 
@@ -569,7 +569,7 @@ export const products: Product[] = [
     description: 'Airy crispy rice cakes dusted with sweet cinnamon-sugar. Light snacking done right.',
     price: 4.49,
     tag: 'Fresh',
-    image: 'https://images.openfoodfacts.org/images/products/003/000/016/9001/front_en.151.400.jpg',
+    image: '/images/products/quaker_rice_cakes.png',
     categoryId: 'snacks',
   },
   {
@@ -578,7 +578,7 @@ export const products: Product[] = [
     description: 'Non-GMO lightly salted popcorn. Pairs with everything, guilty about nothing.',
     price: 4.99,
     tag: 'Fresh',
-    image: 'https://images.openfoodfacts.org/images/products/081/878/001/1938/front_en.72.400.jpg',
+    image: '/images/products/boom_chicka_pop.png',
     categoryId: 'organic',
   },
 
@@ -589,7 +589,7 @@ export const products: Product[] = [
     description: 'Two cups of chocolate-peanut butter mastery. King size because anything less is wrong.',
     price: 2.99,
     tag: 'Popular',
-    image: 'https://images.openfoodfacts.org/images/products/003/400/047/0693/front_en.25.400.jpg',
+    image: '/images/products/reeses_peanut_butter_cups.png',
     categoryId: 'fanfavorite',
   },
   {
@@ -607,7 +607,7 @@ export const products: Product[] = [
     description: 'Rich chocolate shells packed with whole roasted peanuts. The share-worthy upgrade.',
     price: 3.29,
     tag: 'Popular',
-    image: 'https://images.openfoodfacts.org/images/products/004/000/054/7433/front_en.4.400.jpg',
+    image: '/images/products/mms_peanut.png',
     categoryId: 'fanfavorite',
   },
   {
@@ -616,7 +616,7 @@ export const products: Product[] = [
     description: 'Crunchy Nerds wrapped around a chewy gummy center — dangerously addictive texture.',
     price: 3.49,
     tag: 'New',
-    image: 'https://images.openfoodfacts.org/images/products/004/142/004/8548/front_en.56.400.jpg',
+    image: '/images/products/nerds_gummy_clusters.png',
     categoryId: 'snacks',
   },
   {
@@ -625,7 +625,7 @@ export const products: Product[] = [
     description: 'The original gold-standard gummy bear — five classic fruity flavors, zero debate.',
     price: 2.99,
     tag: null,
-    image: 'https://images.openfoodfacts.org/images/products/869/121/601/7689/front_en.9.400.jpg',
+    image: '/images/products/haribo_gold_bears.png',
     categoryId: 'snacks',
   },
 
@@ -654,7 +654,7 @@ export const products: Product[] = [
     description: 'Whole30-approved grass-fed beef with zero sugar or nitrates. Real fuel.',
     price: 2.99,
     tag: null,
-    image: 'https://images.openfoodfacts.org/images/products/085/658/400/4183/front_en.299.400.jpg',
+    image: '/images/products/chomps_beef_stick.png',
     categoryId: 'organic',
   },
   {
@@ -663,7 +663,7 @@ export const products: Product[] = [
     description: 'Two ingredients, massive flavor. No added sugar — just cold-pressed real fruit.',
     price: 2.49,
     tag: 'Fresh',
-    image: 'https://images.openfoodfacts.org/images/products/085/039/700/4071/front_en.32.400.jpg',
+    image: '/images/products/thats_it_apple_mango.png',
     categoryId: 'organic',
   },
 
@@ -674,7 +674,7 @@ export const products: Product[] = [
     description: 'Dense hand-made oat bar with bright lemon and poppyseed. Baked in Boulder, CO.',
     price: 3.49,
     tag: 'New',
-    image: 'https://images.openfoodfacts.org/images/products/082/926/200/0661/front_en.3.400.jpg',
+    image: '/images/products/bobos_lemon_poppyseed.png',
     categoryId: 'exotic',
   },
   {
@@ -721,7 +721,7 @@ export const products: Product[] = [
     description: 'Crispy, saucy, cheesy frozen pizza. The original party starter. No debate.',
     price: 2.99,
     tag: null,
-    image: 'https://images.openfoodfacts.org/images/products/004/280/011/5201/front_en.10.400.jpg',
+    image: '/images/products/totinos_party_pizza.png',
     categoryId: 'latenightfix',
   },
 
