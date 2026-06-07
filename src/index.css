@@ -2,64 +2,65 @@
 @import "tailwindcss";
 
 @theme {
-  /* ─── Rose Blush & Cherry (light theme) ────────────────────────────
-     Background: soft rose-blush (not stark white). Text: deep plum-espresso.
-     Surfaces: blush-tinted cards. Deep Crumbl-style rose replaces neon pink. */
-  --color-background: #f7edf2;            /* soft rose-blush */
-  --color-surface: #fdf4f7;              /* cards, sheets, modals — blush white */
-  --color-surface-bright: #fdf4f7;
-  --color-surface-dim: #efd5e2;          /* wells, image placeholders — rose */
-  --color-surface-container-lowest: #fdf4f7;
-  --color-surface-container-low: #f9eaf2;
-  --color-surface-container: #f3dde9;
-  --color-surface-container-high: #ebd0de;
-  --color-surface-container-highest: #e2c4d4;
+  /* ─── Natural Forest & Honey Caramel (premium dark theme) ────────
+     Background: deep moss-black. Text: pistachio cream.
+     Surfaces: deep moss-stone. Primary accent: sweet amber-caramel.
+     Secondary: organic mint green. Outline: subtle forest/slate borders. */
+  --color-background: #0b0e0c;            /* forest shadow / moss-black */
+  --color-surface: #141815;              /* deep moss-stone card background */
+  --color-surface-bright: #1b221d;
+  --color-surface-dim: #1e2621;          /* input/well background */
+  --color-surface-container-lowest: #111512;
+  --color-surface-container-low: #141815;
+  --color-surface-container: #1a201b;
+  --color-surface-container-high: #202822;
+  --color-surface-container-highest: #28322a;
 
-  --color-on-background: #2a1520;        /* deep plum-espresso */
-  --color-on-surface: #2a1520;
-  --color-surface-variant: #efd5e2;
-  --color-on-surface-variant: #8a5572;   /* warm rose-mauve secondary text */
+  --color-on-background: #f1f5f1;        /* pistachio cream / soft off-white */
+  --color-on-surface: #f1f5f1;
+  --color-surface-variant: #1e2621;
+  --color-on-surface-variant: #8ba895;   /* soft sage green secondary text */
 
-  --color-primary: #e60023;              /* cherry red — kept */
-  --color-pink: #d4245a;                 /* deep Crumbl-style rose (was neon #ff2060) */
+  --color-primary: #d97706;              /* warm sweet caramel/honey amber */
+  --color-pink: #10b981;                 /* organic mint green */
   --color-on-primary: #ffffff;
-  --color-primary-container: #ffd9e4;    /* blush pink container */
-  --color-on-primary-container: #55001c;
+  --color-primary-container: #3a2503;    /* dark warm caramel container */
+  --color-on-primary-container: #ffedd5;
 
-  --color-secondary: #2a1520;
+  --color-secondary: #10b981;            /* mint green secondary */
   --color-on-secondary: #ffffff;
-  --color-secondary-container: #ebd0de;
-  --color-on-secondary-container: #2a1520;
+  --color-secondary-container: #064e3b;
+  --color-on-secondary-container: #d1fae5;
 
-  --color-tertiary: #8a5572;
+  --color-tertiary: #8ba895;             /* sage green */
   --color-on-tertiary: #ffffff;
 
-  --color-outline: #dcc8d4;              /* rose-tinted border */
-  --color-outline-variant: #e8d4de;
+  --color-outline: #222924;              /* subtle forest border */
+  --color-outline-variant: #2e3831;
 
-  --color-inverse-surface: #2a1520;
-  --color-inverse-on-surface: #f7edf2;
-  --color-inverse-primary: #ffb4c6;
+  --color-inverse-surface: #f1f5f1;
+  --color-inverse-on-surface: #0b0e0c;
+  --color-inverse-primary: #d97706;
 
-  --color-error: #d61f2b;                /* slightly deeper red for light bg */
+  --color-error: #ef4444;                /* bright red for warnings */
   --color-on-error: #ffffff;
-  --color-error-container: #ffd9dc;
-  --color-on-error-container: #5c0006;
+  --color-error-container: #7f1d1d;
+  --color-on-error-container: #fca5a5;
 
-  --color-primary-fixed: #ffb4c6;
-  --color-primary-fixed-dim: #f07898;
-  --color-on-primary-fixed: #3b0012;
-  --color-on-primary-fixed-variant: #6e0025;
+  --color-primary-fixed: #ffedd5;
+  --color-primary-fixed-dim: #fed7aa;
+  --color-on-primary-fixed: #451a03;
+  --color-on-primary-fixed-variant: #78350f;
 
-  --color-secondary-fixed: #ebd0de;
-  --color-secondary-fixed-dim: #e2c4d4;
-  --color-on-secondary-fixed: #2a1520;
-  --color-on-secondary-fixed-variant: #8a5572;
+  --color-secondary-fixed: #d1fae5;
+  --color-secondary-fixed-dim: #a7f3d0;
+  --color-on-secondary-fixed: #064e3b;
+  --color-on-secondary-fixed-variant: #047857;
 
-  --color-tertiary-fixed: #e2c4d4;
-  --color-tertiary-fixed-dim: #dcc8d4;
-  --color-on-tertiary-fixed: #2a1520;
-  --color-on-tertiary-fixed-variant: #8a5572;
+  --color-tertiary-fixed: #e2ebd5;
+  --color-tertiary-fixed-dim: #c2d8aa;
+  --color-on-tertiary-fixed: #1e2d03;
+  --color-on-tertiary-fixed-variant: #3a530f;
 
   --spacing-base: 8px;
   --spacing-xs: 4px;
@@ -103,17 +104,17 @@ html, body {
     scrollbar-width: none;
   }
 
-  /* Brand gradient — cherry red to deep Crumbl rose */
+  /* Brand gradient — sweet caramel to deep amber */
   .btn-brand {
-    background: linear-gradient(135deg, #e60023 0%, #d4245a 100%);
-    box-shadow: 0 8px 28px rgba(230, 0, 35, 0.30), 0 2px 8px rgba(212, 36, 90, 0.22);
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    box-shadow: 0 8px 28px rgba(217, 119, 6, 0.30), 0 2px 8px rgba(180, 83, 9, 0.22);
     color: #fff;
   }
   .btn-brand:hover {
-    box-shadow: 0 12px 36px rgba(230, 0, 35, 0.40), 0 4px 12px rgba(212, 36, 90, 0.32);
+    box-shadow: 0 12px 36px rgba(217, 119, 6, 0.40), 0 4px 12px rgba(180, 83, 9, 0.32);
   }
   .glow-brand {
-    box-shadow: 0 0 24px rgba(230, 0, 35, 0.28), 0 0 48px rgba(212, 36, 90, 0.16);
+    box-shadow: 0 0 24px rgba(217, 119, 6, 0.28), 0 0 48px rgba(180, 83, 9, 0.16);
   }
 }
 
@@ -130,8 +131,8 @@ html, body {
   100% { transform: translateX(300%) skewX(-15deg); }
 }
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 20px rgba(230, 0, 35, 0.3), 0 0 40px rgba(255, 32, 96, 0.1); }
-  50%       { box-shadow: 0 0 35px rgba(230, 0, 35, 0.5), 0 0 70px rgba(255, 32, 96, 0.2); }
+  0%, 100% { box-shadow: 0 0 20px rgba(217, 119, 6, 0.3), 0 0 40px rgba(217, 119, 6, 0.1); }
+  50%       { box-shadow: 0 0 35px rgba(217, 119, 6, 0.5), 0 0 70px rgba(217, 119, 6, 0.2); }
 }
 @keyframes float {
   0%, 100% { transform: translateY(0px) rotate(0deg); }
@@ -169,14 +170,14 @@ html, body {
     transition: box-shadow 0.4s ease, transform 0.3s ease;
   }
   .card-hover-glow:hover {
-    box-shadow: 0 0 0 1px rgba(230,0,35,0.15), 0 20px 60px rgba(230,0,35,0.12);
+    box-shadow: 0 0 0 1px rgba(217,119,6,0.15), 0 20px 60px rgba(217,119,6,0.12);
     transform: translateY(-2px);
   }
 
-  /* Frosted blush-white glass panel */
+  /* Frosted dark natural glass panel */
   .glass-panel {
-    background: rgba(253, 244, 247, 0.7);
-    border: 1px solid rgba(42,21,32,0.08);
+    background: rgba(20, 24, 21, 0.75);
+    border: 1px solid rgba(241, 245, 241, 0.08);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
   }

@@ -2,6 +2,7 @@
 // Only intercepts navigation requests — lets the browser's HTTP cache handle
 // all sub-resources (Vite hashed bundles, images, etc.) without interference.
 const SHELL_CACHE = 'sn-shell-v4';
+const IMAGE_CACHE = 'sn-images-v1';
 
 // ── Install: cache the app shell ─────────────────────────────────
 self.addEventListener('install', (event) => {
@@ -20,27 +21,56 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys()
       .then((names) =>
-        Promise.all(names.filter((n) => n !== SHELL_CACHE).map((n) => caches.delete(n)))
+        Promise.all(names.filter((n) => n !== SHELL_CACHE && n !== IMAGE_CACHE).map((n) => caches.delete(n)))
       )
       .then(() => self.clients.claim())
   );
 });
 
-// ── Fetch: ONLY intercept HTML navigation requests ────────────────
-// Sub-resources (JS bundles, CSS, images) are NOT intercepted.
-// Vite ships hashed assets with Cache-Control: immutable — the browser
-// handles their caching perfectly without SW involvement.
+// ── Fetch: Intercept HTML navigation requests & Product Images ─────
 self.addEventListener('fetch', (event) => {
   const { request } = event;
 
-  // Only handle same-origin navigations
   if (request.method !== 'GET') return;
-  if (request.mode !== 'navigate') return;
 
   const url = new URL(request.url);
+
+  // 1. Intercept Image Requests (Local and OpenFoodFacts thumbnails)
+  const isImage = request.destination === 'image' || 
+                  url.pathname.includes('/images/') || 
+                  url.hostname.includes('openfoodfacts.org');
+
+  if (isImage) {
+    event.respondWith(
+      caches.open(IMAGE_CACHE).then((cache) =>
+        cache.match(request).then((cachedResponse) => {
+          if (cachedResponse) {
+            // Serve from cache, but update it in the background
+            fetch(request).then((networkResponse) => {
+              if (networkResponse.status === 200 || networkResponse.type === 'opaque') {
+                cache.put(request, networkResponse);
+              }
+            }).catch(() => {});
+            return cachedResponse;
+          }
+          // Fetch from network, cache it, and return
+          return fetch(request).then((networkResponse) => {
+            if (networkResponse.status === 200 || networkResponse.type === 'opaque') {
+              cache.put(request, networkResponse.clone());
+            }
+            return networkResponse;
+          }).catch(() => Response.error());
+        })
+      )
+    );
+    return;
+  }
+
+  // 2. Only handle same-origin HTML navigations (App Shell)
+  if (request.mode !== 'navigate') return;
   if (url.origin !== self.location.origin) return;
 
-  // Network-first; on failure serve the cached shell so the SPA still loads offline
+  // Network-first; on failure serve the cached shell so the PWA loads offline
   event.respondWith(
     fetch(request).catch(() =>
       caches.match('/').then((cached) => cached ?? Response.error())

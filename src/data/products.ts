@@ -226,7 +226,7 @@ export const products: Product[] = [
     description: 'Bitter, brilliant, alcohol-free social tonic that feels like a night out.',
     price: 4.99,
     tag: 'New',
-    image: '',
+    image: '/images/products/ghia.png',
     categoryId: 'exotic',
   },
   {
@@ -235,7 +235,7 @@ export const products: Product[] = [
     description: 'Fizzy traditional Mexican fermented pineapple with sweet-heat chamoy kick.',
     price: 2.99,
     tag: 'Fresh',
-    image: '',
+    image: '/images/products/de_la_calle.png',
     categoryId: 'exotic',
   },
 
@@ -320,7 +320,7 @@ export const products: Product[] = [
     description: 'Creamy cheesecake swirled with raspberry purée, white chocolate chunks, and finished crust.',
     price: 59.99,
     tag: 'New',
-    image: '',
+    image: '/images/products/cheesecake_white_choc_raspberry.png',
     categoryId: 'exotic',
   },
 
@@ -331,7 +331,7 @@ export const products: Product[] = [
     description: "Hand-rolled dark and milk chocolate truffles from South Broadway's premier boutique.",
     price: 12.49,
     tag: 'Premium',
-    image: '',
+    image: '/images/products/tru_fles_truffles.svg',
     categoryId: 'local',
   },
   {
@@ -340,7 +340,7 @@ export const products: Product[] = [
     description: 'Buttery English toffee drenched in premium chocolate and crushed almonds, crafted in South Denver.',
     price: 8.99,
     tag: 'Popular',
-    image: '',
+    image: '/images/products/centennial_toffee.svg',
     categoryId: 'local',
   },
   {
@@ -349,7 +349,7 @@ export const products: Product[] = [
     description: 'Legendary smooth creamy masterpiece on a graham cracker crust, delivered whole.',
     price: 48.99,
     tag: 'Premium',
-    image: '',
+    image: '/images/products/cheesecake_original_6in.svg',
     categoryId: 'local',
   },
   {
@@ -358,7 +358,7 @@ export const products: Product[] = [
     description: 'Build your own box of six massive gourmet cookies in the iconic pink box.',
     price: 38.99,
     tag: 'Premium',
-    image: '',
+    image: '/images/products/crumbl_6pack.svg',
     categoryId: 'local',
     customizationMatrix: [
       {
@@ -383,7 +383,7 @@ export const products: Product[] = [
     description: 'Hand-pick four large legendary specialty cookies crafted to crush cravings.',
     price: 25.99,
     tag: 'Popular',
-    image: '',
+    image: '/images/products/crumbl_4pack.svg',
     categoryId: 'local',
     customizationMatrix: [
       {
@@ -408,7 +408,7 @@ export const products: Product[] = [
     description: 'Build your own dozen of classic and deluxe cookies engineered for midnight execution.',
     price: 59.99,
     tag: 'Premium',
-    image: '',
+    image: '/images/products/insomnia_custom_dozen.svg',
     categoryId: 'latenightfix',
     customizationMatrix: [
       {
@@ -433,7 +433,7 @@ export const products: Product[] = [
     description: 'Pre-packed assortment of the most popular fresh cookies for maximum delivery speed.',
     price: 54.99,
     tag: 'Popular',
-    image: '',
+    image: '/images/products/insomnia_fastpick.svg',
     categoryId: 'latenightfix',
   },
   {
@@ -442,7 +442,7 @@ export const products: Product[] = [
     description: 'Hand-select 12 fresh melt-in-your-mouth doughnuts to build your ultimate box.',
     price: 27.99,
     tag: 'Premium',
-    image: '',
+    image: '/images/products/krispy_kreme_custom.svg',
     categoryId: 'latenightfix',
     customizationMatrix: [
       {
@@ -466,7 +466,7 @@ export const products: Product[] = [
     description: 'A full box of 12 iconic warm Original Glazed doughnuts. Zero wait time.',
     price: 23.99,
     tag: 'Popular',
-    image: '',
+    image: '/images/products/krispy_kreme_glazed.svg',
     categoryId: 'latenightfix',
   },
 
@@ -477,7 +477,7 @@ export const products: Product[] = [
     description: 'Citrus-charged surge in six. Keeps the session alive all night long.',
     price: 6.99,
     tag: 'Popular',
-    image: '',
+    image: '/images/products/mountain_dew.svg',
     categoryId: 'drinks',
   },
   {
@@ -486,7 +486,7 @@ export const products: Product[] = [
     description: 'Deep bold fruit punch loaded with electrolytes for post-snack hydration.',
     price: 2.49,
     tag: null,
-    image: '',
+    image: 'https://images.openfoodfacts.org/images/products/005/200/032/8660/front_en.34.400.jpg',
     categoryId: 'drinks',
   },
   {
@@ -495,7 +495,7 @@ export const products: Product[] = [
     description: "Unleash the beast. Caffeine, taurine, B-vitamins — when the night's just beginning.",
     price: 3.99,
     tag: 'Popular',
-    image: '',
+    image: 'https://images.openfoodfacts.org/images/products/506/033/563/5808/front_fr.62.400.jpg',
     categoryId: 'drinks',
   },
   {
@@ -504,7 +504,7 @@ export const products: Product[] = [
     description: 'The OG energy drink with that iconic crisp Austrian flavor. Wings included.',
     price: 3.99,
     tag: null,
-    image: '',
+    image: 'https://images.openfoodfacts.org/images/products/900/249/010/0070/front_en.245.400.jpg',
     categoryId: 'drinks',
   },
   {
@@ -513,7 +513,7 @@ export const products: Product[] = [
     description: 'Coconut-water base with electrolytes and zero artificial dyes — athlete approved.',
     price: 3.29,
     tag: 'Fresh',
-    image: '',
+    image: 'https://images.openfoodfacts.org/images/products/085/817/600/2171/front_en.30.400.jpg',
     categoryId: 'organic',
   },
   {
@@ -522,7 +522,7 @@ export const products: Product[] = [
     description: 'Murder your thirst. Aggressively pure mountain sparkling water in a tallboy.',
     price: 10.99,
     tag: 'New',
-    image: '',
+    image: 'https://images.openfoodfacts.org/images/products/085/003/170/0680/front_fr.3.400.jpg',
     categoryId: 'organic',
   },
 
@@ -533,7 +533,7 @@ export const products: Product[] = [
     description: 'The timeless salted crisp, supersized for the whole crew. Pure, simple, perfect.',
     price: 6.49,
     tag: null,
-    image: '',
+    image: '/images/products/lays_classic_family.svg',
     categoryId: 'snacks',
   },
   {
@@ -542,7 +542,7 @@ export const products: Product[] = [
     description: 'Zesty ranch seasoning on a triangular chip that was engineered to disappear.',
     price: 6.49,
     tag: 'Popular',
-    image: '',
+    image: '/images/products/doritos_cool_ranch.svg',
     categoryId: 'snacks',
   },
   {
@@ -551,7 +551,7 @@ export const products: Product[] = [
     description: 'Savory crunchy medley of pretzels, cereals, and crackers. The ultimate shareable.',
     price: 6.99,
     tag: null,
-    image: '',
+    image: '/images/products/chex_mix_bold.svg',
     categoryId: 'snacks',
   },
   {
@@ -560,7 +560,7 @@ export const products: Product[] = [
     description: 'Sweet, salty, roasted — clean fuel that actually hits. Big bag energy.',
     price: 7.99,
     tag: null,
-    image: '',
+    image: '/images/products/planters_honey_peanuts.svg',
     categoryId: 'snacks',
   },
   {
@@ -569,7 +569,7 @@ export const products: Product[] = [
     description: 'Airy crispy rice cakes dusted with sweet cinnamon-sugar. Light snacking done right.',
     price: 4.49,
     tag: 'Fresh',
-    image: '',
+    image: 'https://images.openfoodfacts.org/images/products/003/000/016/9001/front_en.151.400.jpg',
     categoryId: 'snacks',
   },
   {
@@ -578,7 +578,7 @@ export const products: Product[] = [
     description: 'Non-GMO lightly salted popcorn. Pairs with everything, guilty about nothing.',
     price: 4.99,
     tag: 'Fresh',
-    image: '',
+    image: 'https://images.openfoodfacts.org/images/products/081/878/001/1938/front_en.72.400.jpg',
     categoryId: 'organic',
   },
 
@@ -589,7 +589,7 @@ export const products: Product[] = [
     description: 'Two cups of chocolate-peanut butter mastery. King size because anything less is wrong.',
     price: 2.99,
     tag: 'Popular',
-    image: '',
+    image: 'https://images.openfoodfacts.org/images/products/003/400/047/0693/front_en.25.400.jpg',
     categoryId: 'fanfavorite',
   },
   {
@@ -598,7 +598,7 @@ export const products: Product[] = [
     description: 'Caramel, cookie, chocolate. The holy trinity of candy — supersized and ready.',
     price: 2.49,
     tag: null,
-    image: '',
+    image: '/images/products/twix_king.svg',
     categoryId: 'fanfavorite',
   },
   {
@@ -607,7 +607,7 @@ export const products: Product[] = [
     description: 'Rich chocolate shells packed with whole roasted peanuts. The share-worthy upgrade.',
     price: 3.29,
     tag: 'Popular',
-    image: '',
+    image: 'https://images.openfoodfacts.org/images/products/004/000/054/7433/front_en.4.400.jpg',
     categoryId: 'fanfavorite',
   },
   {
@@ -616,7 +616,7 @@ export const products: Product[] = [
     description: 'Crunchy Nerds wrapped around a chewy gummy center — dangerously addictive texture.',
     price: 3.49,
     tag: 'New',
-    image: '',
+    image: 'https://images.openfoodfacts.org/images/products/004/142/004/8548/front_en.56.400.jpg',
     categoryId: 'snacks',
   },
   {
@@ -625,7 +625,7 @@ export const products: Product[] = [
     description: 'The original gold-standard gummy bear — five classic fruity flavors, zero debate.',
     price: 2.99,
     tag: null,
-    image: '',
+    image: 'https://images.openfoodfacts.org/images/products/869/121/601/7689/front_en.9.400.jpg',
     categoryId: 'snacks',
   },
 
@@ -636,7 +636,7 @@ export const products: Product[] = [
     description: 'No B.S. — dates, egg whites, cashews, dark chocolate, sea salt. That is it.',
     price: 3.29,
     tag: null,
-    image: '',
+    image: '/images/products/rxbar_chocolate_sea_salt.svg',
     categoryId: 'organic',
   },
   {
@@ -645,7 +645,7 @@ export const products: Product[] = [
     description: 'Whole almonds and peanuts bound in dark chocolate with a sea-salt finish.',
     price: 2.79,
     tag: 'Popular',
-    image: '',
+    image: '/images/products/kind_dark_chocolate.svg',
     categoryId: 'organic',
   },
   {
@@ -654,7 +654,7 @@ export const products: Product[] = [
     description: 'Whole30-approved grass-fed beef with zero sugar or nitrates. Real fuel.',
     price: 2.99,
     tag: null,
-    image: '',
+    image: 'https://images.openfoodfacts.org/images/products/085/658/400/4183/front_en.299.400.jpg',
     categoryId: 'organic',
   },
   {
@@ -663,7 +663,7 @@ export const products: Product[] = [
     description: 'Two ingredients, massive flavor. No added sugar — just cold-pressed real fruit.',
     price: 2.49,
     tag: 'Fresh',
-    image: '',
+    image: 'https://images.openfoodfacts.org/images/products/085/039/700/4071/front_en.32.400.jpg',
     categoryId: 'organic',
   },
 
@@ -674,7 +674,7 @@ export const products: Product[] = [
     description: 'Dense hand-made oat bar with bright lemon and poppyseed. Baked in Boulder, CO.',
     price: 3.49,
     tag: 'New',
-    image: '',
+    image: 'https://images.openfoodfacts.org/images/products/082/926/200/0661/front_en.3.400.jpg',
     categoryId: 'exotic',
   },
   {
@@ -683,7 +683,7 @@ export const products: Product[] = [
     description: 'Cassava-flour tortilla chips with a punchy lime finish. Paleo and Whole30 friendly.',
     price: 5.49,
     tag: null,
-    image: '',
+    image: '/images/products/siete_lime_chips.svg',
     categoryId: 'exotic',
   },
   {
@@ -692,7 +692,7 @@ export const products: Product[] = [
     description: 'Nostalgia-level sugary cereal taste with 13g protein and zero grams of grain.',
     price: 9.99,
     tag: 'New',
-    image: '',
+    image: '/images/products/magic_spoon_fruity.svg',
     categoryId: 'exotic',
   },
 
@@ -703,7 +703,7 @@ export const products: Product[] = [
     description: 'Cheese and pepperoni stuffed in a crispy crust. Microwave-to-perfect in 2 minutes.',
     price: 3.99,
     tag: 'Popular',
-    image: '',
+    image: '/images/products/hot_pockets_pepperoni.svg',
     categoryId: 'latenightfix',
   },
   {
@@ -712,7 +712,7 @@ export const products: Product[] = [
     description: 'The midnight snack benchmark. Sweet, frosted, and ready for the toaster at 2AM.',
     price: 4.29,
     tag: 'Popular',
-    image: '',
+    image: '/images/products/poptarts_strawberry.svg',
     categoryId: 'latenightfix',
   },
   {
@@ -721,7 +721,7 @@ export const products: Product[] = [
     description: 'Crispy, saucy, cheesy frozen pizza. The original party starter. No debate.',
     price: 2.99,
     tag: null,
-    image: '',
+    image: 'https://images.openfoodfacts.org/images/products/004/280/011/5201/front_en.10.400.jpg',
     categoryId: 'latenightfix',
   },
 
@@ -732,7 +732,7 @@ export const products: Product[] = [
     description: 'Whole-milk Australian-style yoghurt with a sweet-tart strawberry rhubarb swirl.',
     price: 2.99,
     tag: 'Fresh',
-    image: '',
+    image: '/images/products/noosa_strawberry.svg',
     categoryId: 'local',
   },
 ];

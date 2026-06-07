@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Plus, Minus, Sparkles } from 'lucide-react';
 import { Product } from '../../types';
@@ -20,6 +21,7 @@ export function ProductCard({
   className = '',
   animationDelay = 0,
 }: ProductCardProps) {
+  const [isLoaded, setIsLoaded] = useState(false);
   const cartItems = useCartStore((state) => state.items);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
   const quantity = cartItems.find((i) => i.id === product.id)?.quantity ?? 0;
@@ -44,15 +46,26 @@ export function ProductCard({
 
         {/* Image or placeholder */}
         {product.image ? (
-          <motion.img
-            src={product.image}
-            alt={product.name}
-            loading={isFeatured ? 'eager' : 'lazy'}
-            decoding="async"
-            whileHover={{ scale: 1.06 }}
-            transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-            className="w-full h-full object-contain p-3"
-          />
+          <>
+            {!isLoaded && (
+              <div className="absolute inset-0 bg-surface-container animate-shimmer-sweep overflow-hidden" />
+            )}
+            <motion.img
+              src={product.image}
+              alt={product.name}
+              loading={isFeatured ? 'eager' : 'lazy'}
+              decoding="async"
+              onLoad={() => setIsLoaded(true)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: isLoaded ? 1 : 0 }}
+              whileHover={{ scale: 1.06 }}
+              transition={{
+                opacity: { duration: 0.24 },
+                scale: { type: 'spring', stiffness: 260, damping: 20 }
+              }}
+              className="w-full h-full object-contain p-3"
+            />
+          </>
         ) : (
           <div className="w-full h-full flex items-center justify-center p-4">
             <span className="text-[10px] font-black uppercase tracking-widest text-on-background/30 text-center leading-snug">

@@ -1,9 +1,6 @@
 import { useState, useEffect } from 'react';
 
-// Delivery window in local device time (Denver, CO target area)
-const OPEN_HOUR = 21;  // 9 PM
-const CLOSE_HOUR = 4;  // 4 AM (next day)
-
+// Operational hours in Denver, CO (Mountain Time): Noon (12 PM) to Midnight (12 AM)
 export function useDeliveryHours() {
   const [now, setNow] = useState(() => new Date());
 
@@ -12,8 +9,19 @@ export function useDeliveryHours() {
     return () => clearInterval(timer);
   }, []);
 
-  const hour = now.getHours();
-  const isOpen = hour >= OPEN_HOUR || hour < CLOSE_HOUR;
+  // Determine current hour in America/Denver timezone
+  const denverHour = (() => {
+    try {
+      const denverStr = now.toLocaleString('en-US', { timeZone: 'America/Denver' });
+      return new Date(denverStr).getHours();
+    } catch (e) {
+      // Fallback to local time if timezone check fails
+      return now.getHours();
+    }
+  })();
 
-  return { isOpen, opensAt: '9 PM', closesAt: '4 AM' };
+  // Noon (12 PM) to Midnight (12 AM) means denverHour >= 12
+  const isOpen = denverHour >= 12;
+
+  return { isOpen, opensAt: '12 PM', closesAt: '12 AM' };
 }
