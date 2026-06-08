@@ -145,7 +145,7 @@ The `waitlist` collection has strict server-side validation (email regex, field 
 
 ## Product Catalog
 
-Static data in `src/data/products.ts`. **42 products, 8 active categories.** Not stored in Firestore.
+Static data in `src/data/products.ts`. **70 products, 8 active categories.** Not stored in Firestore.
 
 ### Category IDs
 
@@ -166,7 +166,15 @@ Edit `src/data/products.ts`. Use the next sequential string ID. Match the `Produ
 
 ### Product Images
 
-All current products have `image: ''`. `ProductCard` renders a name-based placeholder tile when `image` is falsy. Add image URLs directly in `products.ts` when ready — no code changes needed elsewhere.
+All 70 products have local AI-generated photorealistic product images in `public/images/products/*.png`. Images were generated via Imagen 4.0 Ultra, Nano Banana Pro, and gemini-3.1-flash-image. The image path is set in the `image` field of each product in `products.ts`.
+
+To add or update a product image:
+1. Generate a new image (use `scripts/generate-product-images.js` as a template for API calls)
+2. Save to `public/images/products/<slug>.png`
+3. Update the image path in `scripts/patch-all-images.cjs`
+4. Run `node scripts/patch-all-images.cjs` to apply changes to `products.ts`
+
+Images are served locally from `public/images/products/` — no external CDN or URL dependencies.
 
 ### Customization Matrix
 

@@ -68,9 +68,12 @@ export function filterProductsByQuery(products: Product[], query: string): Produ
 ## Verification commands
 
 ```bash
-# Verify product image links use valid, non-placeholder unsplash urls
-grep -rn "unsplash.com" src/App.tsx
+# Verify all 70 products have non-empty local image paths
+Select-String -Path src/data/products.ts -Pattern "image:" | ForEach-Object { $_ -replace '.*image: ', '' } | ForEach-Object { if ($_ -match "''") { "MISSING" } elseif ($_ -match 'https?://') { "EXTERNAL URL" } else { "OK" } } | Group-Object | Select-Object Count, Name
+
+# Verify all referenced image files exist
+Get-ChildItem public/images/products/*.png | Measure-Object
 
 # Confirm that no hardcoded categories are parsed raw outside categories schema
-grep -rn "categoryId: " src/App.tsx
+Select-String -Pattern "categoryId: " src/data/products.ts
 ```

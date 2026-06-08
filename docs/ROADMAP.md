@@ -11,11 +11,6 @@
 - **Fix:** Change both to `md:max-w-[430px]` in `CustomerApp.tsx`. Renders the PWA as a centered phone column on desktop — correct for a mobile-first app.
 - **Files:** `src/CustomerApp.tsx` (2 class changes)
 
-### Product Images
-- All 42 products currently show placeholder tiles.
-- Add image URLs to `src/data/products.ts` per product — no code changes needed.
-- Source from product manufacturer press kits or licensed stock.
-
 ### Product Customization UI
 - **Scope:** Crumbl Cookies (4-Pack, 6-Pack), Insomnia Cookies (Custom Dozen), Krispy Kreme (Custom Dozen)
 - **Data is ready:** `customizationMatrix` field exists on `Product` type and is populated in `products.ts`
@@ -91,7 +86,7 @@
 
 ### Product Image Management (Admin)
 - Admin HQ: upload product image → stores in Firebase Storage → URL written back to product config
-- Removes the need to edit `products.ts` for image updates
+- Removes the need to edit `products.ts` for image updates (currently images are local PNGs in `public/images/products/`)
 - Requires moving catalog from static `products.ts` to Firestore collection
 
 ---
@@ -105,4 +100,4 @@
 | Stripe webhook handler | Confirm payment server-side, prevent order fraud | Medium |
 | Order total server-side verification | Currently calculated client-side — spoofable | High impact |
 | Rate limiting on Stripe checkout | Prevent abuse of payment endpoint | Medium |
-| Image optimization pipeline | All product images should be WebP, max 600px | Low effort once images exist |
+| Image optimization pipeline | Convert product PNGs to WebP, max 600px width | Low (images exist, just need conversion) |

@@ -56,16 +56,16 @@ Phase 12:    Customization UI + Dispatch + Scale ──────────�
 
 ## Product Catalog (Current)
 
-**42 products across 8 active categories.** All images currently empty — placeholder tiles render in the UI.
+**70 products across 8 active categories.** All products have local AI-generated photorealistic product images served from `public/images/products/`.
 
 | Category | # Products | Examples |
 |---|---|---|
-| Snacks | 9 | Doritos, Cheetos, Lay's, Takis, Pringles, Twizzlers, Skittles |
-| Drinks | 6 | Dr Pepper, Coke, Sprite, Simply Orange, Arizona Tea |
-| Fan Favorite | 2 | Oreo Double Stuf, Chips Ahoy |
-| Late Night Fix | 6 | Insomnia Cookies, Krispy Kreme, Cheez-It, Rice Krispies |
-| Organic & Fresh | 6 | Poppi, Olipop, Harmless Harvest, Marandú Yerba Mate |
-| Exotic Finds | 4 | Ghia Aperitif, De La Calle Tepache, Siete Chips, Cheesecake Factory |
+| Snacks | 24 | Doritos, Cheetos, Lay's, Takis, Pringles, Cheez-It, Skittles, Starburst, Twizzlers |
+| Drinks | 12 | Dr Pepper, Coke, Sprite, Simply Orange, Arizona Tea, Gatorade, Monster, Red Bull |
+| Fan Favorite | 5 | Oreo Double Stuf, Chips Ahoy, Reese's, Twix, M&M's |
+| Late Night Fix | 8 | Insomnia Cookies, Krispy Kreme, Hot Pockets, Pop-Tarts, Totino's |
+| Organic & Fresh | 12 | Poppi, Olipop, Harmless Harvest, Marandú, RXBar, Kind, Chomps |
+| Exotic Finds | 6 | Ghia Aperitif, De La Calle Tepache, Siete Chips, Magic Spoon |
 | Local Deli | 5 | Crumbl 6-Pack, Crumbl 4-Pack, Cheesecake Factory Original, Tru Fles Truffles, Centennial Toffee |
 
 **Customizable products** (Crumbl, Insomnia, Krispy Kreme): `customizationMatrix` data is defined in `products.ts` and typed in `src/types/index.ts`. Selection UI not yet built — items add to cart without customization for now.
@@ -76,6 +76,10 @@ Phase 12:    Customization UI + Dispatch + Scale ──────────�
 
 | Change | Files |
 |---|---|
+| Product images generated for all 70 products via Imagen 4 Ultra, Nano Banana Pro, and gemini-3.1-flash-image | `scripts/generate-product-images.js`, `scripts/generate-remaining-images.js`, `scripts/generate-flash-images.js`, `scripts/generate-specialty-images.js` |
+| Patch script populates all image fields in products.ts | `scripts/patch-all-images.cjs` |
+| SVG placeholders replaced with photorealistic PNGs | `public/images/products/*` |
+| All external image URL dependencies removed | `src/data/products.ts`, `scripts/patch-all-images.cjs` |
 | Apple-class Orders UI (ETA hero, compact past orders, restrained empty state) | `OrdersView.tsx`, `TrackerCard.tsx` |
 | ProfileView Fleet panel max-w-xs bug fixed, Apple polish | `ProfileView.tsx` |
 | Shop hero compacted (~120px vertical savings on iPhone) | `ShopView.tsx` |
@@ -93,9 +97,9 @@ Phase 12:    Customization UI + Dispatch + Scale ──────────�
 | Issue | Priority | Notes |
 |---|---|---|
 | Web layout misaligned on desktop | High | `<main>` uses `md:max-w-4xl` (896px), header uses `md:max-w-md` (448px) — fix both to `md:max-w-[430px]` in `CustomerApp.tsx` |
-| All product images are placeholder tiles | High | Need real product photos or CDN URLs |
 | Customization UI not built | Medium | Crumbl, Insomnia, Krispy Kreme items add without flavor selection |
 | Search bar on Shop home is decorative | Low | Tapping navigates to Search tab — functional but could be a real search input |
+| Image optimization pipeline | Low | Convert product PNGs to WebP, max 600px width |
 | Local Deli page has 5 products | Low | Expand with more Denver-area vendors |
 
 ---
