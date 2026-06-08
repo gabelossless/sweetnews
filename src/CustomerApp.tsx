@@ -194,10 +194,16 @@ export default function CustomerApp() {
     setCustomizingProduct(product);
   };
 
-  return (
-    <div className={`bg-background text-on-background min-h-screen pb-[120px] md:pb-12 pt-[128px] md:pt-[82px] font-body-md selection:bg-white selection:text-black overflow-x-hidden ${isStandalone ? 'standalone-layout' : ''}`}>
+    return (
+      <div className={`relative bg-background text-on-background min-h-screen pb-[120px] md:pb-12 pt-[128px] md:pt-[82px] font-body-md selection:bg-white selection:text-black overflow-x-hidden ${isStandalone ? 'standalone-layout' : ''}`}>
+        {/* Atmospheric Background Glows */}
+        <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+          <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] rounded-full blur-[120px] opacity-10 bg-primary" />
+          <div className="absolute top-[30%] -right-[10%] w-[30%] h-[30%] rounded-full blur-[100px] opacity-10 bg-secondary" />
+          <div className="absolute -bottom-[10%] left-[20%] w-[50%] h-[30%] rounded-full blur-[120px] opacity-10 bg-primary-container" />
+        </div>
 
-      {/* TopAppBar */}
+        {/* TopAppBar */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-on-background/[0.07]">
         <div className="px-5 md:px-8 pt-[max(env(safe-area-inset-top),12px)] md:max-w-[1280px] md:mx-auto">
           {/* Row 1: Brand + [Desktop Nav] + Cart */}

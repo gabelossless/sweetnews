@@ -69,11 +69,11 @@ export function ProductCard({
         ) : (
           <div className="w-full h-full flex items-center justify-center p-4">
             <span className="text-[10px] font-black uppercase tracking-widest text-on-background/30 text-center leading-snug">
-              {product.name.split(' ').slice(0, 2).join('\n')}
+              {product.name.split(' ').slice(0, 2).join('\\n')}
             </span>
           </div>
         )}
-
+        
         {/* Tag badge */}
         {product.tag && (
           <div className="absolute top-2.5 left-2.5">
@@ -85,7 +85,7 @@ export function ProductCard({
 
         {/* Featured sparkle badge */}
         {isFeatured && (
-          <div className="absolute top-2.5 right-2.5 w-6 h-6 rounded-full bg-gradient-to-br from-[#e60023] to-[#ff2060] flex items-center justify-center shadow-[0_4px_10px_rgba(230,0,35,0.5)]">
+          <div className="absolute top-2.5 right-2.5 w-6 h-6 rounded-full bg-gradient-to-br from-primary to-primary-container flex items-center justify-center shadow-[0_4px_10px_rgba(217,119,6,0.5)]">
             <Sparkles className="w-3 h-3 text-white" strokeWidth={2.5} />
           </div>
         )}
@@ -102,7 +102,7 @@ export function ProductCard({
               whileTap={{ scale: 0.86 }}
               onClick={(e) => { e.stopPropagation(); onAdd(); }}
               aria-label={`Add ${product.name}`}
-              className="absolute bottom-2.5 right-2.5 w-8 h-8 rounded-full bg-[#ff2d55] flex items-center justify-center shadow-[0_4px_12px_rgba(255,45,85,0.45)] hover:bg-[#e60023] transition-colors"
+              className="absolute bottom-2.5 right-2.5 w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-[0_4px_12px_rgba(217,119,6,0.45)] hover:brightness-110 transition-colors"
             >
               <Plus className="w-4 h-4 text-white" strokeWidth={2.5} />
             </motion.button>
@@ -113,7 +113,7 @@ export function ProductCard({
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.6, opacity: 0 }}
               transition={{ type: 'spring', stiffness: 500, damping: 26 }}
-              className="absolute bottom-2.5 right-2.5 flex items-center gap-1 bg-[#ff2d55] rounded-full px-1.5 py-1 shadow-[0_4px_12px_rgba(255,45,85,0.45)]"
+              className="absolute bottom-2.5 right-2.5 flex items-center gap-1 bg-primary rounded-full px-1.5 py-1 shadow-[0_4px_12px_rgba(217,119,6,0.45)]"
               onClick={(e) => e.stopPropagation()}
             >
               <button

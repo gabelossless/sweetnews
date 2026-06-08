@@ -76,13 +76,17 @@ export function ShopView({
       <section className="mb-8">
         <div className="flex justify-between items-end mb-6 px-2">
           <div>
-            <h2 className="text-[12px] font-bold text-on-surface-variant uppercase tracking-[0.1em]">
+            <p className="text-[10px] font-black tracking-[0.2em] text-primary uppercase mb-1 flex items-center gap-2">
+              <span className="w-1 h-1 rounded-full bg-primary animate-live-pulse" />
               Tonight's Featured Drops
+            </p>
+            <h2 className="font-headline-md text-[18px] tracking-tight text-on-background leading-tight">
+              Midnight Selection
             </h2>
           </div>
           <button
             onClick={() => setSelectedCategory('all')}
-            className="font-headline-md text-[11px] tracking-[0.2em] text-on-surface-variant uppercase hover:text-on-background active:scale-95 transition-all font-black border border-on-background/[0.09] px-4 py-2 rounded-full hover:border-on-background/[0.12]"
+            className="font-headline-md text-[10px] tracking-[0.15em] text-on-surface-variant uppercase hover:text-on-background active:scale-95 transition-all font-black border border-on-background/[0.1] px-4 py-2 rounded-full hover:bg-on-background/[0.05]"
           >
             All Drops
           </button>
@@ -107,39 +111,39 @@ export function ShopView({
 
       {/* Midnight Reserve Banner */}
       <section className="mb-8 px-2">
-        <motion.div
-          whileHover={{ scale: 1.015 }}
-          whileTap={{ scale: 0.985 }}
-          onClick={() => setSelectedCategory('exotic')}
-          className="cursor-pointer rounded-[40px] p-8 shadow-[0_24px_80px_rgba(230,0,35,0.2)] border border-[#e60023]/20 relative overflow-hidden group"
-          style={{ background: 'linear-gradient(135deg, #1a0008 0%, #0d0003 60%, #000 100%)' }}
-        >
+          <motion.div
+            whileHover={{ scale: 1.015 }}
+            whileTap={{ scale: 0.985 }}
+            onClick={() => setSelectedCategory('exotic')}
+            className="cursor-pointer rounded-[40px] p-8 shadow-[0_24px_80px_rgba(217,119,6,0.2)] border border-primary/20 relative overflow-hidden group"
+            style={{ background: 'linear-gradient(135deg, #1a1a0a 0%, #0d0d03 60%, #000 100%)' }}
+          >
           {/* Noise overlay */}
           <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay pointer-events-none rounded-[40px]"
             style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")'}}
           />
 
           <div className="relative z-10 w-3/4">
-            <h3 className="font-headline-lg text-[11px] tracking-[0.35em] text-[#ff2060]/60 uppercase font-black mb-3">
-              Midnight Series
+            <h3 className="font-headline-lg text-[11px] tracking-[0.35em] text-primary/60 uppercase font-black mb-3">
+              Golden Reserve
             </h3>
             <h4 className="font-display-xl text-[38px] uppercase font-black leading-[0.88] tracking-tighter mb-8 text-white drop-shadow-lg">
-              DARK<br />MATTER
+              GOLDEN<br />SANDS
             </h4>
             <Button
               whileTapScale={0.92}
-              className="px-7 py-3.5 btn-brand font-headline-md text-[11px] tracking-[0.2em] uppercase rounded-full font-black shadow-[0_8px_24px_rgba(230,0,35,0.5)]"
+              className="px-7 py-3.5 btn-brand font-headline-md text-[11px] tracking-[0.2em] uppercase rounded-full font-black shadow-[0_8px_24px_rgba(217,119,6,0.5)]"
             >
               Unlock
             </Button>
           </div>
-
+          
           {/* Big glow orb */}
           <div
             className="absolute -right-20 -bottom-20 w-80 h-80 rounded-full blur-[120px] opacity-15 z-0 group-hover:opacity-25 transition-all duration-700"
-            style={{ background: 'radial-gradient(circle, #e60023, #ff2060)' }}
+            style={{ background: 'radial-gradient(circle, #d97706, #b45309)' }}
           />
-          <Moon className="absolute right-6 bottom-10 w-32 h-32 text-[#ff2060] opacity-[0.05] transform rotate-[-15deg] group-hover:rotate-[0deg] group-hover:scale-110 group-hover:opacity-[0.1] transition-all duration-700 ease-out z-0 fill-current" />
+          <Moon className="absolute right-6 bottom-10 w-32 h-32 text-primary opacity-[0.05] transform rotate-[-15deg] group-hover:rotate-[0deg] group-hover:scale-110 group-hover:opacity-[0.1] transition-all duration-700 ease-out z-0 fill-current" />
 
           {/* Shimmer sweep */}
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-900 ease-in-out rounded-[40px]" />
