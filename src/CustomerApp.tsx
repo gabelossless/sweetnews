@@ -348,33 +348,33 @@ export default function CustomerApp() {
         </AnimatePresence>
       </main>
 
-      {/* BottomNavBar Pill (mobile only) */}
-      <nav className="md:hidden fixed bottom-[calc(env(safe-area-inset-bottom,0px)+16px)] left-1/2 -translate-x-1/2 w-[92%] max-w-[400px] z-50 flex justify-around items-center px-4 py-3.5 bg-surface/80 backdrop-blur-3xl rounded-[32px] border border-on-background/[0.09] shadow-[0_20px_40px_rgba(42,26,31,0.12),_inset_0_1px_0_rgba(255,255,255,0.6)] transition-all duration-300">
-        <NavButton 
-          icon={<Store />} 
-          label="Shop" 
-          isActive={activeTab === 'shop'} 
-          onClick={() => setActiveTab('shop')} 
-        />
-        <NavButton 
-          icon={<Search />} 
-          label="Search" 
-          isActive={activeTab === 'search'} 
-          onClick={() => setActiveTab('search')} 
-        />
-        <NavButton 
-          icon={<ReceiptText />} 
-          label="Orders" 
-          isActive={activeTab === 'orders'} 
-          onClick={() => setActiveTab('orders')} 
-        />
-        <NavButton 
-          icon={<User />} 
-          label="Profile" 
-          isActive={activeTab === 'profile'} 
-          onClick={() => setActiveTab('profile')} 
-        />
-      </nav>
+       {/* BottomNavBar Pill (mobile only) */}
+       <nav className="md:hidden fixed bottom-[calc(env(safe-area-inset-bottom,0px)+20px)] left-1/2 -translate-x-1/2 w-[90%] max-w-[380px] z-50 flex justify-around items-center px-4 py-3 bg-surface/60 backdrop-blur-3xl rounded-[32px] border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.6),_inset_0_1px_0_rgba(255,255,255,0.1)] transition-all duration-300 ring-1 ring-black/20">
+         <NavButton 
+           icon={<Store />} 
+           label="Shop" 
+           isActive={activeTab === 'shop'} 
+           onClick={() => setActiveTab('shop')} 
+         />
+         <NavButton 
+           icon={<Search />} 
+           label="Search" 
+           isActive={activeTab === 'search'} 
+           onClick={() => setActiveTab('search')} 
+         />
+         <NavButton 
+           icon={<ReceiptText />} 
+           label="Orders" 
+           isActive={activeTab === 'orders'} 
+           onClick={() => setActiveTab('orders')} 
+         />
+         <NavButton 
+           icon={<User />} 
+           label="Profile" 
+           isActive={activeTab === 'profile'} 
+           onClick={() => setActiveTab('profile')} 
+         />
+       </nav>
 
       {/* Cart Bottom Sheet Overlay */}
       <CartSheet

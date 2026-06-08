@@ -194,13 +194,13 @@ export function ShopView({
         <div className="flex justify-between items-end mb-6">
           <div>
             <p className="text-[9px] tracking-[0.3em] text-on-surface-variant uppercase font-black mb-1">Full</p>
-            <h2 className="font-headline-md text-[16px] tracking-[0.2em] uppercase font-black text-on-background">
+            <h2 className="font-headline-md text-[20px] tracking-tight text-on-background font-black leading-none">
               {selectedCategory === 'all'
                 ? 'The Vault'
                 : categories.find((c) => c.id === selectedCategory)?.name}
             </h2>
           </div>
-          <span className="text-[10px] text-on-surface-variant font-black uppercase tracking-widest">
+          <span className="text-[10px] text-on-surface-variant font-black uppercase tracking-widest bg-on-background/[0.05] px-2 py-1 rounded-md border border-on-background/[0.05]">
             {filteredGrid.length} drops
           </span>
         </div>

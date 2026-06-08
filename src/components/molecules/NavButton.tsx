@@ -29,10 +29,10 @@ export function NavButton({ icon, label, isActive, onClick }: NavButtonProps) {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ type: 'spring', stiffness: 380, damping: 28 }}
-            className="absolute inset-0 rounded-[18px] bg-gradient-to-b from-[#e60023]/15 to-[#ff2060]/5 border border-[#e60023]/25 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
+            className="absolute inset-0 rounded-[18px] bg-gradient-to-b from-pink/20 to-pink/5 border border-pink/30 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]"
           />
         )}
-      </AnimatePresence>
+      </AnimatePresence
 
       {/* Icon */}
       <motion.div
@@ -40,12 +40,12 @@ export function NavButton({ icon, label, isActive, onClick }: NavButtonProps) {
         transition={{ type: 'spring', stiffness: 400, damping: 25 }}
         className={`relative z-10 transition-all duration-200 ${
           isActive
-            ? 'text-[#ff2060] drop-shadow-[0_0_12px_rgba(255,32,96,0.9)]'
+            ? 'text-pink drop-shadow-[0_0_12px_rgba(255,77,141,0.8)]'
             : ''
         }`}
       >
         {icon}
-      </motion.div>
+      </motion.div
 
       {/* Label — slides up into view when active */}
       <AnimatePresence>
@@ -55,12 +55,12 @@ export function NavButton({ icon, label, isActive, onClick }: NavButtonProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 4 }}
             transition={{ duration: 0.18, ease: 'easeOut' }}
-            className="relative z-10 font-headline-md text-[8px] font-black tracking-[0.18em] uppercase mt-0.5 text-[#ff2060] leading-none"
+            className="relative z-10 font-headline-md text-[8px] font-black tracking-[0.18em] uppercase mt-0.5 text-pink leading-none"
           >
             {label}
           </motion.span>
         )}
-      </AnimatePresence>
+      </AnimatePresence
 
       {/* Live dot indicator at bottom */}
       <AnimatePresence>
@@ -69,7 +69,7 @@ export function NavButton({ icon, label, isActive, onClick }: NavButtonProps) {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             exit={{ scale: 0 }}
-            className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#ff2060] animate-live-pulse shadow-[0_0_6px_rgba(255,32,96,0.9)]"
+            className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-pink animate-live-pulse shadow-[0_0_6px_rgba(255,77,141,0.8)]"
           />
         )}
       </AnimatePresence>
