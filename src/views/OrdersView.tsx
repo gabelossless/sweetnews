@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Package, ChevronDown } from 'lucide-react';
+import { Package, ChevronDown, Repeat } from 'lucide-react';
 import { ActiveOrder } from '../types';
 import { TrackerCard } from '../components/organisms/TrackerCard';
+import { useCartStore } from '../store/cart';
+import { useToastStore } from '../store/toast';
 
 interface OrdersViewProps {
   orders: ActiveOrder[];
@@ -104,62 +106,93 @@ function PastOrderRow({ order }: { order: ActiveOrder }) {
   const shortId = order.id.slice(-6).toUpperCase();
   const itemCount = order.items.reduce((t, i) => t + i.quantity, 0);
   const thumbs = order.items.slice(0, 2);
+  
+  // Cart and toast hooks for reorder functionality
+  const addItem = useCartStore((state) => state.addItem);
+  const showToast = useToastStore((state) => state.showToast);
+
+  // Handle reordering all items from a past order
+  const handleReorder = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent expanding the row
+    order.items.forEach(item => {
+      addItem({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        image: item.image,
+        customizations: item.customizations,
+        quantity: item.quantity
+      });
+    });
+    showToast(`Reordered ${order.items.length} item${order.items.length === 1 ? '' : 's'}`);
+  };
 
   return (
     <div className="rounded-[20px] bg-on-background/[0.03] border border-on-background/[0.07] overflow-hidden">
-      <button
-        onClick={() => setExpanded((v) => !v)}
-        className="w-full flex items-center gap-3 p-3 hover:bg-on-background/[0.03] transition-colors text-left"
-      >
-        {/* Thumbnails stack */}
-        <div className="relative flex-shrink-0 flex">
-          {thumbs.map((item, i) => (
-            <div
-              key={item.id}
-              className="w-9 h-9 rounded-lg border border-background bg-on-background/[0.05] flex items-center justify-center overflow-hidden flex-shrink-0"
-              style={{ marginLeft: i === 0 ? 0 : -10, zIndex: thumbs.length - i }}
+      <div className="flex items-center">
+        <button
+          onClick={() => setExpanded((v) => !v)}
+          className="flex-1 flex items-center gap-3 p-3 hover:bg-on-background/[0.03] transition-colors text-left"
+        >
+          {/* Thumbnails stack */}
+          <div className="relative flex-shrink-0 flex">
+            {thumbs.map((item, i) => (
+              <div
+                key={item.id}
+                className="w-9 h-9 rounded-lg border border-background bg-on-background/[0.05] flex items-center justify-center overflow-hidden flex-shrink-0"
+                style={{ marginLeft: i === 0 ? 0 : -10, zIndex: thumbs.length - i }}
+              >
+                {item.image ? (
+                  <img src={item.image} alt="" className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-[7px] font-black text-on-background/30 uppercase text-center leading-tight px-0.5">
+                    {item.name.split(' ').slice(0, 2).join('\n')}
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Middle */}
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-bold text-on-background truncate">
+              ${order.total.toFixed(2)}
+              <span className="text-on-surface-variant font-normal ml-1.5">
+                · {itemCount} {itemCount === 1 ? 'item' : 'items'}
+              </span>
+            </p>
+            <p className="text-[11px] text-on-surface-variant truncate mt-0.5">
+              #{shortId} · {order.date}
+            </p>
+          </div>
+
+          {/* Status + chevron */}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <span
+              className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                order.status === 'delivered'
+                  ? 'text-emerald-600 bg-emerald-500/[0.08]'
+                  : 'text-on-surface-variant bg-on-background/[0.05]'
+              }`}
             >
-              {item.image ? (
-                <img src={item.image} alt="" className="w-full h-full object-cover" />
-              ) : (
-                <span className="text-[7px] font-black text-on-background/30 uppercase text-center leading-tight px-0.5">
-                  {item.name.split(' ').slice(0, 2).join('\n')}
-                </span>
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* Middle */}
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-bold text-on-background truncate">
-            ${order.total.toFixed(2)}
-            <span className="text-on-surface-variant font-normal ml-1.5">
-              · {itemCount} {itemCount === 1 ? 'item' : 'items'}
+              {STATUS_LABELS[order.status] ?? order.status}
             </span>
-          </p>
-          <p className="text-[11px] text-on-surface-variant truncate mt-0.5">
-            #{shortId} · {order.date}
-          </p>
-        </div>
-
-        {/* Status + chevron */}
-        <div className="flex items-center gap-2 flex-shrink-0">
-          <span
-            className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-              order.status === 'delivered'
-                ? 'text-emerald-600 bg-emerald-500/[0.08]'
-                : 'text-on-surface-variant bg-on-background/[0.05]'
-            }`}
-          >
-            {STATUS_LABELS[order.status] ?? order.status}
-          </span>
-          <ChevronDown
-            size={14}
-            className={`text-on-surface-variant transition-transform ${expanded ? 'rotate-180' : ''}`}
-          />
-        </div>
-      </button>
+            <ChevronDown
+              size={14}
+              className={`text-on-surface-variant transition-transform ${expanded ? 'rotate-180' : ''}`}
+            />
+          </div>
+        </button>
+        
+        {/* Reorder button */}
+        <button
+          onClick={handleReorder}
+          aria-label="Reorder items"
+          className="p-3 text-on-surface-variant hover:text-primary transition-colors"
+        >
+          <Repeat size={16} strokeWidth={2} />
+        </button>
+      </div>
 
       <AnimatePresence initial={false}>
         {expanded && (

@@ -10,7 +10,6 @@ interface ProductCardProps {
   onAdd: () => void;
   onView?: () => void;
   className?: string;
-  animationDelay?: number;
 }
 
 export function ProductCard({
@@ -19,7 +18,6 @@ export function ProductCard({
   onAdd,
   onView,
   className = '',
-  animationDelay = 0,
 }: ProductCardProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const cartItems = useCartStore((state) => state.items);
@@ -27,16 +25,10 @@ export function ProductCard({
   const quantity = cartItems.find((i) => i.id === product.id)?.quantity ?? 0;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '0px 0px -32px 0px' }}
-      transition={{ duration: 0.32, delay: animationDelay, ease: [0.25, 0.1, 0.25, 1] }}
-      className={`flex flex-col ${className}`}
-    >
+    <div className={`flex flex-col ${className}`}>
       {/* Image container */}
       <div
-        className={`relative w-full aspect-square rounded-[16px] overflow-hidden mb-2.5 bg-surface-dim ${onView ? 'cursor-pointer' : ''}`}
+        className={`relative w-full aspect-square rounded-[16px] overflow-hidden mb-2.5 bg-surface-dim card-hover-lift ${onView ? 'cursor-pointer' : ''}`}
         onClick={onView}
         role={onView ? 'button' : undefined}
         aria-label={onView ? `View ${product.name} details` : undefined}
@@ -50,20 +42,13 @@ export function ProductCard({
             {!isLoaded && (
               <div className="absolute inset-0 bg-surface-container animate-shimmer-sweep overflow-hidden" />
             )}
-            <motion.img
+            <img
               src={product.image}
               alt={product.name}
               loading={isFeatured ? 'eager' : 'lazy'}
               decoding="async"
               onLoad={() => setIsLoaded(true)}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: isLoaded ? 1 : 0 }}
-              whileHover={{ scale: 1.06 }}
-              transition={{
-                opacity: { duration: 0.24 },
-                scale: { type: 'spring', stiffness: 260, damping: 20 }
-              }}
-              className="w-full h-full object-contain p-3"
+              className={`w-full h-full object-contain p-3 transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
             />
           </>
         ) : (
@@ -90,57 +75,41 @@ export function ProductCard({
           </div>
         )}
 
-        {/* Add / quantity overlay — bottom-right of image */}
-        <AnimatePresence mode="wait">
+        {/* Add / quantity overlay */}
+        <div className="absolute bottom-2.5 right-2.5">
           {quantity === 0 ? (
-            <motion.button
-              key="add"
-              initial={{ scale: 0.6, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.6, opacity: 0 }}
-              transition={{ type: 'spring', stiffness: 500, damping: 26 }}
-              whileTap={{ scale: 0.86 }}
+            <button
               onClick={(e) => { e.stopPropagation(); onAdd(); }}
               aria-label={`Add ${product.name}`}
-              className="absolute bottom-2.5 right-2.5 w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-[0_4px_12px_rgba(217,119,6,0.45)] hover:brightness-110 transition-colors"
+              className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-[0_4px_12px_rgba(217,119,6,0.45)] active:scale-90 transition-transform duration-150 hover:brightness-110"
             >
               <Plus className="w-4 h-4 text-white" strokeWidth={2.5} />
-            </motion.button>
+            </button>
           ) : (
-            <motion.div
-              key="stepper"
-              initial={{ scale: 0.6, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.6, opacity: 0 }}
-              transition={{ type: 'spring', stiffness: 500, damping: 26 }}
-              className="absolute bottom-2.5 right-2.5 flex items-center gap-1 bg-primary rounded-full px-1.5 py-1 shadow-[0_4px_12px_rgba(217,119,6,0.45)]"
+            <div
+              className="flex items-center gap-1 bg-primary rounded-full px-1.5 py-1 shadow-[0_4px_12px_rgba(217,119,6,0.45)]"
               onClick={(e) => e.stopPropagation()}
             >
               <button
                 onClick={() => updateQuantity(product.id, quantity - 1)}
                 aria-label="Decrease quantity"
-                className="w-5 h-5 rounded-full flex items-center justify-center hover:bg-white/25 active:scale-90 transition-all"
+                className="w-5 h-5 rounded-full flex items-center justify-center active:bg-white/25 active:scale-90 transition-all duration-150"
               >
                 <Minus className="w-3 h-3 text-white" strokeWidth={3} />
               </button>
-              <motion.span
-                key={quantity}
-                initial={{ scale: 1.35, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                className="text-[12px] font-black text-white min-w-[14px] text-center leading-none"
-              >
+              <span className="text-[12px] font-black text-white min-w-[14px] text-center leading-none">
                 {quantity}
-              </motion.span>
+              </span>
               <button
                 onClick={(e) => { e.stopPropagation(); onAdd(); }}
                 aria-label="Increase quantity"
-                className="w-5 h-5 rounded-full flex items-center justify-center hover:bg-white/25 active:scale-90 transition-all"
+                className="w-5 h-5 rounded-full flex items-center justify-center active:bg-white/25 active:scale-90 transition-all duration-150"
               >
                 <Plus className="w-3 h-3 text-white" strokeWidth={3} />
               </button>
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
+        </div>
       </div>
 
       {/* Product info */}
@@ -162,7 +131,7 @@ export function ProductCard({
           ${product.price.toFixed(2)}
         </p>
       </div>
-    </motion.div>
+    </div>
   );
 }
 

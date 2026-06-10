@@ -166,6 +166,13 @@ html, body {
   .animate-spin-slow   { animation: spin-slow 8s linear infinite; }
 
   /* Card hover glow that responds to brand color */
+  .card-hover-lift {
+    will-change: transform;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .card-hover-lift:hover {
+    transform: translateY(-2px);
+  }
   .card-hover-glow {
     transition: box-shadow 0.4s ease, transform 0.3s ease;
   }

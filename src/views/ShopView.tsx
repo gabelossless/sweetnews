@@ -101,7 +101,6 @@ export function ShopView({
                 isFeatured={idx === 0}
                 onAdd={() => onAddToCart(product)}
                 onView={() => onViewProduct(product)}
-                animationDelay={idx * 0.06}
                 className="w-[162px] md:w-[200px] flex-shrink-0"
               />
             ))}
@@ -180,7 +179,6 @@ export function ShopView({
                   isFeatured={false}
                   onAdd={() => onAddToCart(product)}
                   onView={() => onViewProduct(product)}
-                  animationDelay={idx * 0.06}
                   className="w-[162px] md:w-[200px] flex-shrink-0"
                 />
               ))}
@@ -215,7 +213,6 @@ export function ShopView({
                   isFeatured={false}
                   onAdd={() => onAddToCart(product)}
                   onView={() => onViewProduct(product)}
-                  animationDelay={idx * 0.05}
                   className="w-full"
                 />
               ))}
