@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { X, CheckCircle2, ShieldCheck, ChevronDown, MapPin, Plus } from 'lucide-react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useCartStore } from '../../store/cart';
 import { useProfileStore } from '../../store/profile';
@@ -41,11 +41,16 @@ export function CheckoutForm({
   const cartItems = useCartStore((state) => state.items);
 
   const savedName = useProfileStore((state) => state.deliveryName);
-  const savedAddress = useProfileStore((state) => state.deliveryAddress);
+  const savedAddresses = useProfileStore((state) => state.savedAddresses);
+  const addAddress = useProfileStore((state) => state.addAddress);
+
+  const defaultAddress = savedAddresses.find(a => a.isDefault);
+  const initialAddress = defaultAddress ? `${defaultAddress.street}${defaultAddress.apt ? `, ${defaultAddress.apt}` : ''}, ${defaultAddress.city}, ${defaultAddress.state} ${defaultAddress.zip}` : '';
 
   const [deliveryName, setLocalName] = useState(savedName);
-  const [deliveryAddress, setLocalAddress] = useState(savedAddress);
+  const [deliveryAddress, setLocalAddress] = useState(initialAddress);
   const [deliveryApt, setLocalApt] = useState('');
+  const [showAddressPicker, setShowAddressPicker] = useState(false);
   const [cardError, setCardError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -189,14 +194,67 @@ export function CheckoutForm({
                           onChange={(e) => setLocalName(e.target.value)}
                           className="bg-surface-dim"
                         />
-                        <Input
-                          required
-                          type="text"
-                          placeholder="Street Address"
-                          value={deliveryAddress}
-                          onChange={(e) => setLocalAddress(e.target.value)}
-                          className="bg-surface-dim"
-                        />
+                        {/* Saved address selector */}
+                        <div className="relative">
+                          <button
+                            type="button"
+                            onClick={() => setShowAddressPicker(!showAddressPicker)}
+                            className="w-full flex items-center gap-3 text-sm font-bold text-on-background bg-surface-dim border border-on-background/[0.07] hover:border-on-background/[0.12] outline-none px-4 py-3 rounded-2xl text-left transition-all duration-200"
+                          >
+                            <MapPin className="w-4 h-4 text-primary flex-shrink-0" strokeWidth={2} />
+                            <span className="flex-1 truncate">
+                              {deliveryAddress || 'Select or type an address'}
+                            </span>
+                            <ChevronDown className={`w-4 h-4 text-on-surface-variant transition-transform duration-200 ${showAddressPicker ? 'rotate-180' : ''}`} strokeWidth={2} />
+                          </button>
+
+                          <AnimatePresence>
+                            {showAddressPicker && (
+                              <motion.div
+                                initial={{ opacity: 0, y: -8, scaleY: 0.96 }}
+                                animate={{ opacity: 1, y: 0, scaleY: 1 }}
+                                exit={{ opacity: 0, y: -8, scaleY: 0.96 }}
+                                transition={{ duration: 0.15 }}
+                                className="absolute z-20 top-full mt-1 left-0 right-0 bg-surface border border-on-background/[0.09] rounded-2xl shadow-[0_12px_48px_rgba(0,0,0,0.3)] overflow-hidden"
+                              >
+                                {savedAddresses.map((addr) => (
+                                  <button
+                                    key={addr.id}
+                                    type="button"
+                                    onClick={() => {
+                                      const full = `${addr.street}${addr.apt ? `, ${addr.apt}` : ''}, ${addr.city}, ${addr.state} ${addr.zip}`;
+                                      setLocalAddress(full);
+                                      setShowAddressPicker(false);
+                                    }}
+                                    className="w-full flex items-start gap-3 px-4 py-3 hover:bg-on-background/[0.05] transition-colors text-left"
+                                  >
+                                    <MapPin className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                                    <div className="flex-1 min-w-0">
+                                      <p className="text-[11px] font-bold text-on-background truncate">{addr.label}</p>
+                                      <p className="text-[10px] text-on-surface-variant truncate">
+                                        {addr.street}{addr.apt ? `, ${addr.apt}` : ''}, {addr.city}, {addr.state} {addr.zip}
+                                      </p>
+                                    </div>
+                                    {addr.isDefault && (
+                                      <span className="text-[8px] font-black uppercase tracking-wider text-amber-500 flex-shrink-0">Default</span>
+                                    )}
+                                  </button>
+                                ))}
+                                <div className="border-t border-on-background/[0.07]">
+                                  <input
+                                    type="text"
+                                    placeholder="Or type a custom address..."
+                                    value={deliveryAddress}
+                                    onChange={(e) => setLocalAddress(e.target.value)}
+                                    className="w-full text-sm font-bold text-on-background bg-transparent outline-none px-4 py-3 placeholder:text-on-surface-variant tracking-wide"
+                                    onFocus={() => setShowAddressPicker(false)}
+                                  />
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+
                         <Input
                           type="text"
                           placeholder="Apt / Suite (optional)"

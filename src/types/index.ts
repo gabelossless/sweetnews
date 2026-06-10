@@ -72,6 +72,17 @@ export interface UserProfile {
   totalDeliveries?: number;
 }
 
+export interface Address {
+  id: string;
+  label: string;
+  street: string;
+  apt?: string;
+  city: string;
+  state: string;
+  zip: string;
+  isDefault: boolean;
+}
+
 export interface DriverApplication {
   id: string;
   uid: string;

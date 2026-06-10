@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronRight, Bell, Wifi, WifiOff, ShieldCheck, Crown, Check, LogOut } from 'lucide-react';
+import { ChevronRight, Bell, Wifi, WifiOff, ShieldCheck, Crown, Check, LogOut, Plus, MapPin, Pencil, Trash2, Star, X } from 'lucide-react';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { requestPermissionAndGetToken } from '../lib/fcm';
@@ -8,6 +8,7 @@ import { useAuth } from '../context/AuthContext';
 import { WaitlistModal } from '../components/organisms/WaitlistModal';
 import { OwlMascot } from '../components/atoms/OwlMascot';
 import { useState, useRef } from 'react';
+import { Address } from '../types';
 
 interface ProfileViewProps {
   isOnline: boolean;
@@ -17,20 +18,26 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
   const { user, role, login, logout, loginError } = useAuth();
   const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
   const [nameSaved, setNameSaved] = useState(false);
-  const [addressSaved, setAddressSaved] = useState(false);
   const [pushLoading, setPushLoading] = useState(false);
   const [pushError, setPushError] = useState<string | null>(null);
 
+  // Address management state
+  const savedAddresses = useProfileStore((state) => state.savedAddresses);
+  const addAddress = useProfileStore((state) => state.addAddress);
+  const updateAddress = useProfileStore((state) => state.updateAddress);
+  const removeAddress = useProfileStore((state) => state.removeAddress);
+  const setDefaultAddress = useProfileStore((state) => state.setDefaultAddress);
+  const [showAddressForm, setShowAddressForm] = useState(false);
+  const [editingAddress, setEditingAddress] = useState<string | null>(null);
+  const [addressForm, setAddressForm] = useState({ label: '', street: '', apt: '', city: '', state: '', zip: '' });
+
   const deliveryName = useProfileStore((state) => state.deliveryName);
-  const deliveryAddress = useProfileStore((state) => state.deliveryAddress);
   const pushNotifications = useProfileStore((state) => state.pushNotificationsEnabled);
 
   const setDeliveryName = useProfileStore((state) => state.setDeliveryName);
-  const setDeliveryAddress = useProfileStore((state) => state.setDeliveryAddress);
   const setPushNotifications = useProfileStore((state) => state.setPushNotificationsEnabled);
 
   const nameTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const addressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleNameChange = (val: string) => {
     setDeliveryName(val);
@@ -39,11 +46,26 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
     nameTimer.current = setTimeout(() => setNameSaved(true), 1000);
   };
 
-  const handleAddressChange = (val: string) => {
-    setDeliveryAddress(val);
-    setAddressSaved(false);
-    if (addressTimer.current) clearTimeout(addressTimer.current);
-    addressTimer.current = setTimeout(() => setAddressSaved(true), 1000);
+  const openAddressForm = (address?: Address) => {
+    if (address) {
+      setEditingAddress(address.id);
+      setAddressForm({ label: address.label, street: address.street, apt: address.apt ?? '', city: address.city, state: address.state, zip: address.zip });
+    } else {
+      setEditingAddress(null);
+      setAddressForm({ label: '', street: '', apt: '', city: '', state: '', zip: '' });
+    }
+    setShowAddressForm(true);
+  };
+
+  const handleSaveAddress = () => {
+    if (!addressForm.label.trim() || !addressForm.street.trim() || !addressForm.city.trim() || !addressForm.state.trim() || !addressForm.zip.trim()) return;
+    if (editingAddress) {
+      updateAddress(editingAddress, addressForm);
+    } else {
+      addAddress({ ...addressForm, isDefault: savedAddresses.length === 0 });
+    }
+    setShowAddressForm(false);
+    setEditingAddress(null);
   };
 
   const handlePushToggle = async () => {
@@ -275,33 +297,86 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
             />
           </div>
 
-          {/* Address field */}
-          <div className="space-y-1.5 pt-2 border-t border-on-background/[0.07]">
-            <div className="flex items-center justify-between">
+          {/* Saved Addresses */}
+          <div className="pt-2 border-t border-on-background/[0.07]">
+            <div className="flex items-center justify-between mb-3">
               <p className="text-[10px] text-on-surface-variant uppercase tracking-widest font-black">
-                Primary Address
+                Saved Addresses
               </p>
-              <AnimatePresence>
-                {addressSaved && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.7, x: 8 }}
-                    animate={{ opacity: 1, scale: 1, x: 0 }}
-                    exit={{ opacity: 0, scale: 0.7 }}
-                    className="flex items-center gap-1 text-emerald-600"
-                  >
-                    <Check className="w-3 h-3" strokeWidth={3} />
-                    <span className="text-[9px] font-black uppercase tracking-wider">Saved</span>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              <button
+                onClick={() => openAddressForm()}
+                className="flex items-center gap-1 text-[9px] font-black uppercase tracking-wider text-primary hover:text-primary/70 transition-colors"
+              >
+                <Plus className="w-3 h-3" strokeWidth={2.5} />
+                Add
+              </button>
             </div>
-            <input
-              type="text"
-              value={deliveryAddress}
-              onChange={(e) => handleAddressChange(e.target.value)}
-              placeholder="123 Midnight Ave"
-              className="w-full text-sm font-bold text-on-background bg-on-background/[0.05] border border-on-background/[0.07] hover:border-on-background/[0.12] focus:border-[#e60023]/40 focus:bg-on-background/[0.05] outline-none px-4 py-3 rounded-2xl mt-0.5 transition-all duration-200 placeholder:text-on-surface-variant tracking-wide"
-            />
+
+            {/* Address list */}
+            <div className="space-y-2">
+              {savedAddresses.map((addr) => (
+                <div
+                  key={addr.id}
+                  className="flex items-start gap-3 p-3 rounded-2xl bg-on-background/[0.05] border border-on-background/[0.07] group"
+                >
+                  <div className="w-7 h-7 rounded-full bg-on-background/[0.05] border border-on-background/[0.09] flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <MapPin className="w-3.5 h-3.5 text-primary" strokeWidth={2} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <p className="text-[11px] font-bold text-on-background truncate">
+                        {addr.label}
+                      </p>
+                      <p className="text-[9px] text-on-surface-variant truncate">
+                        {addr.street}{addr.apt ? `, ${addr.apt}` : ''}
+                      </p>
+                    </div>
+                    <p className="text-[9px] text-on-surface-variant truncate">
+                      {addr.city}, {addr.state} {addr.zip}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    {!addr.isDefault && (
+                      <button
+                        onClick={() => setDefaultAddress(addr.id)}
+                        aria-label="Set as default"
+                        className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-on-background/[0.07] transition-colors"
+                      >
+                        <Star className="w-3 h-3 text-on-surface-variant hover:text-amber-500" strokeWidth={1.5} />
+                      </button>
+                    )}
+                    <button
+                      onClick={() => openAddressForm(addr)}
+                      aria-label="Edit address"
+                      className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-on-background/[0.07] transition-colors"
+                    >
+                      <Pencil className="w-3 h-3 text-on-surface-variant" strokeWidth={1.5} />
+                    </button>
+                    <button
+                      onClick={() => removeAddress(addr.id)}
+                      aria-label="Remove address"
+                      className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-red-600/20 transition-colors"
+                    >
+                      <Trash2 className="w-3 h-3 text-red-500" strokeWidth={1.5} />
+                    </button>
+                  </div>
+                  {addr.isDefault && (
+                    <div className="flex items-center gap-1 text-amber-500 flex-shrink-0">
+                      <Star className="w-3 h-3 fill-amber-500" strokeWidth={1.5} />
+                      <span className="text-[8px] font-black uppercase tracking-wider">Default</span>
+                    </div>
+                  )}
+                </div>
+              ))}
+              {savedAddresses.length === 0 && (
+                <div className="text-center py-4 px-3 rounded-2xl bg-on-background/[0.03] border border-dashed border-on-background/[0.07]">
+                  <MapPin className="w-5 h-5 text-on-surface-variant mx-auto mb-2" strokeWidth={1.5} />
+                  <p className="text-[10px] text-on-surface-variant font-medium">
+                    No saved addresses yet
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -467,6 +542,125 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
         </div>
 
       </section>
+
+      {/* ── Address Form Modal ─────────────────────────────────── */}
+      <AnimatePresence>
+        {showAddressForm && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowAddressForm(false)}
+              className="fixed inset-0 z-[90] bg-black/50 backdrop-blur-sm"
+            />
+            <div className="fixed inset-0 z-[91] flex items-end justify-center pointer-events-none">
+              <motion.div
+                initial={{ y: '100%' }}
+                animate={{ y: 0 }}
+                exit={{ y: '100%' }}
+                transition={{ type: 'spring', damping: 28, stiffness: 250 }}
+                className="pointer-events-auto w-full max-w-[430px] bg-surface backdrop-blur-[50px] rounded-t-[32px] p-6 border-t border-on-background/[0.09] max-h-[85vh] overflow-y-auto"
+              >
+                <div className="flex justify-center pt-0 pb-4">
+                  <div className="w-10 h-1 bg-on-background/[0.15] rounded-full" />
+                </div>
+
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-[16px] font-black uppercase tracking-tight text-on-background">
+                    {editingAddress ? 'Edit Address' : 'New Address'}
+                  </h3>
+                  <button
+                    onClick={() => setShowAddressForm(false)}
+                    className="w-8 h-8 rounded-full bg-on-background/[0.05] flex items-center justify-center hover:bg-on-background/[0.07] transition-colors"
+                  >
+                    <X className="w-4 h-4 text-on-surface-variant" strokeWidth={2} />
+                  </button>
+                </div>
+
+                <div className="space-y-3">
+                  <div>
+                    <p className="text-[8px] text-on-surface-variant uppercase tracking-[0.2em] font-black mb-1">
+                      Label
+                    </p>
+                    <input
+                      value={addressForm.label}
+                      onChange={(e) => setAddressForm(f => ({ ...f, label: e.target.value }))}
+                      placeholder="e.g. Home, Work"
+                      className="w-full text-sm font-bold text-on-background bg-on-background/[0.05] border border-on-background/[0.07] outline-none px-4 py-3 rounded-2xl transition-all duration-200 placeholder:text-on-surface-variant tracking-wide focus:border-primary/40"
+                    />
+                  </div>
+                  <div>
+                    <p className="text-[8px] text-on-surface-variant uppercase tracking-[0.2em] font-black mb-1">
+                      Street Address
+                    </p>
+                    <input
+                      value={addressForm.street}
+                      onChange={(e) => setAddressForm(f => ({ ...f, street: e.target.value }))}
+                      placeholder="123 Midnight Ave"
+                      className="w-full text-sm font-bold text-on-background bg-on-background/[0.05] border border-on-background/[0.07] outline-none px-4 py-3 rounded-2xl transition-all duration-200 placeholder:text-on-surface-variant tracking-wide focus:border-primary/40"
+                    />
+                  </div>
+                  <div>
+                    <p className="text-[8px] text-on-surface-variant uppercase tracking-[0.2em] font-black mb-1">
+                      Apt / Suite (optional)
+                    </p>
+                    <input
+                      value={addressForm.apt}
+                      onChange={(e) => setAddressForm(f => ({ ...f, apt: e.target.value }))}
+                      placeholder="Apt 4B"
+                      className="w-full text-sm font-bold text-on-background bg-on-background/[0.05] border border-on-background/[0.07] outline-none px-4 py-3 rounded-2xl transition-all duration-200 placeholder:text-on-surface-variant tracking-wide focus:border-primary/40"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <p className="text-[8px] text-on-surface-variant uppercase tracking-[0.2em] font-black mb-1">
+                        City
+                      </p>
+                      <input
+                        value={addressForm.city}
+                        onChange={(e) => setAddressForm(f => ({ ...f, city: e.target.value }))}
+                        placeholder="City"
+                        className="w-full text-sm font-bold text-on-background bg-on-background/[0.05] border border-on-background/[0.07] outline-none px-4 py-3 rounded-2xl transition-all duration-200 placeholder:text-on-surface-variant tracking-wide focus:border-primary/40"
+                      />
+                    </div>
+                    <div>
+                      <p className="text-[8px] text-on-surface-variant uppercase tracking-[0.2em] font-black mb-1">
+                        State
+                      </p>
+                      <input
+                        value={addressForm.state}
+                        onChange={(e) => setAddressForm(f => ({ ...f, state: e.target.value }))}
+                        placeholder="State"
+                        className="w-full text-sm font-bold text-on-background bg-on-background/[0.05] border border-on-background/[0.07] outline-none px-4 py-3 rounded-2xl transition-all duration-200 placeholder:text-on-surface-variant tracking-wide focus:border-primary/40"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-[8px] text-on-surface-variant uppercase tracking-[0.2em] font-black mb-1">
+                      ZIP Code
+                    </p>
+                    <input
+                      value={addressForm.zip}
+                      onChange={(e) => setAddressForm(f => ({ ...f, zip: e.target.value }))}
+                      placeholder="10001"
+                      inputMode="numeric"
+                      className="w-full text-sm font-bold text-on-background bg-on-background/[0.05] border border-on-background/[0.07] outline-none px-4 py-3 rounded-2xl transition-all duration-200 placeholder:text-on-surface-variant tracking-wide focus:border-primary/40"
+                    />
+                  </div>
+
+                  <button
+                    onClick={handleSaveAddress}
+                    className="w-full mt-4 py-4 btn-brand text-white font-black uppercase tracking-[0.2em] text-[11px] rounded-full transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                  >
+                    {editingAddress ? 'Save Changes' : 'Add Address'}
+                  </button>
+                </div>
+              </motion.div>
+            </div>
+          </>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }

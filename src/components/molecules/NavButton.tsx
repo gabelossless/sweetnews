@@ -32,7 +32,7 @@ export function NavButton({ icon, label, isActive, onClick }: NavButtonProps) {
             className="absolute inset-0 rounded-[18px] bg-gradient-to-b from-pink/20 to-pink/5 border border-pink/30 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]"
           />
         )}
-      </AnimatePresence
+      </AnimatePresence>
 
       {/* Icon */}
       <motion.div
@@ -45,7 +45,7 @@ export function NavButton({ icon, label, isActive, onClick }: NavButtonProps) {
         }`}
       >
         {icon}
-      </motion.div
+      </motion.div>
 
       {/* Label — slides up into view when active */}
       <AnimatePresence>
@@ -60,7 +60,7 @@ export function NavButton({ icon, label, isActive, onClick }: NavButtonProps) {
             {label}
           </motion.span>
         )}
-      </AnimatePresence
+      </AnimatePresence>
 
       {/* Live dot indicator at bottom */}
       <AnimatePresence>
