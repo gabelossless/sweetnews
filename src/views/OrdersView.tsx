@@ -104,8 +104,8 @@ export function OrdersView({ orders, onStartShopping }: OrdersViewProps) {
 function PastOrderRow({ order }: { order: ActiveOrder }) {
   const [expanded, setExpanded] = useState(false);
   const shortId = order.id.slice(-6).toUpperCase();
-  const itemCount = order.items.reduce((t, i) => t + i.quantity, 0);
-  const thumbs = order.items.slice(0, 2);
+  const itemCount = (order.items as any[]).reduce((t, i) => t + i.quantity, 0);
+  const thumbs = (order.items as any[]).slice(0, 2);
   
   // Cart and toast hooks for reorder functionality
   const addItem = useCartStore((state) => state.addItem);
@@ -114,14 +114,13 @@ function PastOrderRow({ order }: { order: ActiveOrder }) {
   // Handle reordering all items from a past order
   const handleReorder = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent expanding the row
-    order.items.forEach(item => {
+    (order.items as any[]).forEach(item => {
       addItem({
         id: item.id,
         name: item.name,
         price: item.price,
         image: item.image,
         customizations: item.customizations,
-        quantity: item.quantity
       });
     });
     showToast(`Reordered ${order.items.length} item${order.items.length === 1 ? '' : 's'}`);

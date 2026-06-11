@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import { Plus, Minus, Sparkles } from 'lucide-react';
 import { Product } from '../../types';
 import { useCartStore } from '../../store/cart';

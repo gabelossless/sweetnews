@@ -48,7 +48,7 @@ export function SearchView({
   }, []);
 
   // Save to localStorage — debounced so rapid typing doesn't block the thread
-  const saveHistoryRef = useRef<ReturnType<typeof setTimeout>>();
+  const saveHistoryRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
     if (!searchQuery) return;
     if (saveHistoryRef.current) clearTimeout(saveHistoryRef.current);

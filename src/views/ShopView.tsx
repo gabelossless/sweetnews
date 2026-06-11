@@ -172,7 +172,7 @@ export function ShopView({
               </div>
             </div>
             <div className="flex overflow-x-auto hide-scrollbar gap-4 pb-4 -mx-6 px-6 md:mx-0 md:px-1 pt-1">
-              {recommendations.map((product, idx) => (
+              {recommendations.map((product) => (
                 <ProductCard
                   key={product.id}
                   product={product}
@@ -206,7 +206,7 @@ export function ShopView({
         {filteredGrid.length > 0 ? (
           <motion.div layout className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <AnimatePresence mode="popLayout">
-              {filteredGrid.map((product, idx) => (
+              {filteredGrid.map((product) => (
                 <ProductCard
                   key={product.id}
                   product={product}

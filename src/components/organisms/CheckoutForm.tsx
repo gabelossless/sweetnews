@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, CheckCircle2, ShieldCheck, ChevronDown, MapPin, Plus } from 'lucide-react';
+import { X, CheckCircle2, ShieldCheck, ChevronDown, MapPin } from 'lucide-react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useCartStore } from '../../store/cart';
 import { useProfileStore } from '../../store/profile';
@@ -42,7 +42,6 @@ export function CheckoutForm({
 
   const savedName = useProfileStore((state) => state.deliveryName);
   const savedAddresses = useProfileStore((state) => state.savedAddresses);
-  const addAddress = useProfileStore((state) => state.addAddress);
 
   const defaultAddress = savedAddresses.find(a => a.isDefault);
   const initialAddress = defaultAddress ? `${defaultAddress.street}${defaultAddress.apt ? `, ${defaultAddress.apt}` : ''}, ${defaultAddress.city}, ${defaultAddress.state} ${defaultAddress.zip}` : '';
@@ -66,10 +65,14 @@ export function CheckoutForm({
     const cardElement = elements.getElement(CardElement);
     if (!cardElement) return;
 
+    if (!deliveryAddress.trim()) {
+      setCardError('Please provide a delivery address.');
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      // Step 1: Create PaymentIntent server-side
       const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
       const totalCents = Math.round((subtotal + 3.99) * 100);
 
@@ -87,7 +90,6 @@ export function CheckoutForm({
         return;
       }
 
-      // Step 2: Confirm payment with card element
       const { paymentIntent, error } = await stripe.confirmCardPayment(chargeData.clientSecret, {
         payment_method: {
           card: cardElement,
@@ -109,7 +111,7 @@ export function CheckoutForm({
 
       const sanitizedApt = sanitizeString(deliveryApt).trim();
       const fullAddress = sanitizedApt
-        ? `${sanitizeString(deliveryAddress)}, ${sanitizedApt}`
+        ? `${sanitizeString(deliveryAddress)}${deliveryAddress.includes(sanitizedApt) ? '' : `, ${sanitizedApt}`}`
         : sanitizeString(deliveryAddress);
 
       onPlaceOrder({

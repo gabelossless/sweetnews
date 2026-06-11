@@ -317,7 +317,7 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
               {savedAddresses.map((addr) => (
                 <div
                   key={addr.id}
-                  className="flex items-start gap-3 p-3 rounded-2xl bg-on-background/[0.05] border border-on-background/[0.07] group"
+                  className="flex items-start gap-3 p-3 rounded-2xl bg-on-background/[0.05] border border-on-background/[0.07]"
                 >
                   <div className="w-7 h-7 rounded-full bg-on-background/[0.05] border border-on-background/[0.09] flex items-center justify-center flex-shrink-0 mt-0.5">
                     <MapPin className="w-3.5 h-3.5 text-primary" strokeWidth={2} />
@@ -335,7 +335,7 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
                       {addr.city}, {addr.state} {addr.zip}
                     </p>
                   </div>
-                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="flex items-center gap-1 transition-opacity">
                     {!addr.isDefault && (
                       <button
                         onClick={() => setDefaultAddress(addr.id)}
