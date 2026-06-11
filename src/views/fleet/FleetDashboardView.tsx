@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '../../components/atoms/Button';
 import { ActiveOrder } from '../../types';
 import { getMapUrl } from '../../lib/utils';
-import { updateDriverLocation, updateOrderStatus } from '../../lib/orders';
+import { updateDriverLocation, updateOrderStatus, sendNotification, getOrderStatusNotification } from '../../lib/orders';
 import FleetHistoryView from './FleetHistoryView';
 import FleetProfileView from './FleetProfileView';
 
@@ -102,6 +102,20 @@ export default function FleetDashboardView({
     const next = nextStatusMap[currentStatus];
     if (next) {
       await updateOrderStatus(orderId, next.status as any, next.progress);
+      
+      // Send notification to customer
+      const order = activeOrders.find(o => o.id === orderId);
+      if (order) {
+        const shortId = orderId.slice(-6).toUpperCase();
+        const notification = getOrderStatusNotification(next.status, orderId, shortId);
+        await sendNotification(customerId, {
+          title: notification.title,
+          body: notification.body,
+          type: 'order_status',
+          data: { orderId, status: next.status }
+        });
+      }
+      
       // Also call the parent callback for any additional logic
       onStatusUpdate(orderId, currentStatus, customerId);
     }

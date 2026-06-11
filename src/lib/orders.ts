@@ -208,3 +208,93 @@ export const updateDriverLocation = async (
     }
   });
 };
+
+/**
+ * Sends a notification to a user by writing to the notifications collection.
+ * The client app listens to this collection and shows browser notifications.
+ */
+export const sendNotification = async (
+  userId: string,
+  notification: {
+    title: string;
+    body: string;
+    data?: Record<string, any>;
+    type: 'order_status' | 'order_created' | 'driver_assigned' | 'promo';
+  }
+) => {
+  const notificationsRef = collection(db, 'notifications');
+  await addDoc(notificationsRef, {
+    userId,
+    ...notification,
+    read: false,
+    createdAt: serverTimestamp(),
+  });
+};
+
+/**
+ * Notification templates for order status changes.
+ */
+export const getOrderStatusNotification = (status: string, _orderId: string, shortId: string) => {
+  const templates: Record<string, { title: string; body: string }> = {
+    confirmed: {
+      title: 'Order Confirmed',
+      body: `Your order #${shortId} has been confirmed and is being prepared.`
+    },
+    cooking: {
+      title: 'Preparing Your Order',
+      body: `Your order #${shortId} is being cooked fresh!`
+    },
+    delivering: {
+      title: 'Out for Delivery',
+      body: `Your driver is on the way with order #${shortId}. Track them live!`
+    },
+    delivered: {
+      title: 'Delivered',
+      body: `Your order #${shortId} has been delivered. Enjoy!`
+    },
+    cancelled: {
+      title: 'Order Cancelled',
+      body: `Your order #${shortId} has been cancelled.`
+    },
+  };
+  return templates[status] || { title: 'Order Update', body: `Your order #${shortId} status: ${status}` };
+};
+
+/**
+ * Subscribes to notifications for a specific user.
+ */
+export const subscribeToNotifications = (
+  userId: string,
+  callback: (notifications: Array<{
+    id: string;
+    title: string;
+    body: string;
+    data?: Record<string, any>;
+    type: string;
+    read: boolean;
+    createdAt: Date;
+  }>) => void
+) => {
+  const q = query(
+    collection(db, 'notifications'),
+    where('userId', '==', userId),
+    where('read', '==', false),
+    orderBy('createdAt', 'desc')
+  );
+
+  return onSnapshot(q, (snapshot) => {
+    const notifications = snapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        title: data.title,
+        body: data.body,
+        data: data.data,
+        type: data.type,
+        read: data.read,
+        createdAt: (data.createdAt as any)?.toDate?.() || new Date()
+      };
+    });
+    callback(notifications);
+  });
+};

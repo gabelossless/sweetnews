@@ -13,7 +13,7 @@ import { useGeolocation } from './hooks/useGeolocation';
 import { useDeliveryHours } from './hooks/useDeliveryHours';
 import { useAuth } from './context/AuthContext';
 import { Product } from './types';
-import { createOrder, subscribeToCustomerOrders } from './lib/orders';
+import { createOrder, subscribeToCustomerOrders, subscribeToNotifications } from './lib/orders';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY ?? '');
 
@@ -76,6 +76,44 @@ export default function CustomerApp() {
   // Toast Store variables
   const toastMessage = useToastStore((state) => state.toastMessage);
   const showToast = useToastStore((state) => state.showToast);
+
+  // Listen for notifications and show browser notifications
+  useEffect(() => {
+    if (!user || typeof window === 'undefined') return;
+    
+    // Request notification permission if not already granted
+    if (Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+
+    const unsubscribe = subscribeToNotifications(user.uid, (notifications) => {
+      notifications.forEach(notification => {
+        // Show browser notification if permission granted
+        if (Notification.permission === 'granted') {
+          const browserNotification = new Notification(notification.title, {
+            body: notification.body,
+            icon: '/icon-192.png',
+            badge: '/icon-72.png',
+            tag: notification.id,
+            data: notification.data
+          });
+          
+          browserNotification.onclick = () => {
+            window.focus();
+            if (notification.data?.orderId) {
+              setActiveTab('orders');
+            }
+            browserNotification.close();
+          };
+        }
+        
+        // Also show in-app toast
+        showToast(notification.body);
+      });
+    });
+
+    return () => unsubscribe();
+  }, [user, showToast]);
 
   // Sync Online/Offline State
   useEffect(() => {
