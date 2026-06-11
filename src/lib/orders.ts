@@ -190,3 +190,21 @@ export const cancelOrder = async (orderId: string, reason?: string) => {
     cancellationReason: reason || 'User requested'
   });
 };
+
+/**
+ * Updates the driver's current location for live tracking.
+ */
+export const updateDriverLocation = async (
+  orderId: string,
+  lat: number,
+  lng: number
+) => {
+  const orderRef = doc(db, 'orders', orderId);
+  await updateDoc(orderRef, {
+    driverLocation: {
+      lat,
+      lng,
+      timestamp: Date.now()
+    }
+  });
+};

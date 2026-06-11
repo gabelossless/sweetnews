@@ -1,8 +1,10 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { Box, ChevronRight, Clock, MapPin, Navigation, Package, User } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { Button } from '../../components/atoms/Button';
 import { ActiveOrder } from '../../types';
 import { getMapUrl } from '../../lib/utils';
+import { updateDriverLocation, updateOrderStatus } from '../../lib/orders';
 import FleetHistoryView from './FleetHistoryView';
 import FleetProfileView from './FleetProfileView';
 
@@ -49,6 +51,61 @@ export default function FleetDashboardView({
   onTabChange,
   onStatusUpdate,
 }: FleetDashboardViewProps) {
+  // Location tracking for active deliveries
+  const [watchId, setWatchId] = useState<number | null>(null);
+  const [currentLocation, setCurrentLocation] = useState<{ lat: number; lng: number } | null>(null);
+
+  // Start/stop location tracking based on active delivering orders
+  useEffect(() => {
+    const deliveringOrders = activeOrders.filter(o => o.status === 'delivering');
+    
+    if (deliveringOrders.length > 0 && navigator.geolocation) {
+      const id = navigator.geolocation.watchPosition(
+        (pos) => {
+          const loc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+          setCurrentLocation(loc);
+          
+          // Update location for all delivering orders
+          deliveringOrders.forEach(order => {
+            updateDriverLocation(order.id, loc.lat, loc.lng).catch(console.error);
+          });
+        },
+        (err) => {
+          console.error('Geolocation error:', err);
+        },
+        { 
+          enableHighAccuracy: true, 
+          maximumAge: 10000, 
+          timeout: 15000 
+        }
+      );
+      setWatchId(id);
+    } else if (watchId !== null) {
+      navigator.geolocation.clearWatch(watchId);
+      setWatchId(null);
+      setCurrentLocation(null);
+    }
+
+    return () => {
+      if (watchId !== null) {
+        navigator.geolocation.clearWatch(watchId);
+      }
+    };
+  }, [activeOrders, watchId]);
+
+  const handleStatusUpdate = async (orderId: string, currentStatus: string, customerId: string) => {
+    const nextStatusMap: Record<string, { status: string; progress: number }> = {
+      confirmed: { status: 'cooking', progress: 35 },
+      cooking: { status: 'delivering', progress: 70 },
+      delivering: { status: 'delivered', progress: 100 },
+    };
+    const next = nextStatusMap[currentStatus];
+    if (next) {
+      await updateOrderStatus(orderId, next.status as any, next.progress);
+      // Also call the parent callback for any additional logic
+      onStatusUpdate(orderId, currentStatus, customerId);
+    }
+  };
   return (
     <div className="min-h-screen bg-surface text-on-background pb-32">
       {/* ── Dashboard tab ──────────────────────────────── */}
@@ -62,14 +119,30 @@ export default function FleetDashboardView({
                 Active & Ready
               </p>
             </div>
-            <div className="text-right">
-              <p className="text-[9px] uppercase tracking-widest text-on-surface-variant font-black">Assigned</p>
-              <p
-                className="text-3xl font-black"
-                style={{ background: 'linear-gradient(135deg,#f59e0b,#f97316)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
-              >
-                {activeOrders.length}
-              </p>
+            <div className="flex items-center justify-between gap-4">
+              <div className="text-right">
+                <p className="text-[9px] uppercase tracking-widest text-on-surface-variant font-black">Assigned</p>
+                <p
+                  className="text-3xl font-black"
+                  style={{ background: 'linear-gradient(135deg,#f59e0b,#f97316)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
+                >
+                  {activeOrders.length}
+                </p>
+              </div>
+              {/* GPS Status */}
+              <div className="flex items-center gap-2 text-right">
+                <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-wider">
+                  <span 
+                    className={`w-2 h-2 rounded-full ${currentLocation ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`}
+                  />
+                  <span>{currentLocation ? 'GPS Active' : 'GPS Off'}</span>
+                </div>
+                {currentLocation && (
+                  <div className="text-[8px] text-on-surface-variant font-mono">
+                    {currentLocation.lat.toFixed(4)}, {currentLocation.lng.toFixed(4)}
+                  </div>
+                )}
+              </div>
             </div>
           </header>
 
@@ -137,7 +210,7 @@ export default function FleetDashboardView({
 
                     {actionLabel && (
                       <Button
-                        onClick={() => onStatusUpdate(order.id, order.status, order.customerId)}
+                        onClick={() => handleStatusUpdate(order.id, order.status, order.customerId)}
                         className="w-full py-3.5 rounded-[18px] font-black text-[11px] uppercase tracking-widest text-white transition-all"
                         style={{ background: `linear-gradient(135deg, ${s.btnFrom}, ${s.btnTo})` }}
                       >

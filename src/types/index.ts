@@ -36,6 +36,7 @@ export interface ActiveOrder {
     price: number;
     quantity: number;
     image: string;
+    customizations?: { label: string; upcharge: number };
   }[];
   total: number;
   date: string;
@@ -48,6 +49,11 @@ export interface ActiveOrder {
   driverSnapshot?: {
     name: string;
     photo: string | null;
+  };
+  driverLocation?: {
+    lat: number;
+    lng: number;
+    timestamp: number;
   };
 }
 

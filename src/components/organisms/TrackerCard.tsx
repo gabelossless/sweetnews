@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
-import { ChevronDown, MapPin, Star, Mail, User, AlertCircle, Navigation } from 'lucide-react';
+import { ChevronDown, MapPin, Star, Mail, User, AlertCircle, Navigation, Map } from 'lucide-react';
 import { ActiveOrder } from '../../types';
 import { submitOrderRating } from '../../lib/orders';
 import { getMapUrl } from '../../lib/utils';
@@ -52,6 +52,23 @@ export function TrackerCard({ order }: TrackerCardProps) {
       }
     }
   };
+
+  // Live tracking map URL
+  const buildTrackingMapUrl = () => {
+    if (!order.driverLocation || !order.address) return null;
+    const driver = `${order.driverLocation.lat},${order.driverLocation.lng}`;
+    const destination = encodeURIComponent(order.address);
+    // Using Google Maps Static API - in production use VITE_GOOGLE_MAPS_API_KEY
+    const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '';
+    if (!apiKey) return null;
+    return `https://maps.googleapis.com/maps/api/staticmap?size=400x200&markers=color:blue%7Clabel:D%7C${driver}&markers=color:red%7Clabel:C%7C${destination}&zoom=14&key=${apiKey}`;
+  };
+
+  const trackingMapUrl = buildTrackingMapUrl();
+  const driverLocationAge = order.driverLocation 
+    ? Math.floor((Date.now() - order.driverLocation.timestamp) / 1000) 
+    : null;
+  const isLocationStale = driverLocationAge !== null && driverLocationAge > 60;
 
   const currentStepIndex = STEP_STATUSES.indexOf(order.status);
   const eta = isActive && order.etaMins ? formatEta(order.etaMins) : null;
@@ -147,6 +164,39 @@ export function TrackerCard({ order }: TrackerCardProps) {
               transition={{ duration: 1.0, ease: 'easeOut' }}
             />
           </div>
+        </div>
+      )}
+
+      {/* ── Live Driver Tracking Map (delivering status) ────── */}
+      {order.status === 'delivering' && order.driverLocation && trackingMapUrl && (
+        <div className="mb-5">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-primary" />
+              <span className="text-[9px] font-black uppercase tracking-widest text-on-surface-variant">Live Tracking</span>
+            </div>
+            <span className={`text-[8px] font-mono ${isLocationStale ? 'text-amber-500' : 'text-emerald-500'}`}>
+              {isLocationStale ? `~${driverLocationAge}s ago` : 'Live'}
+            </span>
+          </div>
+          <a
+            href={getMapUrl(order.address)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="relative block rounded-[16px] overflow-hidden border border-on-background/[0.07] bg-on-background/[0.03]"
+          >
+            <img
+              src={trackingMapUrl}
+              alt="Driver live location"
+              className="w-full h-40 object-cover transition-opacity"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+            <div className="absolute bottom-3 left-3 right-3 flex justify-between items-end">
+              <span className="text-xs font-black text-white/90">Driver → Customer</span>
+              <Map className="w-4 h-4 text-white/80" />
+            </div>
+          </a>
         </div>
       )}
 
