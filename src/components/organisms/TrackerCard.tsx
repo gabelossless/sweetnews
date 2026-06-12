@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { motion } from 'motion/react';
-import { ChevronDown, MapPin, Star, Mail, User, AlertCircle, Navigation, Map } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+import { ChevronDown, MapPin, Star, Mail, User, AlertCircle, Navigation, Map as MapIcon } from 'lucide-react';
 import { ActiveOrder } from '../../types';
 import { submitOrderRating } from '../../lib/orders';
 import { getMapUrl } from '../../lib/utils';
@@ -32,6 +32,8 @@ export function TrackerCard({ order }: TrackerCardProps) {
   const [rating, setRating] = useState(order.rating ?? 0);
   const [hoverRating, setHoverRating] = useState(0);
   const [itemsExpanded, setItemsExpanded] = useState(false);
+  const [review, setReview] = useState('');
+  const [submittingReview, setSubmittingReview] = useState(false);
 
   const isActive = order.status !== 'delivered' && order.status !== 'cancelled';
   const isCancelled = order.status === 'cancelled';
@@ -50,6 +52,18 @@ export function TrackerCard({ order }: TrackerCardProps) {
       } catch {
         // silently fail
       }
+    }
+  };
+
+  const handleSubmitReview = async () => {
+    if (!review.trim() || !order.driverId || submittingReview) return;
+    setSubmittingReview(true);
+    try {
+      await submitOrderRating(order.id, order.driverId, rating, review.trim());
+    } catch {
+      // silently fail
+    } finally {
+      setSubmittingReview(false);
     }
   };
 
@@ -194,7 +208,7 @@ export function TrackerCard({ order }: TrackerCardProps) {
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
             <div className="absolute bottom-3 left-3 right-3 flex justify-between items-end">
               <span className="text-xs font-black text-white/90">Driver → Customer</span>
-              <Map className="w-4 h-4 text-white/80" />
+              <MapIcon className="w-4 h-4 text-white/80" />
             </div>
           </a>
         </div>
@@ -288,34 +302,86 @@ export function TrackerCard({ order }: TrackerCardProps) {
         )}
       </div>
 
-      {/* ── Rating (delivered only) ─────────────────────── */}
+      {/* ── Rating & Review (delivered only) ────────────────── */}
       {isDelivered && (
         <div className="mt-5 pt-5 border-t border-on-background/[0.07]">
           <p className="text-[10px] font-medium text-on-surface-variant mb-2.5">
-            {rating > 0 ? 'Thanks for your feedback' : 'Rate your delivery'}
+            {order.rating ? 'Thanks for your feedback' : 'Rate your delivery'}
           </p>
-          <div className="flex gap-1.5">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <motion.button
-                key={star}
-                whileHover={{ scale: 1.15 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={() => handleRate(star)}
-                onMouseEnter={() => !order.rating && setHoverRating(star)}
-                onMouseLeave={() => setHoverRating(0)}
-                className="focus:outline-none"
-                aria-label={`Rate ${star} star${star > 1 ? 's' : ''}`}
-              >
-                <Star
-                  size={20}
-                  fill={(hoverRating || rating) >= star ? '#e60023' : 'transparent'}
-                  className={
-                    (hoverRating || rating) >= star ? 'text-primary' : 'text-on-background/30'
-                  }
-                />
-              </motion.button>
-            ))}
-          </div>
+          
+          {!order.rating ? (
+            // Rating + Review input
+            <div className="space-y-4">
+              <div className="flex gap-1.5">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <motion.button
+                    key={star}
+                    whileHover={{ scale: 1.15 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => handleRate(star)}
+                    onMouseEnter={() => !order.rating && setHoverRating(star)}
+                    onMouseLeave={() => setHoverRating(0)}
+                    className="focus:outline-none"
+                    aria-label={`Rate ${star} star${star > 1 ? 's' : ''}`}
+                  >
+                    <Star
+                      size={20}
+                      fill={(hoverRating || rating) >= star ? '#e60023' : 'transparent'}
+                      className={
+                        (hoverRating || rating) >= star ? 'text-primary' : 'text-on-background/30'
+                      }
+                    />
+                  </motion.button>
+                ))}
+              </div>
+              
+              <AnimatePresence>
+                {rating > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    className="space-y-3"
+                  >
+                    <textarea
+                      placeholder="Add a review (optional)..."
+                      value={review}
+                      onChange={(e) => setReview(e.target.value)}
+                      rows={3}
+                      className="w-full px-4 py-3 text-sm font-medium text-on-background bg-on-background/[0.05] border border-on-background/[0.07] rounded-2xl focus:border-primary/40 focus:outline-none resize-none placeholder:text-on-surface-variant"
+                    />
+                    <motion.button
+                      whileTap={{ scale: 0.96 }}
+                      onClick={handleSubmitReview}
+                      disabled={!review.trim() || submittingReview}
+                      className="w-full py-3 btn-brand text-white font-black uppercase tracking-[0.2em] text-[11px] rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {submittingReview ? 'Submitting...' : 'Submit Review'}
+                    </motion.button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ) : (
+            // Display existing rating + review
+            <div className="space-y-3">
+              <div className="flex gap-1.5">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star
+                    key={star}
+                    size={20}
+                    fill={rating >= star ? '#e60023' : 'transparent'}
+                    className={rating >= star ? 'text-primary' : 'text-on-background/30'}
+                  />
+                ))}
+              </div>
+              {order.review && (
+                <p className="text-[11px] text-on-surface-variant italic leading-relaxed">
+                  "{order.review}"
+                </p>
+              )}
+            </div>
+          )}
         </div>
       )}
 

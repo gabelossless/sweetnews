@@ -46,6 +46,7 @@ export interface ActiveOrder {
   createdAt: string;
   etaMins?: number;
   rating?: number;
+  review?: string;
   driverSnapshot?: {
     name: string;
     photo: string | null;

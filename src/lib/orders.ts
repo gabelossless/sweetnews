@@ -131,12 +131,15 @@ export const subscribeToDriverHistory = (driverId: string, callback: (orders: Ac
 /**
  * Submits a rating for a completed order and updates the driver's aggregate rating.
  */
-export const submitOrderRating = async (orderId: string, driverId: string, rating: number) => {
+export const submitOrderRating = async (orderId: string, driverId: string, rating: number, review?: string) => {
   const orderRef = doc(db, 'orders', orderId);
   const driverRef = doc(db, 'users', driverId);
 
-  // 1. Update the order with the rating
-  await updateDoc(orderRef, { rating });
+  // 1. Update the order with the rating and review
+  await updateDoc(orderRef, { 
+    rating,
+    review: review || null
+  });
 
   // 2. Ideally, trigger a cloud function to update driver avg. 
   // For now, we simulate by fetching and updating locally.
