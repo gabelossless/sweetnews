@@ -69,7 +69,7 @@ export function CustomizationSheet({ product, onClose, onConfirm }: Props) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[70] bg-[#2a1a1f]/40 backdrop-blur-sm"
+            className="fixed inset-0 z-[70] bg-black/60 backdrop-blur-sm"
             onClick={onClose}
           />
 
@@ -121,7 +121,7 @@ export function CustomizationSheet({ product, onClose, onConfirm }: Props) {
                     initial={{ scale: 1.15 }}
                     animate={{ scale: 1 }}
                     className={`text-[12px] font-black tabular-nums ${
-                      ready ? 'text-emerald-600' : atLimit ? 'text-[#e60023]' : 'text-on-surface-variant'
+                      ready ? 'text-emerald-600' : atLimit ? 'text-primary' : 'text-on-surface-variant'
                     }`}
                   >
                     {totalSelected} / {required}
@@ -129,7 +129,7 @@ export function CustomizationSheet({ product, onClose, onConfirm }: Props) {
                 </div>
                 <div className="h-1 bg-on-background/[0.07] rounded-full overflow-hidden">
                   <motion.div
-                    className={`h-full rounded-full ${ready ? 'bg-emerald-500' : 'bg-gradient-to-r from-[#e60023] to-[#ff2060]'}`}
+                    className={`h-full rounded-full ${ready ? 'bg-emerald-500' : 'bg-gradient-to-r from-primary to-amber-600'}`}
                     animate={{ width: `${progressPct}%` }}
                     transition={{ duration: 0.2, ease: 'easeOut' }}
                   />
@@ -147,7 +147,7 @@ export function CustomizationSheet({ product, onClose, onConfirm }: Props) {
                       layout
                       className={`flex items-center justify-between px-4 py-3.5 rounded-[18px] border transition-all duration-200 ${
                         qty > 0
-                          ? 'bg-[#e60023]/[0.08] border-[#e60023]/25'
+                          ? 'bg-primary/[0.08] border-primary/25'
                           : 'bg-surface-dim border-on-background/[0.09]'
                       }`}
                     >
@@ -199,7 +199,7 @@ export function CustomizationSheet({ product, onClose, onConfirm }: Props) {
                           disabled={!canAdd}
                           className={`w-7 h-7 rounded-full flex items-center justify-center transition-all ${
                             canAdd
-                              ? 'bg-gradient-to-br from-[#e60023] to-[#ff2060] shadow-[0_3px_12px_rgba(230,0,35,0.45)] hover:shadow-[0_4px_16px_rgba(230,0,35,0.65)]'
+                              ? 'bg-gradient-to-br from-primary to-amber-600 shadow-[0_3px_12px_rgba(217,119,6,0.3)] hover:shadow-[0_4px_16px_rgba(217,119,6,0.45)]'
                               : 'bg-on-background/[0.05] border border-on-background/[0.07]'
                           }`}
                           aria-label={`Add ${opt.name}`}
@@ -225,7 +225,7 @@ export function CustomizationSheet({ product, onClose, onConfirm }: Props) {
                   disabled={!ready}
                   className={`w-full py-4 rounded-full font-black text-[13px] uppercase tracking-widest transition-all flex items-center justify-center gap-2.5 ${
                     ready
-                      ? 'btn-brand shadow-[0_8px_32px_rgba(230,0,35,0.45)]'
+                      ? 'btn-brand shadow-[0_8px_32px_rgba(217,119,6,0.3)]'
                       : 'bg-on-background/[0.05] text-on-background/30 border border-on-background/[0.09]'
                   }`}
                 >

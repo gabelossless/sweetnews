@@ -43,7 +43,7 @@ export function ProductDetailSheet({ product, onClose, onAdd, onCustomize }: Pro
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[58] bg-[#2a1a1f]/40 backdrop-blur-sm"
+            className="fixed inset-0 z-[58] bg-black/60 backdrop-blur-sm"
             onClick={onClose}
           />
 
@@ -236,7 +236,7 @@ function RelatedCard({ product, onAdd }: RelatedCardProps) {
           <button
             onClick={() => onAdd(product)}
             aria-label={`Add ${product.name}`}
-            className="w-6 h-6 rounded-full bg-[#ff2d55] flex items-center justify-center shadow-[0_2px_8px_rgba(255,45,85,0.4)] hover:bg-[#e60023] transition-colors active:scale-90"
+            className="w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow-[0_2px_8px_rgba(217,119,6,0.3)] hover:brightness-110 transition-colors active:scale-90"
           >
             <Plus size={11} strokeWidth={3} className="text-white" />
           </button>

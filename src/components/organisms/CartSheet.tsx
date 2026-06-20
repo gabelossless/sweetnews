@@ -48,7 +48,7 @@ export function CartSheet({ isOpen, onClose, onCheckout }: CartSheetProps) {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.22 }}
             onClick={onClose}
-            className="fixed inset-0 bg-[#2a1a1f]/40 backdrop-blur-md z-[60]"
+            className="fixed inset-0 bg-black/60 backdrop-blur-md z-[60]"
           />
 
           {/* Positioning wrapper — aligns to bottom on mobile, centers on desktop */}

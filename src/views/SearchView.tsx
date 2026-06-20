@@ -117,7 +117,7 @@ export function SearchView({
         <h1 className="font-display-xl text-[54px] uppercase font-black leading-[0.85] tracking-tighter mb-6 text-on-background">
           <span
             style={{
-              background: 'linear-gradient(135deg,#e60023,#ff2060)',
+              background: 'linear-gradient(135deg,#d97706,#b45309)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
             }}
@@ -130,7 +130,7 @@ export function SearchView({
 
         {/* Search input */}
         <div className="relative group">
-          <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-on-surface-variant group-focus-within:text-[#ff2060] z-10 pointer-events-none" />
+          <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-on-surface-variant group-focus-within:text-primary z-10 pointer-events-none" />
           <input
             ref={inputRef}
             autoFocus
@@ -138,7 +138,7 @@ export function SearchView({
             autoComplete="off"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-14 pr-12 h-14 text-[15px] bg-on-background/[0.03] backdrop-blur-2xl border border-on-background/[0.09] rounded-full placeholder:text-on-surface-variant focus:border-[#e60023]/50 focus:shadow-[0_0_0_1px_rgba(230,0,35,0.25),0_8px_32px_rgba(230,0,35,0.12)] transition-all duration-300 font-bold tracking-wide outline-none"
+            className="w-full pl-14 pr-12 h-14 text-[15px] bg-on-background/[0.03] backdrop-blur-2xl border border-on-background/[0.09] rounded-full placeholder:text-on-surface-variant focus:border-primary/50 focus:shadow-[0_0_0_1px_rgba(217,119,6,0.15),0_8px_32px_rgba(217,119,6,0.08)] transition-all duration-300 font-bold tracking-wide outline-none"
             placeholder="Search drops, tags, flavors..."
             type="text"
           />

@@ -27,7 +27,7 @@ export function ProductCard({
     <div className={`flex flex-col ${className}`}>
       {/* Image container */}
       <div
-        className={`relative w-full aspect-square rounded-[16px] overflow-hidden mb-2.5 bg-surface-dim card-hover-lift ${onView ? 'cursor-pointer' : ''}`}
+        className={`relative w-full aspect-square rounded-[16px] overflow-hidden mb-2.5 bg-surface-dim card-hover-lift ${onView ? 'cursor-pointer' : ''} ${isFeatured ? 'ring-1 ring-primary/20 shadow-[0_20px_50px_rgba(230,0,35,0.10)]' : ''}`}
         onClick={onView}
         role={onView ? 'button' : undefined}
         aria-label={onView ? `View ${product.name} details` : undefined}

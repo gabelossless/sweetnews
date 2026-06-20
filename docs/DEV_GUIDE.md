@@ -11,7 +11,7 @@
 git clone <repo-url> && cd sweetnews
 npm install
 cp .env.example .env.local   # fill in Firebase + Stripe keys
-npm run dev                  # http://localhost:3000
+npm run dev                  # http://localhost:4000
 ```
 
 **Gates before every commit:**
@@ -85,7 +85,8 @@ All client state is Zustand. No Redux, no Context for data.
 |---|---|---|
 | `store/cart.ts` | localStorage (`sweetnews-cart-storage`) | Cart items + quantity helpers |
 | `store/orders.ts` | localStorage (`sweetnews-orders-storage`) | Orders — **overwritten at runtime** by Firestore `onSnapshot` in CustomerApp |
-| `store/profile.ts` | localStorage (`sweetnews-profile-storage`) | Delivery name, address, push notification state |
+| `store/profile.ts` | localStorage (`sweetnews-profile-storage`) | Saved addresses CRUD, delivery name, push notification state |
+| `store/promo.ts` | localStorage (`sweetnews-promo-storage`) | Promo code validation, apply/remove, discount state |
 | `store/toast.ts` | None (ephemeral) | `showToast(msg)` — auto-dismisses at 2.5 s |
 
 **Important:** The `orders` store is a write-through cache. Firestore is the source of truth at runtime. Do not treat localStorage orders as reliable outside of initial hydration.
@@ -190,10 +191,11 @@ Defined in `src/index.css` using Tailwind v4's `@theme` block. **No `tailwind.co
 
 | Token | Value | Use |
 |---|---|---|
-| `bg-background` | `#000000` | Page background |
+| `bg-background` | `#0b0e0c` | Moss-black page background |
 | `text-on-background` | `#ffffff` | Primary text |
-| `text-primary` / `bg-primary` | `#e60023` | Brand red — CTAs, progress |
-| `--color-pink` | `#ff2060` | Brand accent (gradient endpoint) |
+| `text-primary` / `bg-primary` | `#d97706` | Honey amber — CTAs, progress |
+| `--color-pink` / accent | `#ff4d8d` | Berry pink — nav active state, accent |
+| `--color-secondary` | `#10b981` | Mint green — success, secondary actions |
 
 ### Utility Classes
 
@@ -306,7 +308,9 @@ VITE_FIREBASE_STORAGE_BUCKET=
 VITE_FIREBASE_MESSAGING_SENDER_ID=
 VITE_FIREBASE_APP_ID=
 VITE_STRIPE_PUBLISHABLE_KEY=   # pk_live_... prod / pk_test_... dev
-GEMINI_API_KEY=                # Currently unused in core app
+VITE_GOOGLE_MAPS_API_KEY=      # Required for live driver tracking map in TrackerCard
+VITE_GEMINI_API_KEY=           # For AI image generation scripts
+GEMINI_API_KEY=                # Exposed via vite.config.ts define block
 ```
 
 Only `VITE_*` vars reach the browser bundle. `GEMINI_API_KEY` is exposed via `vite.config.ts` `define` block.

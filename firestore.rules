@@ -7,6 +7,25 @@ service cloud.firestore {
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
 
+    function orderById(orderId) {
+      return get(/databases/$(database)/documents/orders/$(orderId)).data;
+    }
+
+    function orderExists(orderId) {
+      return exists(/databases/$(database)/documents/orders/$(orderId));
+    }
+
+    function canAccessOrder(orderId) {
+      return request.auth != null && (
+        orderExists(orderId) &&
+        (
+          isAdmin() ||
+          orderById(orderId).customerId == request.auth.uid ||
+          orderById(orderId).driverId == request.auth.uid
+        )
+      );
+    }
+
     // User profiles
     match /users/{userId} {
       allow read: if request.auth != null;
@@ -28,9 +47,28 @@ service cloud.firestore {
         isAdmin()
       );
       allow update: if request.auth != null && (
+        resource.data.customerId == request.auth.uid ||
         resource.data.driverId == request.auth.uid || 
         isAdmin()
       );
+    }
+
+    // Order events (append-only timeline)
+    match /order_events/{eventId} {
+      allow read: if canAccessOrder(resource.data.order_id);
+      allow create: if request.auth != null && canAccessOrder(request.resource.data.order_id) && (
+        (request.resource.data.actor_type == 'system' && request.resource.data.actor_id == null) ||
+        request.resource.data.actor_id == request.auth.uid ||
+        (request.resource.data.actor_type == 'admin' && isAdmin()) ||
+        (request.resource.data.actor_type == 'driver' && request.resource.data.actor_id == request.auth.uid)
+      );
+      allow update, delete: if false;
+    }
+
+    // Provider-neutral dispatch jobs
+    match /dispatch_jobs/{jobId} {
+      allow read: if canAccessOrder(resource.data.order_id);
+      allow create, update, delete: if isAdmin();
     }
 
     // Waitlist (Public create with validation, Admin read/update/delete)

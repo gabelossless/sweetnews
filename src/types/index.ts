@@ -11,6 +11,65 @@ export interface CustomizationStep {
   options: CustomizationOption[];
 }
 
+export type DispatchFulfillmentMode = 'internal_driver' | 'third_party_webhook' | 'self_delivery';
+
+export type DispatchJobStatus =
+  | 'queued'
+  | 'assigned'
+  | 'accepted'
+  | 'picked_up'
+  | 'delivered'
+  | 'cancelled'
+  | 'failed';
+
+export type OrderTimelineEventType =
+  | 'order.paid'
+  | 'inventory.allocated'
+  | 'dispatch.assigned'
+  | 'dispatch.accepted'
+  | 'dispatch.picked_up'
+  | 'dispatch.delivered'
+  | 'dispatch.eta_updated'
+  | 'dispatch.released'
+  | 'dispatch.failed'
+  | 'order.cancelled';
+
+export type OrderTimelineActorType = 'customer' | 'driver' | 'admin' | 'system' | 'courier';
+
+export type OrderTimelinePayloadValue = string | number | boolean | null | undefined | { [key: string]: any } | any[];
+
+export interface CourierFeeAllocation {
+  platform_cents: number;
+  merchant_cents: number;
+  courier_cents: number;
+  currency: 'USD';
+}
+
+export interface DispatchJob {
+  id: string;
+  order_id: string;
+  fulfillment_mode: DispatchFulfillmentMode;
+  delivery_provider_id: string;
+  provider_job_id: string | null;
+  assigned_driver_id: string | null;
+  external_tracking_url: string | null;
+  courier_fee_allocation: CourierFeeAllocation;
+  status: DispatchJobStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface OrderTimelineEvent {
+  id: string;
+  order_id: string;
+  type: OrderTimelineEventType;
+  actor_type: OrderTimelineActorType;
+  actor_id: string | null;
+  summary: string;
+  payload: Record<string, OrderTimelinePayloadValue> | null;
+  createdAt: string;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -47,10 +106,22 @@ export interface ActiveOrder {
   etaMins?: number;
   rating?: number;
   review?: string;
+  promoCode?: string;
+  discount?: number;
   driverSnapshot?: {
     name: string;
     photo: string | null;
   };
+  payment_status?: 'pending' | 'paid' | 'failed';
+  inventory_allocated?: boolean;
+  dispatch_job_id?: string | null;
+  delivery_provider_id?: string | null;
+  provider_job_id?: string | null;
+  external_tracking_url?: string | null;
+  courier_fee_allocation?: CourierFeeAllocation | null;
+  latest_event_type?: OrderTimelineEventType | null;
+  latest_event_at?: string | null;
+  event_count?: number;
   driverLocation?: {
     lat: number;
     lng: number;
@@ -99,4 +170,27 @@ export interface DriverApplication {
   phone: string;
   status: 'pending' | 'approved' | 'rejected';
   submittedAt: string;
+}
+
+export interface PromoCode {
+  id: string;
+  code: string;
+  description: string;
+  discountType: 'percentage' | 'fixed';
+  discountValue: number; // percentage (0-100) or fixed amount in cents
+  minOrderAmount?: number;
+  maxDiscount?: number;
+  usageLimit?: number;
+  usageCount: number;
+  validFrom: string;
+  validUntil: string;
+  isActive: boolean;
+  applicableCategories?: string[]; // empty = all categories
+}
+
+export interface AppliedPromo {
+  code: string;
+  discountType: 'percentage' | 'fixed';
+  discountValue: number;
+  discountAmount: number; // calculated discount in cents
 }

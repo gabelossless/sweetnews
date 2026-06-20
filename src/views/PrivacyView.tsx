@@ -14,7 +14,7 @@ export default function PrivacyView() {
           <ArrowLeft size={16} className="text-on-background/75" />
         </button>
         <div className="flex items-center gap-2">
-          <ShieldCheck size={16} className="text-[#e60023]" />
+          <ShieldCheck size={16} className="text-primary" />
           <span className="text-sm font-black uppercase tracking-widest text-on-background/75">Privacy Policy</span>
         </div>
       </header>
@@ -129,7 +129,7 @@ export default function PrivacyView() {
                 ['Advertising identifiers', 'No IDFA, ad IDs, or similar identifiers.'],
               ].map(([label, desc]) => (
                 <li key={label} className="flex gap-3">
-                  <span className="text-[#e60023] font-black mt-0.5">✕</span>
+                  <span className="text-primary font-black mt-0.5">✕</span>
                   <span><strong className="text-on-background">{label}</strong> — {desc}</span>
                 </li>
               ))}
@@ -267,7 +267,7 @@ export default function PrivacyView() {
             <address className="not-italic">
               <strong className="text-on-background">Sweet News LLC</strong><br />
               Denver, Colorado<br />
-              <a href="mailto:sweetnewsowl@gmail.com" className="text-[#e60023] hover:text-[#ff2060] transition-colors">
+              <a href="mailto:sweetnewsowl@gmail.com" className="text-primary hover:brightness-110 transition-colors">
                 sweetnewsowl@gmail.com
               </a>
             </address>
@@ -308,7 +308,7 @@ function ExternalLink({ href, children }: { href: string; children: React.ReactN
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-block mt-2 text-[12px] text-[#e60023] hover:text-[#ff2060] transition-colors underline underline-offset-2"
+      className="inline-block mt-2 text-[12px] text-primary hover:brightness-110 transition-colors underline underline-offset-2"
     >
       {children} ↗
     </a>

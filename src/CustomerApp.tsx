@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, Store, ReceiptText, User, ShoppingBag, CheckCircle2 } from 'lucide-react';
 import { loadStripe } from '@stripe/stripe-js';
@@ -28,10 +28,10 @@ import { OwlMascot } from './components/atoms/OwlMascot';
 
 // Views
 import { ShopView } from './views/ShopView';
-import { SearchView } from './views/SearchView';
-import { OrdersView } from './views/OrdersView';
-import { ProfileView } from './views/ProfileView';
-import { AboutView } from './views/AboutView';
+const SearchView = lazy(() => import('./views/SearchView').then(m => ({ default: m.SearchView })));
+const OrdersView = lazy(() => import('./views/OrdersView').then(m => ({ default: m.OrdersView })));
+const ProfileView = lazy(() => import('./views/ProfileView').then(m => ({ default: m.ProfileView })));
+const AboutView = lazy(() => import('./views/AboutView').then(m => ({ default: m.AboutView })));
 
 export default function CustomerApp() {
   useGeolocation();
@@ -243,7 +243,7 @@ export default function CustomerApp() {
 
         {/* TopAppBar */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-on-background/[0.07]">
-        <div className="px-5 md:px-8 pt-[max(env(safe-area-inset-top),12px)] md:max-w-[1280px] md:mx-auto">
+        <div className="px-5 md:px-6 pt-[max(env(safe-area-inset-top),12px)] md:max-w-[430px] md:mx-auto">
           {/* Row 1: Brand + [Desktop Nav] + Cart */}
           <div className="flex items-center justify-between py-2.5 md:py-3.5">
             <button
@@ -314,7 +314,7 @@ export default function CustomerApp() {
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     exit={{ scale: 0 }}
-                    className="absolute -top-0.5 -right-0.5 w-4.5 h-4.5 bg-[#ff2d55] text-white rounded-full flex items-center justify-center text-[10px] font-black shadow-[0_2px_6px_rgba(255,45,85,0.5)]"
+                    className="absolute -top-0.5 -right-0.5 w-4.5 h-4.5 bg-primary text-white rounded-full flex items-center justify-center text-[10px] font-black shadow-[0_2px_6px_rgba(217,119,6,0.3)]"
                   >
                     <motion.span key={cartItemsCount} initial={{ scale: 1.5 }} animate={{ scale: 1 }}>
                       {cartItemsCount}
@@ -339,51 +339,58 @@ export default function CustomerApp() {
       </header>
 
       {/* Main Pages Container */}
-      <main className="px-6 md:px-8 max-w-[430px] md:max-w-[1280px] mx-auto">
-        <AnimatePresence mode="wait">
-          
-          {/* 1. SHOP VIEW */}
-          {activeTab === 'shop' && (
-            <ShopView
-              selectedCategory={selectedCategory}
-              setSelectedCategory={setSelectedCategory}
-              onAddToCart={handleAddToCart}
-              onViewProduct={setSelectedProduct}
-              onNavigateToNews={() => setActiveTab('news')}
-            />
-          )}
+      <main className="px-6 md:px-0 max-w-[430px] md:max-w-[430px] mx-auto">
+        <Suspense fallback={
+          <div className="w-full py-20 flex flex-col items-center justify-center">
+            <div className="w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+            <span className="text-[10px] uppercase tracking-widest text-on-surface-variant font-black mt-4">Loading View...</span>
+          </div>
+        }>
+          <AnimatePresence mode="wait">
+            
+            {/* 1. SHOP VIEW */}
+            {activeTab === 'shop' && (
+              <ShopView
+                selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory}
+                onAddToCart={handleAddToCart}
+                onViewProduct={setSelectedProduct}
+                onNavigateToNews={() => setActiveTab('news')}
+              />
+            )}
 
-          {/* 2. SEARCH VIEW */}
-          {activeTab === 'search' && (
-            <SearchView
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              onAddToCart={handleAddToCart}
-              onViewProduct={setSelectedProduct}
-            />
-          )}
+            {/* 2. SEARCH VIEW */}
+            {activeTab === 'search' && (
+              <SearchView
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                onAddToCart={handleAddToCart}
+                onViewProduct={setSelectedProduct}
+              />
+            )}
 
-          {/* 3. DEDICATED REAL-TIME ORDERS VIEW */}
-          {activeTab === 'orders' && (
-            <OrdersView
-              orders={orders}
-              onStartShopping={() => setActiveTab('shop')}
-            />
-          )}
+            {/* 3. DEDICATED REAL-TIME ORDERS VIEW */}
+            {activeTab === 'orders' && (
+              <OrdersView
+                orders={orders}
+                onStartShopping={() => setActiveTab('shop')}
+              />
+            )}
 
-          {/* 4. DEDICATED PROFILE VIEW */}
-          {activeTab === 'profile' && (
-            <ProfileView
-              isOnline={isOnline}
-            />
-          )}
+            {/* 4. DEDICATED PROFILE VIEW */}
+            {activeTab === 'profile' && (
+              <ProfileView
+                isOnline={isOnline}
+              />
+            )}
 
-          {/* 5. ABOUT / NEWS VIEW */}
-          {activeTab === 'news' && (
-            <AboutView onBack={() => setActiveTab('shop')} />
-          )}
+            {/* 5. ABOUT / NEWS VIEW */}
+            {activeTab === 'news' && (
+              <AboutView onBack={() => setActiveTab('shop')} />
+            )}
 
-        </AnimatePresence>
+          </AnimatePresence>
+        </Suspense>
       </main>
 
        {/* BottomNavBar Pill (mobile only) */}

@@ -17,12 +17,14 @@ import { Button } from './components/atoms/Button';
 import { assignDriver, updateOrderStatus, updateOrderETA, unassignDriver, cancelOrder } from './lib/orders';
 import { motion, AnimatePresence } from 'motion/react';
 import { Car, Hash, Phone, ShieldCheck, Box, MapPin, Navigation, CheckCircle2 } from 'lucide-react';
+import { OrderEventFeedItem, subscribeToAdminOrderEvents } from './lib/orderTimeline';
 
 export default function AdminApp() {
   const { role, user } = useAuth();
   const [activeTab, setActiveTab] = useState<'drivers' | 'dispatcher' | 'waitlist'>('dispatcher');
   const [applications, setApplications] = useState<DriverApplication[]>([]);
   const [orders, setOrders] = useState<ActiveOrder[]>([]);
+  const [orderEvents, setOrderEvents] = useState<OrderEventFeedItem[]>([]);
   const [activeDrivers, setActiveDrivers] = useState<UserProfile[]>([]);
   const [waitlist, setWaitlist] = useState<any[]>([]);
 
@@ -48,13 +50,16 @@ export default function AdminApp() {
       }) as ActiveOrder[]);
     });
 
-    // 3. Listen for Active Drivers
+    // 3. Listen for Order Events
+    const unsubEvents = subscribeToAdminOrderEvents(setOrderEvents);
+
+    // 4. Listen for Active Drivers
     const qDrivers = query(collection(db, 'users'), where('role', '==', 'driver_active'));
     const unsubDrivers = onSnapshot(qDrivers, (snapshot) => {
       setActiveDrivers(snapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() })) as UserProfile[]);
     });
 
-    // 4. Listen for Waitlist
+    // 5. Listen for Waitlist
     const qWaitlist = query(collection(db, 'waitlist'), orderBy('createdAt', 'desc'));
     const unsubWaitlist = onSnapshot(qWaitlist, (snapshot) => {
       setWaitlist(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
@@ -63,6 +68,7 @@ export default function AdminApp() {
     return () => {
       unsubApps();
       unsubOrders();
+      unsubEvents();
       unsubDrivers();
       unsubWaitlist();
     };
@@ -146,13 +152,21 @@ export default function AdminApp() {
     );
   }
 
+  const eventsByOrder = orderEvents.reduce<Record<string, OrderEventFeedItem[]>>((acc, event) => {
+    if (!acc[event.order_id]) {
+      acc[event.order_id] = [];
+    }
+    acc[event.order_id].push(event);
+    return acc;
+  }, {});
+
   return (
     <div className="min-h-screen bg-surface text-on-background p-6 md:p-12">
       <div className="max-w-7xl mx-auto">
         <header className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-6">
           <div>
             <h1 className="text-4xl font-black tracking-tight mb-2">
-              Admin <span style={{ background: 'linear-gradient(135deg,#e60023,#ff2060)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>HQ</span>
+              Admin <span style={{ background: 'linear-gradient(135deg,#d97706,#b45309)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>HQ</span>
             </h1>
             <div className="flex gap-4 mt-6">
               <button 
@@ -321,6 +335,35 @@ export default function AdminApp() {
                       {order.address}
                     </p>
 
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5">
+                      <div className="rounded-2xl bg-on-background/[0.04] border border-on-background/[0.07] p-3">
+                        <p className="text-[9px] uppercase tracking-widest text-on-surface-variant font-black mb-1">Provider</p>
+                        <p className="text-sm font-bold">{order.delivery_provider_id || 'internal_driver'}</p>
+                      </div>
+                      <div className="rounded-2xl bg-on-background/[0.04] border border-on-background/[0.07] p-3">
+                        <p className="text-[9px] uppercase tracking-widest text-on-surface-variant font-black mb-1">Dispatch Job</p>
+                        <p className="text-sm font-bold">{order.dispatch_job_id ? order.dispatch_job_id.slice(0, 10) : 'Not created'}</p>
+                      </div>
+                      <div className="rounded-2xl bg-on-background/[0.04] border border-on-background/[0.07] p-3">
+                        <p className="text-[9px] uppercase tracking-widest text-on-surface-variant font-black mb-1">Fee Split</p>
+                        <p className="text-sm font-bold">
+                          {order.courier_fee_allocation ? `$${(order.courier_fee_allocation.courier_cents / 100).toFixed(2)}` : '$0.00'}
+                        </p>
+                      </div>
+                    </div>
+
+                    {order.external_tracking_url && (
+                      <a
+                        href={order.external_tracking_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-2 mb-5 text-xs font-black uppercase tracking-widest text-primary hover:underline"
+                      >
+                        External Tracking
+                        <Navigation className="w-3 h-3" />
+                      </a>
+                    )}
+
                     <div className="flex gap-2 overflow-x-auto pb-4">
                       {order.items.map((item, idx) => (
                         <div key={idx} className="bg-on-background/[0.05] rounded-2xl p-3 flex items-center gap-3 min-w-[200px] border border-on-background/[0.07]">
@@ -338,6 +381,23 @@ export default function AdminApp() {
                         </div>
                       ))}
                     </div>
+
+                    {eventsByOrder[order.id]?.length ? (
+                      <div className="mt-6">
+                        <p className="text-[9px] uppercase tracking-widest text-on-surface-variant font-black mb-2">Timeline</p>
+                        <div className="flex flex-wrap gap-2">
+                          {eventsByOrder[order.id].slice(0, 4).map((event) => (
+                            <div
+                              key={event.id}
+                              className="rounded-full px-3 py-1.5 bg-on-background/[0.05] border border-on-background/[0.08] text-[10px] font-bold"
+                              title={`${event.summary} • ${event.createdAt}`}
+                            >
+                              <span className="uppercase tracking-widest text-primary">{event.type}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ) : null}
                   </div>
 
                   <div className="w-full lg:w-80 shrink-0 border-l border-on-background/[0.07] lg:pl-8 flex flex-col">
@@ -365,7 +425,7 @@ export default function AdminApp() {
                           onChange={(e) => {
                             const s = e.target.value as 'cooking' | 'delivering' | 'delivered';
                             const progress = s === 'delivered' ? 100 : s === 'delivering' ? 75 : 50;
-                            updateOrderStatus(order.id, s, progress);
+                            updateOrderStatus(order.id, s, progress, user?.uid ?? null);
                           }}
                         >
                           <option value="">Update Status</option>
@@ -421,7 +481,7 @@ export default function AdminApp() {
                           placeholder="ETA (mins)"
                           defaultValue={order.etaMins}
                           onBlur={(e) => handleUpdateETA(order.id, e.target.value)}
-                          className="w-full bg-on-background/[0.05] border border-on-background/[0.09] rounded-lg px-3 py-2 text-xs focus:border-[#e60023] outline-none transition-all"
+                          className="w-full bg-on-background/[0.05] border border-on-background/[0.09] rounded-lg px-3 py-2 text-xs focus:border-primary/50 outline-none transition-all"
                         />
                       </div>
                       <div className="text-[10px] text-on-surface-variant uppercase font-bold">

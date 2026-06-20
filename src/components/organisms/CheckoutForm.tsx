@@ -138,7 +138,7 @@ export function CheckoutForm({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 z-[80] bg-[#2a1a1f]/40 backdrop-blur-sm"
+            className="fixed inset-0 z-[80] bg-black/60 backdrop-blur-sm"
           />
           {/* Positioning wrapper */}
           <div className="fixed inset-0 z-[81] flex items-end md:items-center justify-center pointer-events-none">
@@ -147,7 +147,7 @@ export function CheckoutForm({
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="pointer-events-auto w-full max-w-[430px] h-[95vh] md:h-auto md:max-h-[90vh] bg-surface backdrop-blur-[50px] rounded-t-[48px] md:rounded-[32px] flex flex-col shadow-[0_-20px_60px_rgba(42,26,31,0.12),_inset_0_1px_0_rgba(255,255,255,0.1)] border-t border-on-background/[0.09] md:border md:border-on-background/[0.09]"
+            className="pointer-events-auto w-full max-w-[430px] h-[95vh] md:h-auto md:max-h-[90vh] bg-surface backdrop-blur-[50px] rounded-t-[48px] md:rounded-[32px] flex flex-col shadow-[0_-20px_60px_rgba(0,0,0,0.4),_inset_0_1px_0_rgba(255,255,255,0.1)] border-t border-on-background/[0.09] md:border md:border-on-background/[0.09]"
           >
             <div className="flex justify-center pt-3 pb-2">
               <div className="w-12 h-1.5 bg-on-background/[0.15] rounded-full" />

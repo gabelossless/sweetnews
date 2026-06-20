@@ -24,12 +24,12 @@ export function Logo({ size = 48, className = '' }: LogoProps) {
     >
       <defs>
         <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#e60023" />
-          <stop offset="100%" stopColor="#ff2060" />
+          <stop offset="0%" stopColor="#d97706" />
+          <stop offset="100%" stopColor="#b45309" />
         </linearGradient>
         <radialGradient id={glowId} cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#ff2060" stopOpacity="0.4" />
-          <stop offset="100%" stopColor="#ff2060" stopOpacity="0" />
+          <stop offset="0%" stopColor="#d97706" stopOpacity="0.4" />
+          <stop offset="100%" stopColor="#d97706" stopOpacity="0" />
         </radialGradient>
       </defs>
       <circle cx="24" cy="24" r="22" fill={`url(#${gradId})`} />

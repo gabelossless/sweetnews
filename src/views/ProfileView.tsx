@@ -112,7 +112,7 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
           <br />
           <span
             style={{
-              background: 'linear-gradient(135deg,#e60023,#ff2060)',
+              background: 'linear-gradient(135deg,#d97706,#b45309)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
             }}
@@ -176,7 +176,7 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
         >
           <span
             style={{
-              background: 'linear-gradient(135deg,#e60023,#ff2060)',
+              background: 'linear-gradient(135deg,#d97706,#b45309)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
             }}
@@ -198,9 +198,9 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
           whileHover={{ scale: 1.015 }}
           whileTap={{ scale: 0.985 }}
           className="relative rounded-[32px] p-6 text-white overflow-hidden group select-none
-                     shadow-[0_24px_80px_rgba(230,0,35,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]
-                     border border-[#e60023]/20"
-          style={{ background: 'linear-gradient(135deg, #180005 0%, #0c0002 55%, #000 100%)' }}
+                     shadow-[0_24px_80px_rgba(217,119,6,0.15),inset_0_1px_0_rgba(255,255,255,0.08)]
+                     border border-primary/20"
+          style={{ background: 'linear-gradient(135deg, #16120e 0%, #0d0b09 55%, #000 100%)' }}
         >
           {/* Shimmer sweep */}
           <div className="absolute inset-0 rounded-[32px] overflow-hidden pointer-events-none z-0">
@@ -210,7 +210,7 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
           {/* Big ambient orb */}
           <div
             className="absolute -right-12 -top-12 w-56 h-56 rounded-full blur-[100px] opacity-20 group-hover:opacity-30 transition-opacity duration-700 pointer-events-none z-0"
-            style={{ background: 'radial-gradient(circle, #ff2060, #e60023)' }}
+            style={{ background: 'radial-gradient(circle, #f59e0b, #d97706)' }}
           />
 
           <div className="relative z-10 flex flex-col justify-between h-48">
@@ -227,9 +227,9 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
               <motion.div
                 animate={{ rotate: [0, 5, -5, 0] }}
                 transition={{ duration: 4, repeat: Infinity, repeatDelay: 6 }}
-                className="w-11 h-11 rounded-full bg-gradient-to-br from-[#e60023]/30 to-[#ff2060]/20 border border-[#e60023]/30 flex items-center justify-center shadow-[0_4px_16px_rgba(230,0,35,0.4)]"
+                className="w-11 h-11 rounded-full bg-gradient-to-br from-primary/30 to-amber-600/20 border border-primary/30 flex items-center justify-center shadow-[0_4px_16px_rgba(217,119,6,0.2)]"
               >
-                <Crown className="w-5 h-5 text-[#ff8090]" strokeWidth={1.5} />
+                <Crown className="w-5 h-5 text-amber-400" strokeWidth={1.5} />
               </motion.div>
             </div>
 
@@ -293,7 +293,7 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
               value={deliveryName}
               onChange={(e) => handleNameChange(e.target.value)}
               placeholder="Your name"
-              className="w-full text-sm font-bold text-on-background bg-on-background/[0.05] border border-on-background/[0.07] hover:border-on-background/[0.12] focus:border-[#e60023]/40 focus:bg-on-background/[0.05] outline-none px-4 py-3 rounded-2xl mt-0.5 transition-all duration-200 placeholder:text-on-surface-variant tracking-wide"
+              className="w-full text-sm font-bold text-on-background bg-on-background/[0.05] border border-on-background/[0.07] hover:border-on-background/[0.12] focus:border-primary/40 focus:bg-on-background/[0.05] outline-none px-4 py-3 rounded-2xl mt-0.5 transition-all duration-200 placeholder:text-on-surface-variant tracking-wide"
             />
           </div>
 
@@ -455,7 +455,7 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
                 aria-label="Toggle push notifications"
                 className={`relative w-12 h-6 rounded-full p-0.5 transition-colors duration-300 focus:outline-none disabled:opacity-50 ${
                   pushNotifications
-                    ? 'bg-gradient-to-r from-[#e60023] to-[#ff2060] shadow-[0_2px_12px_rgba(230,0,35,0.5)]'
+                    ? 'bg-gradient-to-r from-primary to-amber-600 shadow-[0_2px_12px_rgba(217,119,6,0.3)]'
                     : 'bg-on-background/[0.12]'
                 }`}
               >

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '../../components/atoms/Button';
 import { ActiveOrder } from '../../types';
 import { getMapUrl } from '../../lib/utils';
-import { updateDriverLocation, updateOrderStatus, sendNotification, getOrderStatusNotification } from '../../lib/orders';
+import { updateDriverLocation } from '../../lib/orders';
 import FleetHistoryView from './FleetHistoryView';
 import FleetProfileView from './FleetProfileView';
 
@@ -94,31 +94,7 @@ export default function FleetDashboardView({
   }, [activeOrders, watchId]);
 
   const handleStatusUpdate = async (orderId: string, currentStatus: string, customerId: string) => {
-    const nextStatusMap: Record<string, { status: string; progress: number }> = {
-      confirmed: { status: 'cooking', progress: 35 },
-      cooking: { status: 'delivering', progress: 70 },
-      delivering: { status: 'delivered', progress: 100 },
-    };
-    const next = nextStatusMap[currentStatus];
-    if (next) {
-      await updateOrderStatus(orderId, next.status as any, next.progress);
-      
-      // Send notification to customer
-      const order = activeOrders.find(o => o.id === orderId);
-      if (order) {
-        const shortId = orderId.slice(-6).toUpperCase();
-        const notification = getOrderStatusNotification(next.status, orderId, shortId);
-        await sendNotification(customerId, {
-          title: notification.title,
-          body: notification.body,
-          type: 'order_status',
-          data: { orderId, status: next.status }
-        });
-      }
-      
-      // Also call the parent callback for any additional logic
-      onStatusUpdate(orderId, currentStatus, customerId);
-    }
+    onStatusUpdate(orderId, currentStatus, customerId);
   };
   return (
     <div className="min-h-screen bg-surface text-on-background pb-32">

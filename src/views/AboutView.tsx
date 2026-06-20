@@ -42,7 +42,7 @@ export function AboutView({ onBack }: AboutViewProps) {
           transition={{ delay: 0.12, duration: 0.45 }}
           className="text-[48px] uppercase font-black leading-[0.88] tracking-tighter mb-3 text-on-background"
         >
-          <span style={{ background: 'linear-gradient(135deg,#e60023,#ff2060)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+          <span style={{ background: 'linear-gradient(135deg,#d97706,#b45309)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
             SWEET
           </span>
           <br />

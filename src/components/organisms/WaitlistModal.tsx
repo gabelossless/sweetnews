@@ -141,7 +141,7 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-[#2a1a1f]/40 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
           />
 
           <motion.div

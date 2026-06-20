@@ -13,6 +13,7 @@ import {
 } from 'firebase/firestore';
 import { db } from './firebase';
 import { ActiveOrder, OrderStatus } from '../types';
+import { writeOrderTimeline } from './orderTimeline';
 
 /**
  * Creates a new order in Firestore.
@@ -28,39 +29,120 @@ export const createOrder = async (
     driverId: null,
     createdAt: serverTimestamp(),
   });
+
+  await writeOrderTimeline({
+    orderId: docRef.id,
+    events: [
+      {
+        type: 'order.paid',
+        actor_type: 'customer',
+        actor_id: orderData.customerId,
+        summary: 'Payment captured for the order.',
+        payload: {
+          customer_id: orderData.customerId,
+          total_cents: orderData.total,
+          item_count: orderData.items.length,
+        },
+      },
+      {
+        type: 'inventory.allocated',
+        actor_type: 'system',
+        actor_id: null,
+        summary: 'Inventory reserved for fulfillment.',
+        payload: {
+          customer_id: orderData.customerId,
+          item_count: orderData.items.length,
+        },
+      },
+    ],
+  });
+
   return docRef.id;
 };
 
 /**
- * Assigns a driver to an order and updates status to confirmed.
+ * Assigns a driver to an order and records a provider-neutral dispatch job.
  */
 export const assignDriver = async (orderId: string, driverId: string) => {
-  const orderRef = doc(db, 'orders', orderId);
   const driverRef = doc(db, 'users', driverId);
   
   // Fetch driver snapshot for the customer
   const driverDoc = await getDoc(driverRef);
   const driverData = driverDoc.data();
-  
-  await updateDoc(orderRef, {
-    driverId,
-    status: 'confirmed',
-    progress: 25,
-    driverSnapshot: {
-      name: driverData?.displayName || 'Sweet News Driver',
-      photo: driverData?.photoURL || null
-    }
+
+  const driverSnapshot = {
+    name: driverData?.displayName || 'Sweet News Driver',
+    photo: driverData?.photoURL || null,
+  };
+
+  await writeOrderTimeline({
+    orderId,
+    events: [
+      {
+        type: 'dispatch.assigned',
+        actor_type: 'admin',
+        actor_id: null,
+        summary: 'Dispatch assigned to an internal driver.',
+        payload: {
+          driver_id: driverId,
+          delivery_provider_id: 'internal_driver',
+          external_tracking_url: null,
+          courier_fee_allocation: {
+            platform_cents: 0,
+            merchant_cents: 0,
+            courier_cents: 0,
+            currency: 'USD',
+          },
+        },
+      },
+    ],
+    orderPatch: {
+      driverSnapshot,
+    },
+    dispatchJob: {
+      fulfillment_mode: 'internal_driver',
+      delivery_provider_id: 'internal_driver',
+      assigned_driver_id: driverId,
+      provider_job_id: null,
+      external_tracking_url: null,
+      courier_fee_allocation: {
+        platform_cents: 0,
+        merchant_cents: 0,
+        courier_cents: 0,
+        currency: 'USD',
+      },
+      status: 'assigned',
+    },
   });
 };
 
 /**
  * Updates the status and progress of an order.
  */
-export const updateOrderStatus = async (orderId: string, status: OrderStatus, progress: number) => {
-  const orderRef = doc(db, 'orders', orderId);
-  await updateDoc(orderRef, {
-    status,
-    progress,
+export const updateOrderStatus = async (orderId: string, status: OrderStatus, progress: number, actorId?: string | null) => {
+  const statusToEvent: Record<OrderStatus, 'inventory.allocated' | 'dispatch.accepted' | 'dispatch.picked_up' | 'dispatch.delivered' | 'order.cancelled'> = {
+    pending: 'inventory.allocated',
+    confirmed: 'inventory.allocated',
+    cooking: 'dispatch.accepted',
+    delivering: 'dispatch.picked_up',
+    delivered: 'dispatch.delivered',
+    cancelled: 'order.cancelled',
+  };
+
+  await writeOrderTimeline({
+    orderId,
+    events: [
+      {
+        type: statusToEvent[status],
+        actor_type: actorId ? 'driver' : 'system',
+        actor_id: actorId ?? null,
+        summary: `Order status moved to ${status}.`,
+        payload: {
+          status,
+          progress,
+        },
+      },
+    ],
   });
 };
 
@@ -163,8 +245,23 @@ export const submitOrderRating = async (orderId: string, driverId: string, ratin
  * Updates the ETA for an order.
  */
 export const updateOrderETA = async (orderId: string, etaMins: number) => {
-  const orderRef = doc(db, 'orders', orderId);
-  await updateDoc(orderRef, { etaMins });
+  await writeOrderTimeline({
+    orderId,
+    events: [
+      {
+        type: 'dispatch.eta_updated',
+        actor_type: 'admin',
+        actor_id: null,
+        summary: `ETA updated to ${etaMins} minutes.`,
+        payload: {
+          eta_mins: etaMins,
+        },
+      },
+    ],
+    orderPatch: {
+      etaMins,
+    },
+  });
 };
 
 /**
@@ -172,13 +269,26 @@ export const updateOrderETA = async (orderId: string, etaMins: number) => {
  * Reverts status to pending.
  */
 export const unassignDriver = async (orderId: string) => {
-  const orderRef = doc(db, 'orders', orderId);
-  await updateDoc(orderRef, {
-    driverId: null,
-    driverSnapshot: null,
-    status: 'pending',
-    progress: 0,
-    etaMins: null
+  await writeOrderTimeline({
+    orderId,
+    events: [
+      {
+        type: 'dispatch.released',
+        actor_type: 'admin',
+        actor_id: null,
+        summary: 'Dispatch released back to the unassigned pool.',
+      },
+    ],
+    orderPatch: {
+      driverId: null,
+      driverSnapshot: null,
+      dispatch_job_id: null,
+      delivery_provider_id: null,
+      provider_job_id: null,
+      external_tracking_url: null,
+      courier_fee_allocation: null,
+      etaMins: null,
+    },
   });
 };
 
@@ -186,11 +296,22 @@ export const unassignDriver = async (orderId: string) => {
  * Cancels an order (User or Admin).
  */
 export const cancelOrder = async (orderId: string, reason?: string) => {
-  const orderRef = doc(db, 'orders', orderId);
-  await updateDoc(orderRef, {
-    status: 'cancelled',
-    progress: 0,
-    cancellationReason: reason || 'User requested'
+  await writeOrderTimeline({
+    orderId,
+    events: [
+      {
+        type: 'order.cancelled',
+        actor_type: 'admin',
+        actor_id: null,
+        summary: reason ? `Order cancelled: ${reason}` : 'Order cancelled.',
+        payload: {
+          reason: reason || 'User requested',
+        },
+      },
+    ],
+    orderPatch: {
+      cancellationReason: reason || 'User requested',
+    },
   });
 };
 

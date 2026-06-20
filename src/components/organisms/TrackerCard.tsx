@@ -326,7 +326,7 @@ export function TrackerCard({ order }: TrackerCardProps) {
                   >
                     <Star
                       size={20}
-                      fill={(hoverRating || rating) >= star ? '#e60023' : 'transparent'}
+                      fill={(hoverRating || rating) >= star ? 'currentColor' : 'transparent'}
                       className={
                         (hoverRating || rating) >= star ? 'text-primary' : 'text-on-background/30'
                       }
@@ -370,7 +370,7 @@ export function TrackerCard({ order }: TrackerCardProps) {
                   <Star
                     key={star}
                     size={20}
-                    fill={rating >= star ? '#e60023' : 'transparent'}
+                    fill={rating >= star ? 'currentColor' : 'transparent'}
                     className={rating >= star ? 'text-primary' : 'text-on-background/30'}
                   />
                 ))}
