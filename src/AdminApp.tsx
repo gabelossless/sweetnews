@@ -18,6 +18,7 @@ import { assignDriver, updateOrderStatus, updateOrderETA, unassignDriver, cancel
 import { motion, AnimatePresence } from 'motion/react';
 import { Car, Hash, Phone, ShieldCheck, Box, MapPin, Navigation, CheckCircle2 } from 'lucide-react';
 import { OrderEventFeedItem, subscribeToAdminOrderEvents } from './lib/orderTimeline';
+import { PickList } from './components/organisms/PickList';
 
 export default function AdminApp() {
   const { role, user } = useAuth();
@@ -161,43 +162,43 @@ export default function AdminApp() {
   }, {});
 
   return (
-    <div className="min-h-screen bg-surface text-on-background p-6 md:p-12">
+    <div className="min-h-screen bg-background text-on-background p-6 md:p-10">
       <div className="max-w-7xl mx-auto">
-        <header className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-6">
+        <header className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-6 border-b border-white/[0.06] pb-6">
           <div>
-            <h1 className="text-4xl font-black tracking-tight mb-2">
-              Admin <span style={{ background: 'linear-gradient(135deg,#d97706,#b45309)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>HQ</span>
+            <h1 className="text-2xl font-serif font-light tracking-wide text-white">
+              Sweet Atelier // <span className="font-semibold italic text-primary">Operations</span>
             </h1>
-            <div className="flex gap-4 mt-6">
+            <div className="flex gap-2.5 mt-4">
               <button 
                 onClick={() => setActiveTab('dispatcher')}
-                className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${activeTab === 'dispatcher' ? 'btn-brand' : 'bg-on-background/[0.05] text-on-surface-variant hover:bg-on-background/[0.07]'}`}
+                className={`px-5 py-2.5 rounded-full text-xs font-semibold tracking-wide transition-all ${activeTab === 'dispatcher' ? 'bg-primary text-black' : 'bg-white/[0.03] text-white/60 border border-white/[0.08] hover:bg-white/[0.06]'}`}
               >
-                Dispatcher Terminal
+                Dispatcher
               </button>
               <button 
                 onClick={() => setActiveTab('drivers')}
-                className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${activeTab === 'drivers' ? 'btn-brand' : 'bg-on-background/[0.05] text-on-surface-variant hover:bg-on-background/[0.07]'}`}
+                className={`px-5 py-2.5 rounded-full text-xs font-semibold tracking-wide transition-all ${activeTab === 'drivers' ? 'bg-primary text-black' : 'bg-white/[0.03] text-white/60 border border-white/[0.08] hover:bg-white/[0.06]'}`}
               >
-                Fleet Recruitment
+                Fleet
               </button>
               <button 
                 onClick={() => setActiveTab('waitlist')}
-                className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${activeTab === 'waitlist' ? 'btn-brand' : 'bg-on-background/[0.05] text-on-surface-variant hover:bg-on-background/[0.07]'}`}
+                className={`px-5 py-2.5 rounded-full text-xs font-semibold tracking-wide transition-all ${activeTab === 'waitlist' ? 'bg-primary text-black' : 'bg-white/[0.03] text-white/60 border border-white/[0.08] hover:bg-white/[0.06]'}`}
               >
-                Waitlist Manager
+                Waitlist
               </button>
             </div>
           </div>
           
-          <div className="flex gap-4">
-            <div className="bg-on-background/[0.05] backdrop-blur-md px-6 py-3 rounded-2xl border border-on-background/[0.09]">
-              <span className="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold block mb-1">Live Orders</span>
-              <span className="text-2xl font-black">{orders.filter(o => o.status !== 'delivered').length}</span>
+          <div className="flex gap-3">
+            <div className="bg-[#0c0c0e] px-4 py-2.5 rounded-[14px] border border-white/[0.04]">
+              <span className="text-[8px] uppercase tracking-wider text-white/40 block mb-1">Active Orders</span>
+              <span className="text-xl font-medium text-white">{orders.filter(o => o.status !== 'delivered').length}</span>
             </div>
-            <div className="bg-on-background/[0.05] backdrop-blur-md px-6 py-3 rounded-2xl border border-on-background/[0.09]">
-              <span className="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold block mb-1">Waitlist</span>
-              <span className="text-2xl font-black">{waitlist.filter(w => w.status === 'waiting').length}</span>
+            <div className="bg-[#0c0c0e] px-4 py-2.5 rounded-[14px] border border-white/[0.04]">
+              <span className="text-[8px] uppercase tracking-wider text-white/40 block mb-1">Waitlist Records</span>
+              <span className="text-xl font-medium text-white">{waitlist.filter(w => w.status === 'waiting').length}</span>
             </div>
           </div>
         </header>
@@ -318,35 +319,35 @@ export default function AdminApp() {
               className="grid grid-cols-1 gap-6"
             >
               {orders.filter(o => o.status !== 'delivered').map((order) => (
-                <div key={order.id} className="bg-on-background/[0.03] border border-on-background/[0.07] rounded-[32px] p-8 flex flex-col lg:flex-row gap-8">
+                <div key={order.id} className="bg-surface border border-white/[0.04] rounded-[24px] p-6 flex flex-col lg:flex-row gap-6 shadow-md">
                   <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
-                        order.status === 'pending' ? 'bg-amber-500 text-black' : 'btn-brand'
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className={`px-3 py-0.5 rounded-full text-[9px] font-semibold uppercase tracking-wider border ${
+                        order.status === 'pending' ? 'border-amber-500/30 text-amber-500 bg-amber-500/5' : 'border-primary/30 text-primary bg-primary/5'
                       }`}>
                         {order.status}
                       </div>
-                      <span className="text-on-surface-variant text-sm">Order #{order.id.slice(-4)}</span>
+                      <span className="text-white/40 text-xs">Order ID: #{order.id.slice(-6).toUpperCase()}</span>
                     </div>
                     
-                    <h3 className="text-2xl font-black mb-1">{order.customerName}</h3>
-                    <p className="text-on-surface-variant flex items-center gap-2 mb-6">
-                      <MapPin className="w-4 h-4" />
+                    <h3 className="text-xl font-serif font-light text-white mb-1 tracking-tight">{order.customerName}</h3>
+                    <p className="text-on-surface-variant flex items-center gap-2 mb-4 text-xs">
+                      <MapPin className="w-3.5 h-3.5 text-primary" />
                       {order.address}
                     </p>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5">
-                      <div className="rounded-2xl bg-on-background/[0.04] border border-on-background/[0.07] p-3">
-                        <p className="text-[9px] uppercase tracking-widest text-on-surface-variant font-black mb-1">Provider</p>
-                        <p className="text-sm font-bold">{order.delivery_provider_id || 'internal_driver'}</p>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 mb-4">
+                      <div className="rounded-[14px] bg-[#0c0c0e] border border-white/[0.04] p-3.5">
+                        <p className="text-[8.5px] uppercase tracking-wider text-primary mb-1 font-semibold">Logistics Provider</p>
+                        <p className="text-xs font-medium text-white">{order.delivery_provider_id || 'internal_driver'}</p>
                       </div>
-                      <div className="rounded-2xl bg-on-background/[0.04] border border-on-background/[0.07] p-3">
-                        <p className="text-[9px] uppercase tracking-widest text-on-surface-variant font-black mb-1">Dispatch Job</p>
-                        <p className="text-sm font-bold">{order.dispatch_job_id ? order.dispatch_job_id.slice(0, 10) : 'Not created'}</p>
+                      <div className="rounded-[14px] bg-[#0c0c0e] border border-white/[0.04] p-3.5">
+                        <p className="text-[8.5px] uppercase tracking-wider text-primary mb-1 font-semibold">Dispatch Job ID</p>
+                        <p className="text-xs font-medium text-white">{order.dispatch_job_id ? order.dispatch_job_id.slice(0, 10).toUpperCase() : 'NOT_CREATED'}</p>
                       </div>
-                      <div className="rounded-2xl bg-on-background/[0.04] border border-on-background/[0.07] p-3">
-                        <p className="text-[9px] uppercase tracking-widest text-on-surface-variant font-black mb-1">Fee Split</p>
-                        <p className="text-sm font-bold">
+                      <div className="rounded-[14px] bg-[#0c0c0e] border border-white/[0.04] p-3.5">
+                        <p className="text-[8.5px] uppercase tracking-wider text-primary mb-1 font-semibold">Courier Fee Split</p>
+                        <p className="text-xs font-medium text-white">
                           {order.courier_fee_allocation ? `$${(order.courier_fee_allocation.courier_cents / 100).toFixed(2)}` : '$0.00'}
                         </p>
                       </div>
@@ -357,26 +358,26 @@ export default function AdminApp() {
                         href={order.external_tracking_url}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-2 mb-5 text-xs font-black uppercase tracking-widest text-primary hover:underline"
+                        className="inline-flex items-center gap-2 mb-4 text-xs font-bold uppercase tracking-wider text-primary hover:underline"
                       >
                         External Tracking
                         <Navigation className="w-3 h-3" />
                       </a>
                     )}
 
-                    <div className="flex gap-2 overflow-x-auto pb-4">
+                    <div className="flex gap-2 overflow-x-auto pb-2">
                       {order.items.map((item, idx) => (
-                        <div key={idx} className="bg-on-background/[0.05] rounded-2xl p-3 flex items-center gap-3 min-w-[200px] border border-on-background/[0.07]">
+                        <div key={idx} className="bg-white/[0.02] rounded-xl p-2.5 flex items-center gap-3 min-w-[180px] border border-white/5">
                           {item.image ? (
-                            <img src={item.image} className="w-10 h-10 rounded-xl object-cover" alt="" />
+                            <img src={item.image} className="w-9 h-9 rounded-lg object-cover" alt="" />
                           ) : (
-                            <div className="w-10 h-10 rounded-xl bg-on-background/[0.05] flex items-center justify-center text-[8px] font-black text-on-surface-variant uppercase text-center leading-tight px-0.5">
+                            <div className="w-9 h-9 rounded-lg bg-white/[0.04] flex items-center justify-center text-[8px] font-bold text-white/50 uppercase text-center leading-tight px-0.5">
                               {item.name.split(' ').slice(0, 2).join('\n')}
                             </div>
                           )}
                           <div>
-                            <p className="text-xs font-bold truncate w-24">{item.name}</p>
-                            <p className="text-[10px] opacity-50">Qty: {item.quantity}</p>
+                            <p className="text-xs font-semibold text-white truncate w-24">{item.name}</p>
+                            <p className="text-[9px] text-white/40">QTY: {item.quantity}</p>
                           </div>
                         </div>
                       ))}
@@ -384,12 +385,12 @@ export default function AdminApp() {
 
                     {eventsByOrder[order.id]?.length ? (
                       <div className="mt-6">
-                        <p className="text-[9px] uppercase tracking-widest text-on-surface-variant font-black mb-2">Timeline</p>
+                        <p className="text-[9px] uppercase tracking-widest text-on-surface-variant font-semibold mb-2">Chronicle Timeline</p>
                         <div className="flex flex-wrap gap-2">
                           {eventsByOrder[order.id].slice(0, 4).map((event) => (
                             <div
                               key={event.id}
-                              className="rounded-full px-3 py-1.5 bg-on-background/[0.05] border border-on-background/[0.08] text-[10px] font-bold"
+                              className="rounded-full px-3 py-1.5 bg-on-background/[0.05] border border-on-background/[0.08] text-[10px] font-medium"
                               title={`${event.summary} • ${event.createdAt}`}
                             >
                               <span className="uppercase tracking-widest text-primary">{event.type}</span>
@@ -400,49 +401,97 @@ export default function AdminApp() {
                     ) : null}
                   </div>
 
-                  <div className="w-full lg:w-80 shrink-0 border-l border-on-background/[0.07] lg:pl-8 flex flex-col">
-                    <span className="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold block mb-4">Assign Logistics</span>
+                  <div className="w-full lg:w-80 shrink-0 border-t lg:border-t-0 lg:border-l border-white/10 lg:pl-6 flex flex-col">
+                    <span className="text-[10px] uppercase tracking-wider text-white/40 block mb-3">Logistics Assignment</span>
                     
                     {(() => {
                       const ownerDriverUid = import.meta.env.VITE_OWNER_DRIVER_UID as string | undefined;
-                      return !order.driverId && ownerDriverUid ? (
+                      const ownerDriverUidStr = ownerDriverUid ? String(ownerDriverUid) : undefined;
+                      return !order.driverId && ownerDriverUidStr ? (
                         <button
-                          onClick={() => handleAssign(order.id, ownerDriverUid, order.customerId)}
-                          className="w-full mb-3 py-3 rounded-2xl btn-brand font-black text-[11px] uppercase tracking-widest shadow-[0_4px_16px_rgba(230,0,35,0.4)]"
+                          onClick={() => handleAssign(order.id, ownerDriverUidStr, order.customerId)}
+                          className="w-full mb-3 py-3 rounded-full btn-brand font-semibold text-xs tracking-wide"
                         >
-                          ⚡ Assign to Me
+                          ⚡ Claim Order
                         </button>
                       ) : null;
                     })()}
                     {order.driverId ? (
-                      <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-4">
-                        <p className="text-xs text-emerald-600 font-bold mb-1 flex items-center gap-2">
-                          <Navigation className="w-3 h-3" /> Assigned
-                        </p>
-                        <p className="text-sm font-medium">Driver UID: {order.driverId.slice(0, 12)}...</p>
-                        <select
-                          className="w-full mt-4 bg-on-background/[0.05] border border-on-background/[0.09] rounded-xl px-4 py-2 text-xs"
-                          onChange={(e) => {
-                            const s = e.target.value as 'cooking' | 'delivering' | 'delivered';
-                            const progress = s === 'delivered' ? 100 : s === 'delivering' ? 75 : 50;
-                            updateOrderStatus(order.id, s, progress, user?.uid ?? null);
-                          }}
-                        >
-                          <option value="">Update Status</option>
-                          <option value="cooking">Move to Cooking</option>
-                          <option value="delivering">Move to Delivering</option>
-                          <option value="delivered">Mark Delivered</option>
-                        </select>
-                        <div className="flex gap-2 mt-4">
+                      <div className="bg-[#0c0c0e] border border-white/[0.04] rounded-[16px] p-4 space-y-4">
+                        <div className="flex items-center justify-between pb-2 border-b border-white/5">
+                          <p className="text-xs text-primary font-semibold flex items-center gap-1.5 uppercase">
+                            <Navigation className="w-3.5 h-3.5" /> Courier Assigned
+                          </p>
+                          <span className="text-[9px] text-white/40 uppercase font-serif italic">
+                            {order.driverId === ownerDriverUid ? 'FOUNDER' : 'FLEET'}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-white/50">Courier ID: {order.driverId.slice(0, 12).toUpperCase()}...</p>
+                        
+                        {order.driverId === ownerDriverUid ? (
+                          // Founder delivery console
+                          <div className="space-y-4 pt-1">
+                            {/* 1. Navigate Button */}
+                            <button
+                              onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(order.address)}`, '_blank')}
+                              className="w-full py-2.5 bg-transparent border border-primary text-primary hover:bg-primary/5 rounded-full font-semibold text-xs tracking-wide flex items-center justify-center gap-2"
+                            >
+                              📍 Navigate to Destination
+                            </button>
+
+                            {/* 2. Interactive States & Checklist */}
+                            {order.status === 'confirmed' && (
+                              <button
+                                onClick={() => updateOrderStatus(order.id, 'cooking', 50, user?.uid ?? null)}
+                                className="w-full py-2.5 bg-primary text-black hover:bg-amber-500 rounded-full font-semibold text-xs tracking-wide"
+                              >
+                                🛍 Start Bagging
+                              </button>
+                            )}
+
+                            {order.status === 'cooking' && (
+                              <PickList
+                                items={order.items}
+                                onAllPicked={() => updateOrderStatus(order.id, 'delivering', 75, user?.uid ?? null)}
+                              />
+                            )}
+
+                            {order.status === 'delivering' && (
+                              <button
+                                onClick={() => updateOrderStatus(order.id, 'delivered', 100, user?.uid ?? null)}
+                                className="w-full py-3.5 bg-emerald-500 text-black hover:bg-emerald-400 rounded-full font-semibold text-xs tracking-wide"
+                              >
+                                ✅ Confirm Delivery Complete
+                              </button>
+                            )}
+                          </div>
+                        ) : (
+                          // Standard dropdown fallback
+                          <select
+                            className="w-full bg-[#0a0a0c] border border-white/10 rounded-lg px-3 py-2 text-xs text-white outline-none"
+                            onChange={(e) => {
+                              const s = e.target.value as 'cooking' | 'delivering' | 'delivered';
+                              const progress = s === 'delivered' ? 100 : s === 'delivering' ? 75 : 50;
+                              updateOrderStatus(order.id, s, progress, user?.uid ?? null);
+                            }}
+                          >
+                            <option value="">Update Status</option>
+                            <option value="cooking">Preparing Selection</option>
+                            <option value="delivering">Private Courier Transit</option>
+                            <option value="delivered">Delivered with Compliments</option>
+                          </select>
+                        )}
+
+                        <div className="flex gap-2 pt-2 border-t border-white/5">
                           <button 
                             onClick={() => handleUnassign(order.id)}
-                            className="flex-1 py-2 rounded-xl bg-on-background/[0.05] border border-on-background/[0.09] text-[10px] font-black uppercase tracking-widest text-on-surface-variant hover:bg-red-500/10 hover:text-red-600 hover:border-red-500/20 transition-all"
+                            className="flex-1 py-2 rounded-full bg-white/[0.03] border border-white/10 text-[10px] font-semibold tracking-wide text-white/70 hover:bg-red-500/10 hover:text-red-500 hover:border-red-500/20 transition-all"
                           >
-                            Unassign Driver
+                            Unassign
                           </button>
                           <button 
                             onClick={() => handleCancelOrder(order.id)}
-                            className="px-4 py-2 rounded-xl bg-on-background/[0.05] border border-on-background/[0.09] text-[10px] font-black uppercase tracking-widest text-on-surface-variant hover:bg-red-500/10 hover:text-red-600 hover:border-red-500/20 transition-all"
+                            className="px-4 py-2 rounded-full bg-white/[0.03] border border-white/10 text-[10px] font-semibold tracking-wide text-white/70 hover:bg-red-500/10 hover:text-red-500 hover:border-red-500/20 transition-all"
                           >
                             Cancel
                           </button>

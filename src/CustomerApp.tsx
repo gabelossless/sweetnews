@@ -24,7 +24,7 @@ import { CheckoutForm } from './components/organisms/CheckoutForm';
 import { CustomizationSheet } from './components/organisms/CustomizationSheet';
 import { ProductDetailSheet } from './components/organisms/ProductDetailSheet';
 import { InstallPrompt } from './components/pwa/InstallPrompt';
-import { OwlMascot } from './components/atoms/OwlMascot';
+import { Logo } from './components/atoms/Logo';
 
 // Views
 import { ShopView } from './views/ShopView';
@@ -234,12 +234,7 @@ export default function CustomerApp() {
 
     return (
       <div className={`relative bg-background text-on-background min-h-screen pb-[120px] md:pb-12 pt-[128px] md:pt-[82px] font-body-md selection:bg-white selection:text-black overflow-x-hidden ${isStandalone ? 'standalone-layout' : ''}`}>
-        {/* Atmospheric Background Glows */}
-        <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-          <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] rounded-full blur-[120px] opacity-10 bg-primary" />
-          <div className="absolute top-[30%] -right-[10%] w-[30%] h-[30%] rounded-full blur-[100px] opacity-10 bg-secondary" />
-          <div className="absolute -bottom-[10%] left-[20%] w-[50%] h-[30%] rounded-full blur-[120px] opacity-10 bg-primary-container" />
-        </div>
+        {/* Base background */}
 
         {/* TopAppBar */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-on-background/[0.07]">
@@ -250,19 +245,18 @@ export default function CustomerApp() {
               type="button"
               onClick={() => setActiveTab('shop')}
               aria-label="Sweet News — go to shop"
-              className="flex items-center gap-2 cursor-pointer select-none bg-transparent border-0 p-0"
+              className="flex items-center gap-3 cursor-pointer select-none bg-transparent border-0 p-0"
             >
-              <OwlMascot size={34} />
-              <div className="flex flex-col items-start">
-                <span className="text-[17px] font-black tracking-tight text-on-background leading-tight">Sweet News</span>
+              <Logo size={32} />
+              <div className="flex flex-col items-start border-l border-white/10 pl-2.5">
                 {isDeliveryOpen ? (
-                  <span className="flex items-center gap-1 text-[9px] font-black uppercase tracking-[0.18em] text-emerald-600 leading-none">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-live-pulse" />
-                    Live Now
+                  <span className="flex items-center gap-1.5 text-[9px] font-serif font-semibold tracking-wider text-emerald-500 leading-none uppercase">
+                    <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-live-pulse" />
+                    Concierge Active
                   </span>
                 ) : (
-                  <span className="text-[9px] font-black uppercase tracking-[0.18em] text-on-surface-variant leading-none">
-                    Opens {opensAt}
+                  <span className="text-[9px] font-serif font-semibold tracking-wider text-on-surface-variant leading-none uppercase">
+                    Atelier Closed
                   </span>
                 )}
               </div>
@@ -393,33 +387,35 @@ export default function CustomerApp() {
         </Suspense>
       </main>
 
-       {/* BottomNavBar Pill (mobile only) */}
-       <nav className="md:hidden fixed bottom-[calc(env(safe-area-inset-bottom,0px)+20px)] left-1/2 -translate-x-1/2 w-[90%] max-w-[380px] z-50 flex justify-around items-center px-4 py-3 bg-surface/60 backdrop-blur-3xl rounded-[32px] border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.6),_inset_0_1px_0_rgba(255,255,255,0.1)] transition-all duration-300 ring-1 ring-black/20">
-         <NavButton 
-           icon={<Store />} 
-           label="Shop" 
-           isActive={activeTab === 'shop'} 
-           onClick={() => setActiveTab('shop')} 
-         />
-         <NavButton 
-           icon={<Search />} 
-           label="Search" 
-           isActive={activeTab === 'search'} 
-           onClick={() => setActiveTab('search')} 
-         />
-         <NavButton 
-           icon={<ReceiptText />} 
-           label="Orders" 
-           isActive={activeTab === 'orders'} 
-           onClick={() => setActiveTab('orders')} 
-         />
-         <NavButton 
-           icon={<User />} 
-           label="Profile" 
-           isActive={activeTab === 'profile'} 
-           onClick={() => setActiveTab('profile')} 
-         />
-       </nav>
+       {/* BottomNavBar Luxury Glass Dock (mobile only) */}
+       <div className="md:hidden fixed bottom-5 left-1/2 -translate-x-1/2 w-[calc(100%-32px)] max-w-[398px] z-50">
+         <nav className="flex justify-around items-center px-3 py-2 bg-[#121215]/85 backdrop-blur-xl border border-white/[0.06] rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
+           <NavButton 
+             icon={<Store />} 
+             label="Shop" 
+             isActive={activeTab === 'shop'} 
+             onClick={() => setActiveTab('shop')} 
+           />
+           <NavButton 
+             icon={<Search />} 
+             label="Search" 
+             isActive={activeTab === 'search'} 
+             onClick={() => setActiveTab('search')} 
+           />
+           <NavButton 
+             icon={<ReceiptText />} 
+             label="Orders" 
+             isActive={activeTab === 'orders'} 
+             onClick={() => setActiveTab('orders')} 
+           />
+           <NavButton 
+             icon={<User />} 
+             label="Profile" 
+             isActive={activeTab === 'profile'} 
+             onClick={() => setActiveTab('profile')} 
+           />
+         </nav>
+       </div>
 
       {/* Cart Bottom Sheet Overlay */}
       <CartSheet
@@ -458,13 +454,13 @@ export default function CustomerApp() {
       <AnimatePresence>
         {toastMessage && (
           <motion.div
-            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+            initial={{ opacity: 0, y: 15, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className="fixed bottom-[100px] left-1/2 -translate-x-1/2 z-[100] flex items-center gap-3 bg-[#2a1a1f] text-white px-5 py-3.5 rounded-full shadow-[0_12px_40px_rgba(42,26,31,0.25)] md:bottom-28 border border-white/10"
+            exit={{ opacity: 0, y: 10, scale: 0.98 }}
+            className="fixed bottom-[90px] left-1/2 -translate-x-1/2 z-[100] flex items-center gap-2.5 bg-[#121215]/95 backdrop-blur-md text-[#fcfcfd] px-5 py-3.5 rounded-full border border-primary/30 font-medium text-[11.5px] tracking-wide shadow-lg shadow-black/50"
           >
-            <CheckCircle2 className="w-5 h-5 text-emerald-400 fill-emerald-400/20" />
-            <span className="font-label-bold text-[13px] font-bold">{toastMessage}</span>
+            <CheckCircle2 className="w-4 h-4 text-primary" />
+            <span>{toastMessage}</span>
           </motion.div>
         )}
       </AnimatePresence>

@@ -1,5 +1,12 @@
 # Sweet News Session Handoff
 
+## Baseline
+
+- Local repo: `C:\Users\Walt & Carter\Downloads\sweet-news`
+- Branch: `main`
+- Remote baseline: `origin/main` at `db526f7` (`Design: honey amber theme, lazy-loading, edge-case fixes & smoke test pass`)
+- Status on `2026-06-21`: local workspace is ahead only by uncommitted changes. Nothing new is committed on top of `db526f7`.
+
 ## Locked Decisions
 
 - Launch only in `Denver` and `Atlanta`.
@@ -7,7 +14,7 @@
 - Keep the catalog broad at `70-100` products.
 - Improve merchandising instead of reducing assortment.
 
-## Data Model Direction
+## Stable Model Direction
 
 - `orders` is the customer-facing summary snapshot.
 - `order_events` is the append-only audit trail and source of truth for timeline history.
@@ -19,33 +26,70 @@
   - `delivery_provider_id`
   - `external_tracking_url`
   - `courier_fee_allocation`
+- Visible order chain remains:
+  - `order.paid` -> `inventory.allocated` -> `dispatch.assigned`
 
-## Event Timeline
+## Current Local WIP
 
-The visible order chain should be:
+This workspace has an uncommitted visual and founder-ops pass on top of `db526f7`.
 
-`order.paid` -> `inventory.allocated` -> `dispatch.assigned`
+- Theme direction is shifting from honey amber / moss to an obsidian + champagne "atelier" look.
+- Customer copy is being reframed around concierge / courier language.
+- Admin is being reframed as `Sweet Atelier // Operations`.
+- A founder-delivery workflow is partially wired into admin:
+  - claim order
+  - navigate to destination
+  - start assembling
+  - use a local pick checklist
+  - confirm delivery complete
 
-Later transitions can continue from the same timeline without changing the schema.
+## Files With Uncommitted Changes
 
-## Code Changes Made
+- Modified:
+  - `src/AdminApp.tsx`
+  - `src/CustomerApp.tsx`
+  - `src/components/atoms/Button.tsx`
+  - `src/components/atoms/Logo.tsx`
+  - `src/components/molecules/CategoryChip.tsx`
+  - `src/components/molecules/NavButton.tsx`
+  - `src/components/molecules/ProductCard.tsx`
+  - `src/components/organisms/TrackerCard.tsx`
+  - `src/index.css`
+  - `src/views/ShopView.tsx`
+- Untracked:
+  - `src/components/organisms/PickList.tsx`
+  - `src/lib/operatingHours.ts`
 
-- Added timeline and dispatch types in `src/types/index.ts`.
-- Added provider-neutral timeline helpers in `src/lib/orderTimeline.ts`.
-- Updated order writes in `src/lib/orders.ts` to emit timeline events.
-- Updated admin dispatch UI in `src/AdminApp.tsx` to surface provider and timeline info.
-- Updated Firestore rules for `order_events` and `dispatch_jobs`.
-- Synced launch and roadmap docs to the new model.
+## What The WIP Actually Changes
 
-## Important Behavior
+- `src/index.css`, `Button`, `Logo`, `CategoryChip`, `NavButton`, `ProductCard`, `TrackerCard`, and `ShopView` are all part of the theme pass.
+- `src/CustomerApp.tsx` swaps the top-bar identity from `OwlMascot` to `Logo`, changes closed/open copy, and restyles the mobile dock + toast treatment.
+- `src/AdminApp.tsx` adds `PickList` and a founder-centric fulfillment branch when the assigned driver matches the owner UID.
+- `src/components/organisms/PickList.tsx` is local-state-only and does not write to Firestore.
+- `src/lib/operatingHours.ts` duplicates logic that already exists in `src/hooks/useDeliveryHours.ts` and is not wired into the app yet.
 
-- Fleet/admin status updates should always include the actor ID when possible.
-- The fleet screen no longer double-writes order status.
-- The admin panel now reads the event stream so state changes stay transparent.
+## Verification
 
-## Next Build Steps
+- `npm run build` fails on this machine because the repo path contains `Walt & Carter`.
+- `npx tsc --noEmit` fails for the same reason.
+- Use direct Node bypass commands instead:
+  - `node .\node_modules\typescript\bin\tsc --noEmit`
+  - `node .\node_modules\vite\bin\vite.js build`
+- `node .\node_modules\vite\bin\vite.js build` passes on the current workspace.
+- Vite still warns that the Firebase vendor chunk is larger than `500 kB`.
+- `node .\node_modules\typescript\bin\tsc --noEmit` currently fails with 8 errors:
+  - `src/AdminApp.tsx`: `ownerDriverUid` is referenced out of scope.
+  - `src/components/atoms/Logo.tsx`: unused `React` import.
+  - `src/components/molecules/NavButton.tsx`: `React.cloneElement` typing issue around `size`.
+  - `src/components/molecules/ProductCard.tsx`: unused `Sparkles` import.
+  - `src/CustomerApp.tsx`: unused `opensAt`.
+  - `src/views/ShopView.tsx`: unused `Moon` import.
+  - `src/views/ShopView.tsx`: unused `Logo` import.
 
-1. Finish verifying the new event-driven writes with `tsc --noEmit` and `vite build`.
-2. Complete any remaining admin UI cleanup for the new timeline model.
-3. Add third-party courier routing after manual/internal dispatch is stable.
-4. Keep notifications tied to the event stream, not ad hoc status overwrites.
+## Recommended Next Steps
+
+1. Fix the TypeScript errors before committing anything from this theme/ops pass.
+2. Decide whether the `operatingHours.ts` utility should replace `useDeliveryHours.ts` or be removed to avoid duplicate sources of truth.
+3. Sanity-check whether the new luxury/atelier voice is a deliberate brand change or just an experiment before propagating it further.
+4. If the theme pass stays, do a visual browser check on `/`, `/admin`, and `/fleet` after the TS gate is green.
+5. Keep using the direct Node bypass commands for this repo path on Windows.

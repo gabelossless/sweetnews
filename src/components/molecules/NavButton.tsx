@@ -11,66 +11,52 @@ interface NavButtonProps {
 export function NavButton({ icon, label, isActive, onClick }: NavButtonProps) {
   return (
     <motion.button
-      whileTap={{ scale: 0.82 }}
+      whileTap={{ scale: 0.95 }}
       onClick={onClick}
       aria-label={label}
-      className={`relative flex flex-col items-center justify-center w-16 h-14 rounded-[18px] transition-all duration-300 ${
+      className={`relative flex flex-col items-center justify-center w-16 h-12 rounded-full transition-all duration-150 ${
         isActive
           ? ''
-          : 'text-on-surface-variant hover:text-on-background/75 hover:bg-on-background/[0.05]'
+          : 'text-on-surface-variant hover:text-on-background/75'
       }`}
     >
-      {/* Active background pill */}
+      {/* Active background outline */}
       <AnimatePresence>
         {isActive && (
           <motion.div
             layoutId="nav-active-bg"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ type: 'spring', stiffness: 380, damping: 28 }}
-            className="absolute inset-0 rounded-[18px] bg-gradient-to-b from-pink/20 to-pink/5 border border-pink/30 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="absolute inset-0 rounded-full bg-primary/10 border border-primary/20"
           />
         )}
       </AnimatePresence>
 
       {/* Icon */}
-      <motion.div
-        animate={isActive ? { y: -1, scale: 1.08 } : { y: 0, scale: 1 }}
-        transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-        className={`relative z-10 transition-all duration-200 ${
+      <div
+        className={`relative z-10 transition-all duration-150 ${
           isActive
-            ? 'text-pink drop-shadow-[0_0_12px_rgba(255,77,141,0.8)]'
+            ? 'text-primary'
             : ''
         }`}
       >
-        {icon}
-      </motion.div>
+        {React.cloneElement(icon as React.ReactElement, { size: 18, strokeWidth: isActive ? 2.5 : 2 })}
+      </div>
 
-      {/* Label — slides up into view when active */}
+      {/* Label */}
       <AnimatePresence>
         {isActive && (
           <motion.span
-            initial={{ opacity: 0, y: 4 }}
+            initial={{ opacity: 0, y: 2 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 4 }}
-            transition={{ duration: 0.18, ease: 'easeOut' }}
-            className="relative z-10 font-headline-md text-[8px] font-black tracking-[0.18em] uppercase mt-0.5 text-pink leading-none"
+            exit={{ opacity: 0, y: 2 }}
+            transition={{ duration: 0.12 }}
+            className="relative z-10 font-medium text-[8px] tracking-wider uppercase mt-1 text-primary leading-none"
           >
             {label}
           </motion.span>
-        )}
-      </AnimatePresence>
-
-      {/* Live dot indicator at bottom */}
-      <AnimatePresence>
-        {isActive && (
-          <motion.span
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            exit={{ scale: 0 }}
-            className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-pink animate-live-pulse shadow-[0_0_6px_rgba(255,77,141,0.8)]"
-          />
         )}
       </AnimatePresence>
     </motion.button>

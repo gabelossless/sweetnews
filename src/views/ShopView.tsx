@@ -42,73 +42,65 @@ export function ShopView({
     >
       <section className="mb-8 px-1">
         <motion.div
-          initial={{ opacity: 0, y: 18 }}
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
-          className="relative overflow-hidden rounded-[36px] border border-on-background/[0.08] bg-gradient-to-br from-[#111612] via-[#070707] to-[#000000] p-5 md:p-6 shadow-[0_24px_90px_rgba(0,0,0,0.48)]"
+          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          className="relative overflow-hidden rounded-[24px] border border-white/[0.05] bg-surface p-6 md:p-7 shadow-[0_12px_40px_rgba(0,0,0,0.5)]"
         >
-          <div className="absolute -left-16 -top-20 h-48 w-48 rounded-full bg-primary/25 blur-[110px]" />
-          <div className="absolute right-0 top-0 h-32 w-32 rounded-full bg-secondary/20 blur-[90px]" />
-
           <div className="relative z-10 flex items-start justify-between gap-4">
-            <div className="max-w-[18rem]">
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.22em] text-white/70">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-live-pulse" />
-                Denver + Atlanta launch
+            <div>
+              <div className="inline-flex items-center gap-1.5 font-serif text-[11px] italic tracking-wide text-primary uppercase">
+                <span className="w-1.5 h-1.5 bg-primary rounded-full animate-live-pulse" />
+                The Late-Night Selection
               </div>
-              <h1 className="mt-4 text-[34px] md:text-[38px] font-black uppercase tracking-tighter leading-[0.88] text-white">
-                Sweet News
+              <h1 className="mt-3 text-[36px] font-serif font-light leading-none text-white tracking-tight">
+                Sweet <span className="font-semibold italic text-primary">News</span>
               </h1>
-              <p className="mt-3 text-[13px] leading-relaxed text-white/72 max-w-[24ch]">
-                Late-night snacks, drinks, and essentials delivered fast.
+              <p className="mt-2.5 text-[12px] leading-relaxed text-on-surface-variant font-light max-w-[24rem]">
+                Curated confectioneries, artisanal snacks, and fresh newspapers delivered directly to your door by private courier.
               </p>
             </div>
-
-            <Logo size={64} className="shrink-0 drop-shadow-[0_10px_30px_rgba(0,0,0,0.35)]" />
           </div>
 
-          <div className="relative z-10 mt-5 grid grid-cols-3 gap-2">
+          <div className="relative z-10 mt-6 grid grid-cols-3 gap-2.5">
             {[
-              { title: '70+ products', subtitle: 'Broad launch catalog' },
-              { title: '10 mi', subtitle: 'Default downtown cap' },
-              { title: 'Founder dispatch', subtitle: 'Manual first, scale later' },
+              { title: '70+ Selections', subtitle: 'HANDPICKED DROPS' },
+              { title: '10.0 MI Radius', subtitle: 'PRIVATE COURIER' },
+              { title: 'Bespoke Duty', subtitle: 'OWNER DISPATCH' },
             ].map((item) => (
               <div
                 key={item.title}
-                className="rounded-2xl border border-white/8 bg-white/[0.035] px-3 py-3 backdrop-blur-sm"
+                className="rounded-[14px] border border-white/[0.04] bg-[#0c0c0e] p-3.5"
               >
-                <p className="text-[12px] font-black uppercase tracking-[0.12em] text-white">
+                <p className="text-[13px] font-serif font-medium tracking-tight text-primary">
                   {item.title}
                 </p>
-                <p className="mt-1 text-[9px] uppercase tracking-[0.16em] text-white/50">
+                <p className="mt-1.5 text-[8.5px] font-medium text-on-surface-variant tracking-wider uppercase">
                   {item.subtitle}
                 </p>
               </div>
             ))}
           </div>
 
-          <div className="relative z-10 mt-5 flex flex-wrap gap-3">
+          <div className="relative z-10 mt-6 flex flex-wrap gap-2.5">
             <Button
               type="button"
               variant="brand"
-              whileTapScale={0.96}
+              whileTapScale={0.98}
               onClick={() => setSelectedCategory('snacks')}
-              className="h-12 rounded-full px-5 text-[10px] uppercase tracking-[0.22em]"
+              className="h-10 px-5 text-[11px] font-medium tracking-wide"
             >
-              Browse snacks
+              Browse Collections
             </Button>
             <button
               type="button"
               onClick={onNavigateToNews}
-              className="inline-flex h-12 items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-5 text-[10px] font-black uppercase tracking-[0.22em] text-white/75 transition-colors hover:bg-white/[0.07] hover:text-white"
+              className="inline-flex h-10 items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-5 text-[11px] font-medium tracking-wide text-white/80 hover:bg-white/[0.06] hover:text-white transition-all"
             >
-              Read the story
-              <ArrowRight size={12} />
+              The Chronicle
+              <ArrowRight size={11} className="text-primary" />
             </button>
           </div>
-
-          <div className="absolute -right-8 bottom-0 h-40 w-40 rounded-full bg-primary/10 blur-[100px]" />
-          <Moon className="absolute right-4 bottom-4 h-24 w-24 rotate-[-20deg] text-white/5 fill-current" />
         </motion.div>
       </section>
 
@@ -160,22 +152,22 @@ export function ShopView({
       <section className={`mb-8 ${isAllCategories ? 'mt-10' : 'mt-6'}`}>
         <div className="flex items-end justify-between gap-4 mb-4 px-1">
           <div>
-            <p className="text-[9px] font-black uppercase tracking-[0.28em] text-on-surface-variant mb-1">
-              {isAllCategories ? 'Full catalog' : 'Filtered view'}
+            <p className="text-[9px] font-semibold uppercase tracking-[0.25em] text-primary mb-1">
+              {isAllCategories ? 'The Collection' : 'Curated Selection'}
             </p>
-            <h2 className="text-[20px] font-black tracking-tight text-on-background leading-tight">
-              {isAllCategories ? 'The Vault' : selectedCategoryLabel}
+            <h2 className="text-[24px] font-serif font-medium tracking-tight text-white leading-tight">
+              {isAllCategories ? 'The Midnight Collection' : selectedCategoryLabel}
             </h2>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-[10px] text-on-surface-variant font-black uppercase tracking-widest bg-on-background/[0.05] px-2.5 py-1.5 rounded-full border border-on-background/[0.05]">
-              {filteredProducts.length} drops
+            <span className="text-[10px] text-on-surface-variant font-medium uppercase tracking-widest bg-white/[0.03] px-3 py-1 rounded-full border border-white/[0.04]">
+              {filteredProducts.length} Selections
             </span>
             {!isAllCategories && (
               <button
                 type="button"
                 onClick={() => setSelectedCategory('all')}
-                className="text-[10px] font-black uppercase tracking-[0.2em] text-primary hover:text-primary/70 transition-colors"
+                className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary hover:text-primary/70 transition-colors"
               >
                 Clear
               </button>
@@ -183,10 +175,10 @@ export function ShopView({
           </div>
         </div>
 
-        <p className="text-[12px] text-on-surface-variant leading-relaxed px-1 mb-4 max-w-[32ch]">
+        <p className="text-[12.5px] font-light text-on-surface-variant leading-relaxed px-1 mb-5 max-w-[36ch]">
           {isAllCategories
-            ? 'The curated sections above lead the story. The full catalog stays available below for search-driven browsing.'
-            : 'This filter stays focused so the home screen feels calm while the full catalog remains one tap away.'}
+            ? 'Explore our curated late-night collection, selected for the discerning night owl. Delivered fresh, with speed and absolute discretion.'
+            : 'Focused selections curated to bring you the best culinary accompaniments for your late hours.'}
         </p>
 
         {filteredProducts.length > 0 ? (

@@ -24,17 +24,15 @@ export function Button({
 }: ButtonProps) {
 
   const variants = {
-    // Red → pink gradient — main CTA
-    brand: 'btn-brand font-black',
-    // Clean surface — secondary CTA
-    primary: 'bg-surface text-on-background hover:bg-surface-dim shadow-[0_10px_30px_rgba(42,26,31,0.10)] font-black',
-    secondary: 'bg-on-background/[0.05] border border-on-background/[0.09] text-on-background hover:bg-on-background/[0.07] font-black',
-    outline: 'bg-transparent border border-on-background/[0.09] text-on-background hover:bg-on-background/[0.05] font-black',
-    ghost: 'bg-transparent text-on-surface-variant hover:text-on-background hover:bg-on-background/[0.05]',
+    brand: 'btn-brand font-medium tracking-wide',
+    primary: 'bg-surface border border-white/5 text-on-background hover:bg-surface-bright font-medium tracking-wide',
+    secondary: 'bg-white/[0.03] border border-white/[0.06] text-on-background hover:bg-white/[0.06] font-medium tracking-wide',
+    outline: 'bg-transparent border border-white/10 text-white hover:bg-white/5 font-medium tracking-wide',
+    ghost: 'bg-transparent text-on-surface-variant hover:text-on-background hover:bg-white/[0.03] font-medium tracking-wide',
   };
 
   const baseStyles =
-    'relative flex items-center justify-center gap-2 rounded-2xl px-6 py-4 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden';
+    'relative flex items-center justify-center gap-2 rounded-full px-6 py-3.5 transition-all active:scale-98 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden';
 
   return (
     <motion.button

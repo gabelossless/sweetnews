@@ -1,66 +1,61 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
 @import "tailwindcss";
 
 @theme {
-  /* ─── Natural Forest & Honey Caramel (premium dark theme) ────────
-     Background: deep moss-black. Text: pistachio cream.
-     Surfaces: deep moss-stone. Primary accent: sweet amber-caramel.
-     Secondary: organic mint green. Outline: subtle forest/slate borders. */
-  --color-background: #0b0e0c;            /* forest shadow / moss-black */
-  --color-surface: #141815;              /* deep moss-stone card background */
-  --color-surface-bright: #1b221d;
-  --color-surface-dim: #1e2621;          /* input/well background */
-  --color-surface-container-lowest: #111512;
-  --color-surface-container-low: #141815;
-  --color-surface-container: #1a201b;
-  --color-surface-container-high: #202822;
-  --color-surface-container-highest: #28322a;
+  /* ─── Obsidian & Champagne Atelier (Luxury Midnight Theme) ────────
+     Background: deep obsidian black. Text: cashmere white.
+     Surfaces: warm slate/charcoal. Primary active accent: champagne gold.
+     Borders: ultra-thin gold or slate outlines. */
+  --color-background: #070709;            /* deep obsidian black */
+  --color-surface: #121215;              /* warm dark slate card background */
+  --color-surface-bright: #1c1c20;
+  --color-surface-dim: #1e1e24;          /* input/well background */
+  --color-surface-container-lowest: #030304;
+  --color-surface-container-low: #0b0b0e;
+  --color-surface-container: #121215;
+  --color-surface-container-high: #19191e;
+  --color-surface-container-highest: #202026;
 
-  --color-on-background: #f1f5f1;        /* pistachio cream / soft off-white */
-  --color-on-surface: #f1f5f1;
-  --color-surface-variant: #1e2621;
-  --color-on-surface-variant: #8ba895;   /* soft sage green secondary text */
+  --color-on-background: #fcfcfd;        /* cashmere white text */
+  --color-on-surface: #fcfcfd;
+  --color-surface-variant: #18181c;
+  --color-on-surface-variant: #8e8e93;   /* elegant subtext grey */
 
-  --color-primary: #d97706;              /* warm sweet caramel/honey amber */
-  --color-pink: #ff4d8d;                     /* berry pink accent */
-  --color-on-primary: #ffffff;
-  --color-primary-container: #3a2503;    /* dark warm caramel container */
-  --color-on-primary-container: #ffedd5;
+  --color-primary: #d4af37;              /* champagne gold */
+  --color-pink: #d4af37;                 /* override pink with gold */
+  --color-on-primary: #000000;           /* black text for high readability */
+  --color-primary-container: #2c240d;    /* deep gold container */
+  --color-on-primary-container: #f5e3b5;
 
-  --color-secondary: #10b981;            /* mint green secondary */
-  --color-on-secondary: #ffffff;
-  --color-secondary-container: #064e3b;
-  --color-on-secondary-container: #d1fae5;
+  --color-secondary: #fcfcfd;            /* cashmere white highlight */
+  --color-on-secondary: #000000;
+  --color-secondary-container: #1c1c20;
+  --color-on-secondary-container: #fcfcfd;
 
-  --color-tertiary: #8ba895;             /* sage green */
-  --color-on-tertiary: #ffffff;
+  --color-tertiary: #8e8e93;
+  --color-on-tertiary: #000000;
 
-  --color-outline: #222924;              /* subtle forest border */
-  --color-outline-variant: #2e3831;
+  --color-outline: #1c1c1f;              /* slate border */
+  --color-outline-variant: #2a2a2e;
 
-  --color-inverse-surface: #f1f5f1;
-  --color-inverse-on-surface: #0b0e0c;
-  --color-inverse-primary: #d97706;
+  --color-inverse-surface: #fcfcfd;
+  --color-inverse-on-surface: #000000;
+  --color-inverse-primary: #d4af37;
 
-  --color-error: #ef4444;                /* bright red for warnings */
+  --color-error: #e55c5c;                /* elegant warm red */
   --color-on-error: #ffffff;
-  --color-error-container: #7f1d1d;
+  --color-error-container: #451010;
   --color-on-error-container: #fca5a5;
 
-  --color-primary-fixed: #ffedd5;
-  --color-primary-fixed-dim: #fed7aa;
-  --color-on-primary-fixed: #451a03;
-  --color-on-primary-fixed-variant: #78350f;
+  --color-primary-fixed: #fcf6df;
+  --color-primary-fixed-dim: #f3e6bd;
+  --color-on-primary-fixed: #453203;
+  --color-on-primary-fixed-variant: #785a0f;
 
-  --color-secondary-fixed: #d1fae5;
-  --color-secondary-fixed-dim: #a7f3d0;
-  --color-on-secondary-fixed: #064e3b;
-  --color-on-secondary-fixed-variant: #047857;
-
-  --color-tertiary-fixed: #e2ebd5;
-  --color-tertiary-fixed-dim: #c2d8aa;
-  --color-on-tertiary-fixed: #1e2d03;
-  --color-on-tertiary-fixed-variant: #3a530f;
+  --color-secondary-fixed: #f2f2f7;
+  --color-secondary-fixed-dim: #e5e5ea;
+  --color-on-secondary-fixed: #000000;
+  --color-on-secondary-fixed-variant: #3a3a3c;
 
   --spacing-base: 8px;
   --spacing-xs: 4px;
@@ -70,12 +65,13 @@
   --spacing-gutter: 16px;
   --spacing-lg: 40px;
 
-  --font-headline-md: "Outfit", sans-serif;
-  --font-headline-lg: "Outfit", sans-serif;
+  --font-headline-md: "Cormorant Garamond", serif;
+  --font-headline-lg: "Cormorant Garamond", serif;
   --font-body-lg: "Inter", sans-serif;
   --font-body-md: "Inter", sans-serif;
-  --font-display-xl: "Outfit", sans-serif;
+  --font-display-xl: "Cormorant Garamond", serif;
   --font-label-bold: "Inter", sans-serif;
+  --font-serif: "Cormorant Garamond", serif;
 }
 
 /* Global Safe Area & Layout Adaptations */
@@ -87,12 +83,10 @@ html, body {
   font-family: var(--font-body-md);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Top/bottom safe areas are handled per-component (header pt, standalone-layout pb).
-     Left/right are applied here for landscape iPhone notch. */
   padding-left: env(safe-area-inset-left, 0px);
   padding-right: env(safe-area-inset-right, 0px);
   overflow-x: hidden;
-  overscroll-behavior-y: contain; /* Prevents viewport rubber-banding elastic scroll in safari standalones */
+  overscroll-behavior-y: contain;
 }
 
 @layer utilities {
@@ -104,22 +98,23 @@ html, body {
     scrollbar-width: none;
   }
 
-  /* Brand gradient — sweet caramel to deep amber */
+  /* Luxury branding style - warm gold glow and soft lift */
   .btn-brand {
-    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
-    box-shadow: 0 8px 28px rgba(217, 119, 6, 0.30), 0 2px 8px rgba(180, 83, 9, 0.22);
-    color: #fff;
+    background-color: #d4af37;
+    color: #000000;
+    border: 1px solid #d4af37;
+    box-shadow: 0 4px 18px rgba(212, 175, 55, 0.18);
   }
   .btn-brand:hover {
-    box-shadow: 0 12px 36px rgba(217, 119, 6, 0.40), 0 4px 12px rgba(180, 83, 9, 0.32);
+    background-color: #e5c158;
+    border-color: #e5c158;
+    box-shadow: 0 6px 24px rgba(229, 193, 88, 0.3);
   }
   .glow-brand {
-    box-shadow: 0 0 24px rgba(217, 119, 6, 0.28), 0 0 48px rgba(180, 83, 9, 0.16);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
   }
 }
 
-/* Standalone PWA layout: body no longer adds safe-area-inset-top, so we
-   include it here. 116px = header rows (60 brand + 52 search + 4 buffer). */
 .standalone-layout {
   padding-top: calc(env(safe-area-inset-top, 0px) + 116px) !important;
   padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 100px) !important;
@@ -130,20 +125,16 @@ html, body {
   0%   { transform: translateX(-100%) skewX(-15deg); }
   100% { transform: translateX(300%) skewX(-15deg); }
 }
-@keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 20px rgba(217, 119, 6, 0.3), 0 0 40px rgba(217, 119, 6, 0.1); }
-  50%       { box-shadow: 0 0 35px rgba(217, 119, 6, 0.5), 0 0 70px rgba(217, 119, 6, 0.2); }
-}
-@keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50%       { transform: translateY(-8px) rotate(2deg); }
+@keyframes gold-pulse {
+  0%, 100% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.08); }
+  50%       { box-shadow: 0 0 25px rgba(212, 175, 55, 0.22); }
 }
 @keyframes live-pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.5; transform: scale(0.85); }
+  50%       { opacity: 0.5; transform: scale(0.92); }
 }
 @keyframes slide-up-fade {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 @keyframes spin-slow {
@@ -156,35 +147,35 @@ html, body {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.07) 50%, transparent 100%);
-    animation: shimmer-sweep 2.5s ease-in-out infinite;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%);
+    animation: shimmer-sweep 2.8s ease-in-out infinite;
   }
-  .animate-glow-pulse  { animation: glow-pulse 2.5s ease-in-out infinite; }
-  .animate-float       { animation: float 4s ease-in-out infinite; }
+  .animate-glow-pulse  { animation: gold-pulse 3s ease-in-out infinite; }
   .animate-live-pulse  { animation: live-pulse 1.5s ease-in-out infinite; }
-  .animate-slide-up    { animation: slide-up-fade 0.35s ease both; }
-  .animate-spin-slow   { animation: spin-slow 8s linear infinite; }
+  .animate-slide-up    { animation: slide-up-fade 0.35s cubic-bezier(0.16, 1, 0.3, 1) both; }
+  .animate-spin-slow   { animation: spin-slow 15s linear infinite; }
 
-  /* Card hover glow that responds to brand color */
+  /* Premium hover style - soft lift with gold tinted border */
   .card-hover-lift {
     will-change: transform;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
   }
   .card-hover-lift:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    border-color: rgba(212, 175, 55, 0.25) !important;
   }
   .card-hover-glow {
-    transition: box-shadow 0.4s ease, transform 0.3s ease;
+    transition: border-color 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .card-hover-glow:hover {
-    box-shadow: 0 0 0 1px rgba(217,119,6,0.15), 0 20px 60px rgba(217,119,6,0.12);
+    border-color: rgba(212, 175, 55, 0.35) !important;
     transform: translateY(-2px);
   }
 
-  /* Frosted dark natural glass panel */
+  /* Luxury glass panel */
   .glass-panel {
-    background: rgba(20, 24, 21, 0.75);
-    border: 1px solid rgba(241, 245, 241, 0.08);
+    background: rgba(18, 18, 21, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.04);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
   }

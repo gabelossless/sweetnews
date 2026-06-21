@@ -1,4 +1,4 @@
-import { useId } from 'react';
+import React from 'react';
 
 interface LogoProps {
   size?: number;
@@ -6,37 +6,15 @@ interface LogoProps {
 }
 
 export function Logo({ size = 48, className = '' }: LogoProps) {
-  // useId ensures each Logo instance gets unique SVG gradient IDs —
-  // duplicate IDs in one document cause broken renders in Safari.
-  const uid = useId().replace(/:/g, '');
-  const gradId = `sn-g-${uid}`;
-  const glowId = `sn-w-${uid}`;
-
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 48 48"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
+    <div
+      className={`flex items-center font-serif select-none tracking-wide ${className}`}
+      style={{ fontSize: `${size * 0.42}px`, height: `${size}px` }}
       aria-hidden="true"
-      focusable="false"
     >
-      <defs>
-        <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#d97706" />
-          <stop offset="100%" stopColor="#b45309" />
-        </linearGradient>
-        <radialGradient id={glowId} cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#d97706" stopOpacity="0.4" />
-          <stop offset="100%" stopColor="#d97706" stopOpacity="0" />
-        </radialGradient>
-      </defs>
-      <circle cx="24" cy="24" r="22" fill={`url(#${gradId})`} />
-      <circle cx="24" cy="24" r="22" fill={`url(#${glowId})`} />
-      {/* Crescent moon */}
-      <path d="M30 16a10 10 0 1 0 0 16 8 8 0 1 1 0-16z" fill="#fff" opacity="0.95" />
-    </svg>
+      <span className="text-[#fcfcfd] font-light">Sweet</span>
+      <span className="text-primary font-medium italic ml-1.5">News</span>
+    </div>
   );
 }
 

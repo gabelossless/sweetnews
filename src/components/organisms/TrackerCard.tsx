@@ -10,21 +10,21 @@ interface TrackerCardProps {
 }
 
 const STATUS_LABELS: Record<string, string> = {
-  confirmed: 'Confirmed',
-  cooking: 'Preparing',
-  delivering: 'On the way',
-  delivered: 'Delivered',
-  cancelled: 'Cancelled',
-  pending: 'Pending',
+  confirmed: 'Order Curated',
+  cooking: 'Preparing Selection',
+  delivering: 'Courier in Transit',
+  delivered: 'Delivered with Compliments',
+  cancelled: 'Selection Cancelled',
+  pending: 'Awaiting Concierge',
 };
 
-const PROGRESS_STEPS = ['Confirmed', 'Preparing', 'On the way', 'Delivered'];
+const PROGRESS_STEPS = ['Curated', 'Preparing', 'In Transit', 'Delivered'];
 const STEP_STATUSES = ['confirmed', 'cooking', 'delivering', 'delivered'];
 
 function formatEta(etaMins: number): { absolute: string; relative: string } {
   const arrive = new Date(Date.now() + etaMins * 60_000);
   const absolute = arrive.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-  const relative = etaMins < 1 ? 'arriving now' : `in ~${etaMins} min`;
+  const relative = etaMins < 1 ? 'Arriving Now' : `Est. Arrival in ${etaMins} min`;
   return { absolute, relative };
 }
 
@@ -91,34 +91,34 @@ export function TrackerCard({ order }: TrackerCardProps) {
 
   return (
     <div
-      className={`rounded-[24px] border p-5 relative ${
+      className={`rounded-[20px] border p-6 relative ${
         isCancelled
-          ? 'border-on-background/[0.07] opacity-60 bg-on-background/[0.03]'
+          ? 'border-white/5 opacity-60 bg-white/[0.01]'
           : isActive
-          ? 'border-on-background/[0.09] bg-surface'
-          : 'border-on-background/[0.07] bg-on-background/[0.03]'
+          ? 'border-white/[0.06] bg-surface shadow-lg'
+          : 'border-white/5 bg-white/[0.01]'
       }`}
     >
       {/* ── ETA hero (active orders only) ────────────────── */}
       {isActive && eta && (
-        <div className="mb-5">
-          <p className="text-[10px] uppercase tracking-[0.25em] text-on-surface-variant font-bold mb-1">
-            Arriving by
+        <div className="mb-5 bg-[#0c0c0e] border border-white/[0.04] p-4.5 rounded-[14px]">
+          <p className="text-[9px] uppercase tracking-widest text-[#d4af37]/80 mb-1.5 font-semibold">
+            Estimated Timeline
           </p>
-          <p className="text-2xl font-black text-on-background tracking-tight leading-none">
-            {eta.absolute}
+          <p className="text-xl font-serif font-light text-primary leading-none">
+            {eta.relative}
           </p>
-          <p className="text-xs text-on-surface-variant mt-1">{eta.relative}</p>
+          <p className="text-[10px] text-on-surface-variant mt-2">Scheduled Delivery: {eta.absolute}</p>
         </div>
       )}
 
       {isActive && !eta && (
-        <div className="mb-5">
-          <p className="text-[10px] uppercase tracking-[0.25em] text-on-surface-variant font-bold mb-1">
-            Status
+        <div className="mb-5 bg-[#0c0c0e] border border-white/[0.04] p-4.5 rounded-[14px]">
+          <p className="text-[9px] uppercase tracking-widest text-on-surface-variant mb-1.5 font-semibold">
+            Concierge Dispatch
           </p>
-          <p className="text-xl font-black text-on-background tracking-tight leading-none">
-            Calculating ETA…
+          <p className="text-lg font-serif font-light text-white leading-none animate-pulse">
+            Calculating estimated time...
           </p>
         </div>
       )}
@@ -127,22 +127,22 @@ export function TrackerCard({ order }: TrackerCardProps) {
       <div className="flex justify-between items-start mb-4">
         <div>
           <span
-            className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full border ${
+            className={`text-[10px] font-medium tracking-wide px-3 py-0.5 rounded-full border ${
               isCancelled
-                ? 'bg-on-background/[0.03] text-on-surface-variant border-on-background/[0.07]'
+                ? 'bg-red-500/10 text-red-400 border-red-500/20'
                 : isDelivered
-                ? 'bg-emerald-500/[0.08] text-emerald-600 border-emerald-500/[0.15]'
-                : 'bg-on-background/[0.05] text-on-background border-on-background/[0.09]'
+                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                : 'bg-primary/10 text-primary border-primary/20'
             }`}
           >
             {STATUS_LABELS[order.status] ?? order.status}
           </span>
-          <p className="text-[10px] text-on-surface-variant font-medium mt-2 tracking-wide">
-            #{shortId} · {order.date}
+          <p className="text-[10px] text-on-surface-variant mt-2.5 tracking-wide">
+            Order #{shortId} · {order.date}
           </p>
         </div>
         <div className="text-right">
-          <p className="text-lg font-black text-on-background tracking-tight">
+          <p className="text-base font-medium text-white tracking-tight">
             ${order.total.toFixed(2)}
           </p>
           <p className="text-[10px] text-on-surface-variant mt-0.5">
@@ -153,30 +153,48 @@ export function TrackerCard({ order }: TrackerCardProps) {
 
       {/* ── Progress (active only) ──────────────────────── */}
       {isActive && (
-        <div className="mb-5">
-          <div className="flex justify-between mb-2">
-            {PROGRESS_STEPS.map((step, i) => (
-              <span
-                key={step}
-                className={`text-[9px] font-bold transition-colors ${
-                  i === currentStepIndex
-                    ? 'text-on-background'
-                    : i < currentStepIndex
-                    ? 'text-on-surface-variant'
-                    : 'text-on-background/30'
-                }`}
-              >
-                {step}
-              </span>
-            ))}
-          </div>
-          <div className="relative h-[3px] bg-on-background/[0.07] rounded-full overflow-hidden">
-            <motion.div
-              className="absolute inset-y-0 left-0 rounded-full bg-primary"
-              initial={{ width: 0 }}
-              animate={{ width: `${order.progress}%` }}
-              transition={{ duration: 1.0, ease: 'easeOut' }}
+        <div className="mb-8 mt-5">
+          <div className="relative flex justify-between items-center px-1">
+            {/* Background line */}
+            <div className="absolute left-4 right-4 top-1/2 -translate-y-1/2 h-[2px] bg-white/[0.06] z-0" />
+            {/* Active filled line */}
+            <div 
+              className="absolute left-4 top-1/2 -translate-y-1/2 h-[2px] bg-primary z-0 transition-all duration-500" 
+              style={{ width: `${Math.max(0, (currentStepIndex / 3) * 100)}%`, maxWidth: 'calc(100% - 32px)' }}
             />
+            
+            {PROGRESS_STEPS.map((step, i) => {
+              const isCompleted = i <= currentStepIndex;
+              const isCurrent = i === currentStepIndex;
+              return (
+                <div key={step} className="relative z-10 flex flex-col items-center">
+                  <div 
+                    className={`w-3.5 h-3.5 rounded-full flex items-center justify-center border transition-all duration-300 ${
+                      isCurrent 
+                        ? 'bg-primary border-primary ring-4 ring-primary/25 scale-110'
+                        : isCompleted
+                        ? 'bg-primary border-primary'
+                        : 'bg-surface border-white/10'
+                    }`}
+                  >
+                    {isCompleted && (
+                      <div className="w-1.5 h-1.5 rounded-full bg-black" />
+                    )}
+                  </div>
+                  <span
+                    className={`text-[9px] font-medium mt-2 tracking-wide whitespace-nowrap ${
+                      isCurrent
+                        ? 'text-primary font-semibold'
+                        : isCompleted
+                        ? 'text-white/80'
+                        : 'text-white/30'
+                    }`}
+                  >
+                    {step}
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
@@ -229,9 +247,9 @@ export function TrackerCard({ order }: TrackerCardProps) {
             </div>
           )}
           <div className="flex-1 min-w-0">
-            <p className="text-[10px] text-on-surface-variant font-medium mb-0.5">Your driver</p>
-            <p className="text-sm font-bold text-on-background truncate">
-              {order.driverSnapshot?.name ?? 'Sweet News Driver'}
+            <p className="text-[10px] text-on-surface-variant font-medium mb-0.5">Your courier</p>
+            <p className="text-sm font-semibold text-on-background truncate">
+              {order.driverSnapshot?.name ?? 'Sweet News Courier'}
             </p>
           </div>
           <a
@@ -247,8 +265,8 @@ export function TrackerCard({ order }: TrackerCardProps) {
       {/* ── Dispatching notice (active, no driver yet) ── */}
       {!order.driverId && isActive && (
         <div className="flex items-center gap-2 mb-5 text-[11px] text-on-surface-variant">
-          <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
-          Finding you a driver…
+          <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37] animate-live-pulse" />
+          Assigning a private courier…
         </div>
       )}
 
@@ -354,7 +372,7 @@ export function TrackerCard({ order }: TrackerCardProps) {
                       whileTap={{ scale: 0.96 }}
                       onClick={handleSubmitReview}
                       disabled={!review.trim() || submittingReview}
-                      className="w-full py-3 btn-brand text-white font-black uppercase tracking-[0.2em] text-[11px] rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full py-3.5 btn-brand text-black font-semibold tracking-wider text-[11px] rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {submittingReview ? 'Submitting...' : 'Submit Review'}
                     </motion.button>
