@@ -91,6 +91,10 @@ Phase 13+:   Multi-City + Admin Dashboard + Scale ──────────
 
 | Change | Files |
 |---|---|
+| Responsive PWA layout overhaul (desktop split hero, wide headers, responsive 3/4 col product grids, right-sidebar cart drawer, centered popups) | `src/CustomerApp.tsx`, `src/components/organisms/CartSheet.tsx`, `src/views/ShopView.tsx`, `src/components/organisms/MerchSection.tsx`, `src/components/organisms/ProductDetailSheet.tsx`, `src/components/organisms/CustomizationSheet.tsx`, `src/views/ProfileView.tsx` |
+| Obsidian & Champagne Atelier visual design (Cormorant Garamond, gold accents, rounded curves) | `src/index.css`, `src/components/*`, `src/views/*` |
+| Cloned and integrated Leonxlnx/taste-skill rules under .agents/skills | `.agents/skills/*`, `skills-lock.json` |
+| Resolved all React/TypeScript compiler bugs, validated production build passes | Config / Build |
 | Order timeline model + provider-neutral dispatch jobs added | `src/types/index.ts`, `src/lib/orderTimeline.ts`, `src/lib/orders.ts`, `src/AdminApp.tsx` |
 | Launch focus narrowed to Denver + Atlanta with downtown-centered service radius | `docs/LAUNCH_PLAN.md`, `docs/ROADMAP.md` |
 | Shop home reworked into curated merch sections + full catalog vault | `src/views/ShopView.tsx`, `src/utils/merchandising.ts`, `src/components/organisms/MerchSection.tsx` |

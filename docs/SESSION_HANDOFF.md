@@ -1,95 +1,57 @@
 # Sweet News Session Handoff
 
-## Baseline
+## Baseline Status
 
-- Local repo: `C:\Users\Walt & Carter\Downloads\sweet-news`
-- Branch: `main`
-- Remote baseline: `origin/main` at `db526f7` (`Design: honey amber theme, lazy-loading, edge-case fixes & smoke test pass`)
-- Status on `2026-06-21`: local workspace is ahead only by uncommitted changes. Nothing new is committed on top of `db526f7`.
+- **Local Repo:** `C:\Users\Walt & Carter\Downloads\sweet-news`
+- **Branch:** `main`
+- **Latest Commit:** `9323bcb` (`Design: Responsive PWA Layout Overhaul — desktop split hero visual, wide headers, responsive 3/4 col product grids, right-sidebar cart drawer, centered popups`)
+- **Remote Repo:** [gabelossless/sweetnews](https://github.com/gabelossless/sweetnews.git) (Synced)
 
-## Locked Decisions
+---
 
-- Launch only in `Denver` and `Atlanta`.
-- Use a downtown-centered service radius of `10-12 miles`.
-- Keep the catalog broad at `70-100` products.
-- Improve merchandising instead of reducing assortment.
+## 🎨 Major Upgrades Completed
 
-## Stable Model Direction
+### 1. Visual Identity: "The Obsidian & Champagne Atelier"
+We transitioned the visual design from the former Honey Amber/industrial theme to a haute couture hospitality-inspired luxury identity:
+- **Palette:** Deep obsidian black (`#070709` background), cashmere white text (`#fcfcfd`), dark slate surfaces (`#121215`), and soft champagne gold accents (`#d4af37` / `.btn-brand`).
+- **Typography:** Imported and integrated `Cormorant Garamond` (Google Serif font) for all display headings, brand marks, and status headers, while keeping `Inter` for clean body text.
+- **Components:** Rounded borders (`rounded-full`, `rounded-[20px]`, `rounded-[14px]`) replaced hard, boxy, brutalist corners. All buttons, product cards, category chips, and tracker components conform to this system.
 
-- `orders` is the customer-facing summary snapshot.
-- `order_events` is the append-only audit trail and source of truth for timeline history.
-- `dispatch_jobs` is provider-neutral and must support:
-  - internal driver fulfillment
-  - founder/self delivery
-  - third-party courier webhooks
-- Every dispatch payload should carry the same fields:
-  - `delivery_provider_id`
-  - `external_tracking_url`
-  - `courier_fee_allocation`
-- Visible order chain remains:
-  - `order.paid` -> `inventory.allocated` -> `dispatch.assigned`
+### 2. Layout Overhaul: True Responsive PWA
+Previously, the app layout was hardcoded to a mobile-width column (`max-w-[430px]`) on all screens. We broke these constraints to deliver separate, optimized mobile and desktop designs:
+- **Grid Layouts:** Product catalogs (`ShopView` & `MerchSection`) now use responsive columns: `grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6`.
+- **Top Header:** The main `<header>` container expands to `md:max-w-7xl px-5 md:px-8 mx-auto`, showcasing the logo, active concierge indicator, and a wide horizontal nav bar on desktop.
+- **Asymmetric Desktop Hero:** Overhauled the welcome hero in `ShopView` to feature a split grid on desktop (col-span 7 for text and call-to-actions, col-span 5 displaying a newly generated luxury brand visual: `public/images/sweet_news_hero.png`).
+- **Right-Sidebar Cart Drawer:** Transitioned the cart sheet to slide out from the right (`x: '100%'` to `x: 0`) and align to the screen height on desktop, replacing the bottom slide-up mobile sheet.
+- **Centered Modal Overlays:** Customization sheets, product details, and profile forms now dynamically anchor as centered popup cards on desktop instead of stretching full-screen.
 
-## Current Local WIP
+### 3. "Anti-Slop" Design Skills Installed
+We integrated the premium agent rules from [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) into the workspace:
+- Cloned and added to `.agents/skills/`.
+- Active skills include: `design-taste-frontend` (v2), `high-end-visual-design`, `redesign-existing-projects`, and `minimalist-ui`.
+- These skills enforce strict spacing rhythm, copy registers (banning placeholder text and em-dash styling), and a11y color contrasts.
 
-This workspace has an uncommitted visual and founder-ops pass on top of `db526f7`.
+---
 
-- Theme direction is shifting from honey amber / moss to an obsidian + champagne "atelier" look.
-- Customer copy is being reframed around concierge / courier language.
-- Admin is being reframed as `Sweet Atelier // Operations`.
-- A founder-delivery workflow is partially wired into admin:
-  - claim order
-  - navigate to destination
-  - start assembling
-  - use a local pick checklist
-  - confirm delivery complete
+## 🛠️ Verification & Compilation
 
-## Files With Uncommitted Changes
+- **TypeScript strict mode (`tsc --noEmit`) passes with zero errors.** All previous reference scoping errors and unused imports have been resolved.
+- **Vite production compilation (`node "node_modules/vite/bin/vite.js" build`) passes with zero errors/warnings.**
+- **Mobile Viewport:** The centered mobile layout remains fully intact on devices `< 768px` width, showing the bottom glass dock bar.
 
-- Modified:
-  - `src/AdminApp.tsx`
-  - `src/CustomerApp.tsx`
-  - `src/components/atoms/Button.tsx`
-  - `src/components/atoms/Logo.tsx`
-  - `src/components/molecules/CategoryChip.tsx`
-  - `src/components/molecules/NavButton.tsx`
-  - `src/components/molecules/ProductCard.tsx`
-  - `src/components/organisms/TrackerCard.tsx`
-  - `src/index.css`
-  - `src/views/ShopView.tsx`
-- Untracked:
-  - `src/components/organisms/PickList.tsx`
-  - `src/lib/operatingHours.ts`
+---
 
-## What The WIP Actually Changes
+## 🧭 Recommended Next Steps
 
-- `src/index.css`, `Button`, `Logo`, `CategoryChip`, `NavButton`, `ProductCard`, `TrackerCard`, and `ShopView` are all part of the theme pass.
-- `src/CustomerApp.tsx` swaps the top-bar identity from `OwlMascot` to `Logo`, changes closed/open copy, and restyles the mobile dock + toast treatment.
-- `src/AdminApp.tsx` adds `PickList` and a founder-centric fulfillment branch when the assigned driver matches the owner UID.
-- `src/components/organisms/PickList.tsx` is local-state-only and does not write to Firestore.
-- `src/lib/operatingHours.ts` duplicates logic that already exists in `src/hooks/useDeliveryHours.ts` and is not wired into the app yet.
-
-## Verification
-
-- `npm run build` fails on this machine because the repo path contains `Walt & Carter`.
-- `npx tsc --noEmit` fails for the same reason.
-- Use direct Node bypass commands instead:
-  - `node .\node_modules\typescript\bin\tsc --noEmit`
-  - `node .\node_modules\vite\bin\vite.js build`
-- `node .\node_modules\vite\bin\vite.js build` passes on the current workspace.
-- Vite still warns that the Firebase vendor chunk is larger than `500 kB`.
-- `node .\node_modules\typescript\bin\tsc --noEmit` currently fails with 8 errors:
-  - `src/AdminApp.tsx`: `ownerDriverUid` is referenced out of scope.
-  - `src/components/atoms/Logo.tsx`: unused `React` import.
-  - `src/components/molecules/NavButton.tsx`: `React.cloneElement` typing issue around `size`.
-  - `src/components/molecules/ProductCard.tsx`: unused `Sparkles` import.
-  - `src/CustomerApp.tsx`: unused `opensAt`.
-  - `src/views/ShopView.tsx`: unused `Moon` import.
-  - `src/views/ShopView.tsx`: unused `Logo` import.
-
-## Recommended Next Steps
-
-1. Fix the TypeScript errors before committing anything from this theme/ops pass.
-2. Decide whether the `operatingHours.ts` utility should replace `useDeliveryHours.ts` or be removed to avoid duplicate sources of truth.
-3. Sanity-check whether the new luxury/atelier voice is a deliberate brand change or just an experiment before propagating it further.
-4. If the theme pass stays, do a visual browser check on `/`, `/admin`, and `/fleet` after the TS gate is green.
-5. Keep using the direct Node bypass commands for this repo path on Windows.
+1. **Security Guard & Operator Role Promotion (`AuthContext.tsx`)**:
+   - Implement automatic role promotion to `admin` for the specified founder/operator emails:
+     - `lylyg82g@gmail.com`
+     - `roadadventureone@gmail.com`
+     - `daimonzachery@gmail.com`
+     - `gabelossless@gmail.com`
+   - Secure `/admin` with a route guard showing a luxury "Access Denied" screen if the user is not authenticated as an admin.
+2. **Synchronize Operator Guides**:
+   - Document the admin dashboard operational flow (claiming orders, picker checklists, waitlist management).
+   - Write and synchronize this operator guide at `src/docs/OPERATOR_GUIDE.md` and `docs/OPERATOR_GUIDE.md`.
+3. **Verify Promotions/Stripe integration**:
+   - Resolve the discount calculation mismatch between `usePromoStore` and Stripe's `totalCents` payload during Checkout.
