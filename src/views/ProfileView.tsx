@@ -554,13 +554,13 @@ export function ProfileView({ isOnline }: ProfileViewProps) {
               onClick={() => setShowAddressForm(false)}
               className="fixed inset-0 z-[90] bg-black/50 backdrop-blur-sm"
             />
-            <div className="fixed inset-0 z-[91] flex items-end justify-center pointer-events-none">
+            <div className="fixed inset-0 z-[91] flex items-end justify-center pointer-events-none md:items-center">
               <motion.div
                 initial={{ y: '100%' }}
                 animate={{ y: 0 }}
                 exit={{ y: '100%' }}
                 transition={{ type: 'spring', damping: 28, stiffness: 250 }}
-                className="pointer-events-auto w-full max-w-[430px] bg-surface backdrop-blur-[50px] rounded-t-[32px] p-6 border-t border-on-background/[0.09] max-h-[85vh] overflow-y-auto"
+                className="pointer-events-auto w-full max-w-[430px] md:max-w-md bg-surface backdrop-blur-[50px] rounded-t-[32px] md:rounded-[24px] p-6 border-t md:border border-on-background/[0.09] max-h-[85vh] md:max-h-[90vh] overflow-y-auto"
               >
                 <div className="flex justify-center pt-0 pb-4">
                   <div className="w-10 h-1 bg-on-background/[0.15] rounded-full" />

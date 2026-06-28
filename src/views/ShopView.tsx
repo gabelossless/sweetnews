@@ -45,61 +45,72 @@ export function ShopView({
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          className="relative overflow-hidden rounded-[24px] border border-white/[0.05] bg-surface p-6 md:p-7 shadow-[0_12px_40px_rgba(0,0,0,0.5)]"
+          className="relative overflow-hidden rounded-[24px] border border-white/[0.05] bg-surface p-6 md:p-10 shadow-[0_12px_40px_rgba(0,0,0,0.5)]"
         >
-          <div className="relative z-10 flex items-start justify-between gap-4">
-            <div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch relative z-10">
+            {/* Left side content */}
+            <div className="lg:col-span-7 flex flex-col justify-center">
               <div className="inline-flex items-center gap-1.5 font-serif text-[11px] italic tracking-wide text-primary uppercase">
                 <span className="w-1.5 h-1.5 bg-primary rounded-full animate-live-pulse" />
                 The Late-Night Selection
               </div>
-              <h1 className="mt-3 text-[36px] font-serif font-light leading-none text-white tracking-tight">
+              <h1 className="mt-3 text-[36px] md:text-[48px] font-serif font-light leading-none text-white tracking-tight">
                 Sweet <span className="font-semibold italic text-primary">News</span>
               </h1>
-              <p className="mt-2.5 text-[12px] leading-relaxed text-on-surface-variant font-light max-w-[24rem]">
+              <p className="mt-3 text-[12px] md:text-[14px] leading-relaxed text-on-surface-variant font-light max-w-[28rem]">
                 Curated confectioneries, artisanal snacks, and fresh newspapers delivered directly to your door by private courier.
               </p>
-            </div>
-          </div>
-
-          <div className="relative z-10 mt-6 grid grid-cols-3 gap-2.5">
-            {[
-              { title: '70+ Selections', subtitle: 'HANDPICKED DROPS' },
-              { title: '10.0 MI Radius', subtitle: 'PRIVATE COURIER' },
-              { title: 'Bespoke Duty', subtitle: 'OWNER DISPATCH' },
-            ].map((item) => (
-              <div
-                key={item.title}
-                className="rounded-[14px] border border-white/[0.04] bg-[#0c0c0e] p-3.5"
-              >
-                <p className="text-[13px] font-serif font-medium tracking-tight text-primary">
-                  {item.title}
-                </p>
-                <p className="mt-1.5 text-[8.5px] font-medium text-on-surface-variant tracking-wider uppercase">
-                  {item.subtitle}
-                </p>
+              
+              <div className="mt-6 grid grid-cols-3 gap-2.5">
+                {[
+                  { title: '70+ Selections', subtitle: 'HANDPICKED DROPS' },
+                  { title: '10.0 MI Radius', subtitle: 'PRIVATE COURIER' },
+                  { title: 'Bespoke Duty', subtitle: 'OWNER DISPATCH' },
+                ].map((item) => (
+                  <div
+                    key={item.title}
+                    className="rounded-[14px] border border-white/[0.04] bg-[#0c0c0e] p-3.5"
+                  >
+                    <p className="text-[13px] md:text-[15px] font-serif font-medium tracking-tight text-primary">
+                      {item.title}
+                    </p>
+                    <p className="mt-1.5 text-[8.5px] font-medium text-on-surface-variant tracking-wider uppercase">
+                      {item.subtitle}
+                    </p>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
 
-          <div className="relative z-10 mt-6 flex flex-wrap gap-2.5">
-            <Button
-              type="button"
-              variant="brand"
-              whileTapScale={0.98}
-              onClick={() => setSelectedCategory('snacks')}
-              className="h-10 px-5 text-[11px] font-medium tracking-wide"
-            >
-              Browse Collections
-            </Button>
-            <button
-              type="button"
-              onClick={onNavigateToNews}
-              className="inline-flex h-10 items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-5 text-[11px] font-medium tracking-wide text-white/80 hover:bg-white/[0.06] hover:text-white transition-all"
-            >
-              The Chronicle
-              <ArrowRight size={11} className="text-primary" />
-            </button>
+              <div className="mt-6 flex flex-wrap gap-2.5">
+                <Button
+                  type="button"
+                  variant="brand"
+                  whileTapScale={0.98}
+                  onClick={() => setSelectedCategory('snacks')}
+                  className="h-10 px-5 text-[11px] font-medium tracking-wide"
+                >
+                  Browse Collections
+                </Button>
+                <button
+                  type="button"
+                  onClick={onNavigateToNews}
+                  className="inline-flex h-10 items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-5 text-[11px] font-medium tracking-wide text-white/80 hover:bg-white/[0.06] hover:text-white transition-all"
+                >
+                  The Chronicle
+                  <ArrowRight size={11} className="text-primary" />
+                </button>
+              </div>
+            </div>
+
+            {/* Right side visual asset */}
+            <div className="hidden lg:block lg:col-span-5 relative min-h-[320px] rounded-[18px] overflow-hidden border border-white/5 bg-on-background/[0.02]">
+              <img
+                src="/images/sweet_news_hero.png"
+                alt="Sweet News Luxury Atelier selection"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+            </div>
           </div>
         </motion.div>
       </section>
@@ -182,7 +193,7 @@ export function ShopView({
         </p>
 
         {filteredProducts.length > 0 ? (
-          <motion.div layout className="grid grid-cols-2 gap-4 md:gap-5">
+          <motion.div layout className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             <AnimatePresence mode="popLayout">
               {filteredProducts.map((product, idx) => (
                 <motion.div

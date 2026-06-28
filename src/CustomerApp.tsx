@@ -238,7 +238,7 @@ export default function CustomerApp() {
 
         {/* TopAppBar */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-on-background/[0.07]">
-        <div className="px-5 md:px-6 pt-[max(env(safe-area-inset-top),12px)] md:max-w-[430px] md:mx-auto">
+        <div className="px-5 md:px-8 pt-[max(env(safe-area-inset-top),12px)] md:max-w-7xl md:mx-auto">
           {/* Row 1: Brand + [Desktop Nav] + Cart */}
           <div className="flex items-center justify-between py-2.5 md:py-3.5">
             <button
@@ -333,7 +333,7 @@ export default function CustomerApp() {
       </header>
 
       {/* Main Pages Container */}
-      <main className="px-6 md:px-0 max-w-[430px] md:max-w-[430px] mx-auto">
+      <main className="px-6 md:px-8 max-w-7xl mx-auto w-full">
         <Suspense fallback={
           <div className="w-full py-20 flex flex-col items-center justify-center">
             <div className="w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin" />

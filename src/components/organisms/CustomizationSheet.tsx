@@ -73,16 +73,15 @@ export function CustomizationSheet({ product, onClose, onConfirm }: Props) {
             onClick={onClose}
           />
 
-          {/* Sheet wrapper */}
-          <div className="fixed inset-0 z-[71] flex items-end justify-center pointer-events-none">
+          <div className="fixed inset-0 z-[71] flex items-end justify-center pointer-events-none md:items-center">
             <motion.div
               key="customization-sheet"
               initial={{ y: '100%' }}
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', stiffness: 340, damping: 36 }}
-              className="pointer-events-auto w-full max-w-[430px] max-h-[88vh] flex flex-col
-                         bg-surface rounded-t-[36px] border border-on-background/[0.07]
+              className="pointer-events-auto w-full max-w-[430px] md:max-w-md max-h-[88vh] md:max-h-[90vh] flex flex-col
+                         bg-surface rounded-t-[36px] md:rounded-[24px] border border-on-background/[0.07]
                          shadow-[0_-24px_80px_rgba(42,26,31,0.12)]"
             >
               {/* Handle */}

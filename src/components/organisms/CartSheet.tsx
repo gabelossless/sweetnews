@@ -24,6 +24,8 @@ export function CartSheet({ isOpen, onClose, onCheckout }: CartSheetProps) {
   const addItem = useCartStore((state) => state.addItem);
   const dragControls = useDragControls();
 
+  const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 768;
+
   const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const orderTotal = subtotal + DELIVERY_FEE;
 
@@ -51,11 +53,11 @@ export function CartSheet({ isOpen, onClose, onCheckout }: CartSheetProps) {
             className="fixed inset-0 bg-black/60 backdrop-blur-md z-[60]"
           />
 
-          {/* Positioning wrapper — aligns to bottom on mobile, centers on desktop */}
-          <div className="fixed inset-0 z-[70] flex items-end justify-center pointer-events-none md:items-center">
+          {/* Positioning wrapper — aligns to bottom on mobile, right drawer on desktop */}
+          <div className="fixed inset-0 z-[70] flex items-end justify-center pointer-events-none md:items-stretch md:justify-end">
           {/* Sheet */}
           <motion.div
-            drag="y"
+            drag={isDesktop ? false : "y"}
             dragControls={dragControls}
             dragListener={false}
             dragConstraints={{ top: 0, bottom: 0 }}
@@ -63,17 +65,17 @@ export function CartSheet({ isOpen, onClose, onCheckout }: CartSheetProps) {
             onDragEnd={(_, info) => {
               if (info.offset.y > 100) onClose();
             }}
-            initial={{ y: '100%' }}
-            animate={{ y: 0 }}
-            exit={{ y: '100%' }}
+            initial={isDesktop ? { x: '100%' } : { y: '100%' }}
+            animate={isDesktop ? { x: 0 } : { y: 0 }}
+            exit={isDesktop ? { x: '100%' } : { y: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 260, mass: 0.9 }}
             className="pointer-events-auto w-full max-w-[430px]
-                       h-[88vh] md:h-auto md:max-h-[88vh]
-                       rounded-t-[48px] md:rounded-[32px]
+                       h-[88vh] md:h-full
+                       rounded-t-[48px] md:rounded-t-none md:rounded-l-[32px]
                        flex flex-col
-                       shadow-[0_-24px_80px_rgba(42,26,31,0.12),inset_0_1px_0_rgba(255,255,255,0.08)]
-                       border-t border-on-background/[0.09] md:border md:border-on-background/[0.09]"
-            style={{ background: 'linear-gradient(180deg, #ffffff 0%, #fbf8f4 100%)' }}
+                       shadow-[0_-24px_80px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.08)]
+                       border-t border-on-background/[0.09] md:border-t-0 md:border-l md:border-on-background/[0.09]"
+            style={{ background: 'linear-gradient(180deg, #121215 0%, #070709 100%)' }}
           >
             {/* Drag handle — hidden on desktop where drag-to-close isn't expected */}
             <div
